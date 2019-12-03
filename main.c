@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/03 04:55:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/03 22:23:56 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,19 @@ void		*crt_img(t_data *data)
 	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT);
 	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
 											&data->img.size, &data->img.endian);
+	while (x < WIDTH)
+}
+
+void		crt_column(t_data data, int column)
+{
 	while (++i < start * (data->img.size / 4))
-		data->img.buffer[i] = 0xFFFF;
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
 	i--;
 	while (++i < end * (data->img.size / 4))
-		data->img.buffer[i] = 0xFF0000;
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF0000;
 	i--;
 	while (++i < HEIGHT * (data->img.size / 4))
-		data->img.buffer[i] = 0xA0AAAAAA;
-	return (data->img.ptr);
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
 }
 
 /*void		*crt_sky(t_data *data)
@@ -244,7 +248,7 @@ void	raycasting(t_data *data)
 	x = -1;
 	while (++x < WIDTH)
 	{
-
+		
 	}
 }
 
