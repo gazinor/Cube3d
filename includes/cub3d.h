@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/04 19:48:07 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/04 22:29:47 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 2560
+# define HEIGHT 1440
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -26,8 +26,10 @@
 # define R_ARROW 124
 # define ABS(Value) (Value < 0) ? -Value : Value
 
+# include "mlx.h"
 # include <stdlib.h>
 # include <stdio.h>
+# include <unistd.h>
 # include <math.h>
 
 typedef enum	e_bool
@@ -114,12 +116,20 @@ typedef	struct	s_data
 	char		**map;
 }				t_data;
 
-void	*ft_init_map(t_data *data);
-void	ft_fill_map(t_data *data);
-void    crt_column(t_data *data, int column);
 void    *crt_img(t_data *data);
+void    crt_column(t_data *data, int column);
 void    raycasting(t_data *data, int x);
-void    wall_dir(t_data *data);
 void    raycast_value(t_data *data, int x);
+void    wall_dist(t_data *data);
+void    init_ray(t_data *data, int x);
+void    ft_init(t_data *data);
+void    *ft_init_map(t_data *data);
+void    ft_fill_map(t_data *data);
+void    move_forward(t_data *data);
+void    move_backward(t_data *data);
+void    move_left(t_data *data);
+void    move_right(t_data *data);
+void    turn_left(t_data *data);
+void    turn_right(t_data *data);
 
 #endif
