@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/03 22:23:56 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/04 01:40:07 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char	*G_BUFFER[11] =
 	"1111111111",
 	"1000000001",
 	"1000000001",
-	"1000000001",
 	"1000N00001",
+	"1000000001",
 	"1000000001",
 	"1000000001",
 	"1000000001",
@@ -69,8 +69,9 @@ void	ft_fill_map(t_data *data)
 			if (G_BUFFER[i][j] == 'N' || G_BUFFER[i][j] == 'S' ||
 			G_BUFFER[i][j] == 'E' || G_BUFFER[i][j] == 'O')
 			{
-				data->perso.pos.x = G_BUFFER[i];
-				data->perso.pos.y = G_BUFFER[i][j];
+				data->perso.pos.x = (double)i;
+				data->perso.pos.y = (double)j;
+				printf("pos.x : %f , pos.y : %f\n", data->perso.pos.x , data->perso.pos.y);
 			}
 			data->map[i][j] = G_BUFFER[i][j];
 			j++;
@@ -106,57 +107,39 @@ int		exit_properly(t_bool error, char *error_msg)
 ** start = (HEIGHT / 2) - ((HEIGHT / 2) / dist)
 ** end = (HEIGHT / 2) + ((HEIGHT / 2) / dist)
 */
-while (x < WIDTH)
-	
 
 void		*crt_img(t_data *data)
 {
-	int i;
+	int x;
 
-	i = -1;
+	x = -1;
 	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT);
 	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
-											&data->img.size, &data->img.endian);
-	while (x < WIDTH)
+										&data->img.size, &data->img.endian);
+	while (++x < WIDTH)
+	{
+		raycasting(data, x);
+		crt_column(data, x);
+	}
+	return (data->img.buffer);
 }
 
-void		crt_column(t_data data, int column)
+void		crt_column(t_data *data, int column)
 {
-	while (++i < start * (data->img.size / 4))
+	int	i;
+
+	i = -1;
+	while (++i < data->ray.start * (data->img.size / 4))
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
 	i--;
-	while (++i < end * (data->img.size / 4))
+	while (++i < data->ray.end * (data->img.size / 4))
+	{
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF0000;
+	}
 	i--;
 	while (++i < HEIGHT * (data->img.size / 4))
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
 }
-
-/*void		*crt_sky(t_data *data)
-{
-	int				i;
-
-	i = -1;
-	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT / 2);
-	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
-											&data->img.size, &data->img.endian);
-	while (++i < (HEIGHT / 2) * (data->img.size / 4))
-		data->img.buffer[i] = 0xFFFF;
-	return (data->img.ptr);
-}
-
-void		*crt_ground(t_data *data)
-{
-	int				i;
-
-	i = -1;
-	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT / 2);
-	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
-											&data->img.size, &data->img.endian);
-	while (++i < (HEIGHT / 2) * (data->img.size / 4))
-		data->img.buffer[i] = 0xA0AAAAAA;
-	return (data->img.ptr);
-}*/
 
 int			key(int key, t_data *data)
 {
@@ -181,7 +164,7 @@ int			key(int key, t_data *data)
 	return (0);
 }
 
-void	move_forward(t_data data)
+void	move_forward(t_data *data)
 {
 	double	new_x;
 	double	new_y;
@@ -196,7 +179,7 @@ void	move_forward(t_data data)
 	}
 }
 
-void	move_backward(t_data data)
+void	move_backward(t_data *data)
 {
 	double	new_x;
 	double	new_y;
@@ -211,7 +194,7 @@ void	move_backward(t_data data)
 	}
 }
 
-void	move_left(t_data data)
+void	move_left(t_data *data)
 {
 	double	new_x;
 	double	new_y;
@@ -226,7 +209,7 @@ void	move_left(t_data data)
 	}
 }
 
-void	move_right(t_data data)
+void	move_right(t_data *data)
 {
 	double	new_x;
 	double	new_y;
@@ -241,15 +224,104 @@ void	move_right(t_data data)
 	}
 }
 
-void	raycasting(t_data *data)
+void	init_ray(t_data *data, int x)
 {
-	int	x;
+	data->ray.start = 0;
+	data->ray.end = 0;
+	data->ray.planx = 0;
+	data->ray.plany = 1;
+	data->ray.camera = (2 * x / WIDTH) - 1;
+	data->ray.dirx = data->perso.dir.x + data->ray.planx * data->ray.camera;
+	data->ray.diry = data->perso.dir.y + data->ray.plany * data->ray.camera;
+	data->cast.mapx = (int)data->perso.pos.x;
+	data->cast.mapy = (int)data->perso.pos.y;
+	data->cast.sidedistx = 0;
+	data->cast.sidedisty = 0;
+	data->cast.deltax = sqrt(1+(data->ray.diry * data->ray.diry) /
+			(data->ray.dirx * data->ray.dirx));
+	data->cast.deltay = sqrt(1+(data->ray.dirx * data->ray.dirx) /
+		(data->ray.diry * data->ray.diry));
+	data->cast.stepx = 0;
+	data->cast.stepy = 0;
+	data->cast.hit = 0;
+	data->cast.side = 0;
+	data->cast.walldist = 0;
+}
 
-	x = -1;
-	while (++x < WIDTH)
+void	raycasting(t_data *data, int x)
+{
+	raycast_value(data, x);
+	while (data->cast.hit == 0)
 	{
-		
+		if (data->cast.sidedistx < data->cast.sidedisty)
+		{
+			data->cast.sidedistx += data->cast.deltax;
+			data->cast.mapx += data->cast.stepx;
+			data->cast.side = 0;
+		}
+		else
+		{
+			data->cast.sidedisty += data->cast.deltay;
+			data->cast.mapy += data->cast.stepy;
+			data->cast.side = 1;
+		}
+		if (data->map[data->cast.mapx][data->cast.mapy] > 0)
+			data->cast.hit = 1;
 	}
+	wall_dir(data);
+	getchar();
+}
+
+void	raycast_value(t_data *data, int x)
+{
+	init_ray(data, x);
+	if (data->ray.dirx < 0)
+	{
+		data->cast.stepx = -1;
+		data->cast.sidedistx = (
+				data->perso.pos.x - data->cast.mapx) * data->cast.deltax;
+	}
+	else
+	{
+		data->cast.stepx = 1;
+		data->cast.sidedistx = (
+				data->cast.mapx + 1.0 - data->perso.pos.x) * data->cast.deltax;
+	}
+	if (data->ray.diry < 0)
+	{
+		data->cast.stepy = -1;
+		data->cast.sidedisty = (
+				data->perso.pos.y - data->cast.mapy) * data->cast.deltay;
+	}
+	else
+	{
+		data->cast.stepy = 1;
+		data->cast.sidedisty = (
+				data->cast.mapy + 1.0 - data->perso.pos.y) * data->cast.deltay;
+	}
+}
+
+void	wall_dir(t_data *data)
+{
+	int	heightline;
+
+	if (data->cast.side == 0)
+		data->cast.walldist = ABS((data->cast.mapx - data->perso.pos.x + (
+							1 - data->cast.stepx)/2) / data->ray.dirx);
+	else
+		data->cast.walldist = ABS((data->cast.mapy - data->perso.pos.y + (
+							1 - data->cast.stepy)/2) / data->ray.diry);
+	heightline = ABS((int)(HEIGHT / data->cast.walldist));
+	data->ray.start = (int)(-heightline / 2 + HEIGHT / 2);
+	data->ray.end = (int)(heightline / 2 + HEIGHT / 2);
+	printf("mapx : %d , mapy : %d\n", data->cast.mapx, data->cast.mapy);
+	printf("stepx : %f , stepy : %f\n", data->cast.stepx, data->cast.stepy);
+	printf("heightline : %d , data->cast.walldist : %f\n", heightline, data->cast.walldist);
+	printf("start : %d , end : %d\n", data->ray.start, data->ray.start);
+	if (data->ray.start < 0)
+		data->ray.start = 0;
+	if (data->ray.end >= HEIGHT)
+		data->ray.end = HEIGHT - 1;
 }
 
 int     ft_move(t_data *data)
@@ -262,8 +334,7 @@ int     ft_move(t_data *data)
 		move_right(data);
     if (data->event.left == TRUE)
 		move_left(data);
-	raycasting(data);
-	mlx_put_image_to_window(data.mlx.ptr, data.mlx.win, crt_img(&data), 0, 0);
+	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, crt_img(data), 0, 0);
     return (0);
 }
 
@@ -285,15 +356,13 @@ void	ft_init(t_data *data)
 	ft_init_map(data);
 }
 
-int 	main()
+int		main()
 {
 	t_data	data;
 
 	ft_init(&data);
 	data.mlx.ptr = mlx_init();
 	data.mlx.win = mlx_new_window(data.mlx.ptr, WIDTH, HEIGHT, "Cube3d");
-//	mlx_put_image_to_window(data.mlx.ptr, data.mlx.win, crt_sky(&data), 0, 0);
-//	mlx_put_image_to_window(data.mlx.ptr, data.mlx.win, crt_ground(&data), 0, HEIGHT / 2);
 	mlx_do_key_autorepeatoff(data.mlx.ptr);
 	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
 	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);
