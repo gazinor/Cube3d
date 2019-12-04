@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/04 22:29:47 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 00:04:25 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 2560
-# define HEIGHT 1440
+# define WIDTH 1920
+# define HEIGHT 1080
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
