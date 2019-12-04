@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/04 02:03:19 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/04 19:48:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef	struct	s_perso
 {
 	t_pos		pos;
 	t_pos		dir;
+	double		planx;
+	double		plany;
 	double		speed;
 	double		rot;
 	double		plane;
@@ -78,8 +80,6 @@ typedef	struct	s_event
 
 typedef	struct	s_ray
 {
-	double		planx;
-	double		plany;
 	int			start;
 	int			end;
 	double		dirx;
