@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/04 01:40:07 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/04 06:10:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ char	*G_BUFFER[11] =
 {
 	"1111111111",
 	"1000000001",
+	"100N000001",
 	"1000000001",
-	"1000N00001",
 	"1000000001",
 	"1000000001",
 	"1000000001",
@@ -66,14 +66,14 @@ void	ft_fill_map(t_data *data)
 		j = 0;
 		while (G_BUFFER[i][j])
 		{
+			data->map[i][j] = G_BUFFER[i][j];
 			if (G_BUFFER[i][j] == 'N' || G_BUFFER[i][j] == 'S' ||
 			G_BUFFER[i][j] == 'E' || G_BUFFER[i][j] == 'O')
 			{
+				data->map[i][j] = '0';
 				data->perso.pos.x = (double)i;
 				data->perso.pos.y = (double)j;
-				printf("pos.x : %f , pos.y : %f\n", data->perso.pos.x , data->perso.pos.y);
 			}
-			data->map[i][j] = G_BUFFER[i][j];
 			j++;
 		}
 		data->map[i][j] = '\0';
@@ -113,9 +113,6 @@ void		*crt_img(t_data *data)
 	int x;
 
 	x = -1;
-	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT);
-	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
-										&data->img.size, &data->img.endian);
 	while (++x < WIDTH)
 	{
 		raycasting(data, x);
@@ -129,15 +126,15 @@ void		crt_column(t_data *data, int column)
 	int	i;
 
 	i = -1;
-	while (++i < data->ray.start * (data->img.size / 4))
+	while (++i < data->ray.start)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
 	i--;
-	while (++i < data->ray.end * (data->img.size / 4))
+	while (++i < data->ray.end)
 	{
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF0000;
 	}
 	i--;
-	while (++i < HEIGHT * (data->img.size / 4))
+	while (++i < HEIGHT)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
 }
 
@@ -145,22 +142,14 @@ int			key(int key, t_data *data)
 {
 	if (key == ESC)
 		exit_properly(FALSE, NULL);
-	else if (data->event.forward == FALSE && key == FORWARD)
-        data->event.forward = TRUE;
-    else if (data->event.backward == FALSE && key == BACKWARD)
-        data->event.backward = TRUE;
-    else if (data->event.right == FALSE && key == RIGHT)
-        data->event.right = TRUE;
-    else if (data->event.left == FALSE && key == LEFT)
-        data->event.left = TRUE;
-    else if (data->event.forward == TRUE && key == FORWARD)
-        data->event.forward = FALSE;
-    else if (data->event.backward == TRUE && key == BACKWARD)
-        data->event.backward = FALSE;
-    else if (data->event.right == TRUE && key == RIGHT)
-        data->event.right = FALSE;
-    else if (data->event.left == TRUE && key == LEFT)
-        data->event.left = FALSE;
+	else if (key == FORWARD)
+        data->event.forward ^= 1;
+    else if (key == BACKWARD)
+        data->event.backward ^= 1;
+    else if (key == RIGHT)
+        data->event.right ^= 1;
+    else if (key == LEFT)
+        data->event.left ^= 1;
 	return (0);
 }
 
@@ -172,7 +161,7 @@ void	move_forward(t_data *data)
 	new_x = (data->perso.pos.x + (data->perso.dir.x * data->perso.speed));
 	new_y = (data->perso.pos.y + (data->perso.dir.y * data->perso.speed));
 	printf("POS X %f POS Y %f\n", data->perso.pos.x, data->perso.pos.y);
-    if (data->map[(int)new_x][(int)new_y] == 0)
+    if (data->map[(int)new_x][(int)new_y] == '0')
 	{
         data->perso.pos.x = new_x;
         data->perso.pos.y = new_y;
@@ -187,7 +176,7 @@ void	move_backward(t_data *data)
 	new_x = (data->perso.pos.x - (data->perso.dir.x * data->perso.speed));
 	new_y = (data->perso.pos.y - (data->perso.dir.y * data->perso.speed));
 	printf("POS X %f POS Y %f\n", data->perso.pos.x, data->perso.pos.y);
-    if (data->map[(int)new_x][(int)new_y] == 0)
+    if (data->map[(int)new_x][(int)new_y] == '0')
 	{
         data->perso.pos.x = new_x;
         data->perso.pos.y = new_y;
@@ -199,10 +188,10 @@ void	move_left(t_data *data)
 	double	new_x;
 	double	new_y;
 
-	new_x = (data->perso.pos.x + (data->perso.dir.x * data->perso.speed));
-	new_y = (data->perso.pos.y - (data->perso.dir.y * data->perso.speed));
+	new_x = (data->perso.pos.x);// + (data->perso.dir.x * data->perso.speed));
+	new_y = (data->perso.pos.y - (data->perso.dir.x * data->perso.speed));
 	printf("POS X %f POS Y %f\n", data->perso.pos.x, data->perso.pos.y);
-    if (data->map[(int)new_x][(int)new_y] == 0)
+    if (data->map[(int)new_x][(int)new_y] == '0')
 	{
         data->perso.pos.x = new_x;
         data->perso.pos.y = new_y;
@@ -214,10 +203,10 @@ void	move_right(t_data *data)
 	double	new_x;
 	double	new_y;
 
-	new_x = (data->perso.pos.x - (data->perso.dir.x * data->perso.speed));
-	new_y = (data->perso.pos.y + (data->perso.dir.y * data->perso.speed));
+	new_x = (data->perso.pos.x);// - (data->perso.dir.x * data->perso.speed));
+	new_y = (data->perso.pos.y + (data->perso.dir.x * data->perso.speed));
 	printf("POS X %f POS Y %f\n", data->perso.pos.x, data->perso.pos.y);
-    if (data->map[(int)new_x][(int)new_y] == 0)
+    if (data->map[(int)new_x][(int)new_y] == '0')
 	{
         data->perso.pos.x = new_x;
         data->perso.pos.y = new_y;
@@ -229,18 +218,18 @@ void	init_ray(t_data *data, int x)
 	data->ray.start = 0;
 	data->ray.end = 0;
 	data->ray.planx = 0;
-	data->ray.plany = 1;
-	data->ray.camera = (2 * x / WIDTH) - 1;
+	data->ray.plany = 0.666;
+	data->ray.camera = (2 * x / (double)WIDTH) - 1;
 	data->ray.dirx = data->perso.dir.x + data->ray.planx * data->ray.camera;
 	data->ray.diry = data->perso.dir.y + data->ray.plany * data->ray.camera;
 	data->cast.mapx = (int)data->perso.pos.x;
 	data->cast.mapy = (int)data->perso.pos.y;
 	data->cast.sidedistx = 0;
 	data->cast.sidedisty = 0;
-	data->cast.deltax = sqrt(1+(data->ray.diry * data->ray.diry) /
-			(data->ray.dirx * data->ray.dirx));
-	data->cast.deltay = sqrt(1+(data->ray.dirx * data->ray.dirx) /
-		(data->ray.diry * data->ray.diry));
+	data->cast.deltax = sqrt(1 + ((data->ray.diry * data->ray.diry) /
+			(data->ray.dirx * data->ray.dirx)));
+	data->cast.deltay = sqrt(1 + ((data->ray.dirx * data->ray.dirx) /
+		(data->ray.diry * data->ray.diry)));
 	data->cast.stepx = 0;
 	data->cast.stepy = 0;
 	data->cast.hit = 0;
@@ -265,11 +254,10 @@ void	raycasting(t_data *data, int x)
 			data->cast.mapy += data->cast.stepy;
 			data->cast.side = 1;
 		}
-		if (data->map[data->cast.mapx][data->cast.mapy] > 0)
+		if (data->map[data->cast.mapx][data->cast.mapy] > '0')
 			data->cast.hit = 1;
 	}
 	wall_dir(data);
-	getchar();
 }
 
 void	raycast_value(t_data *data, int x)
@@ -311,13 +299,9 @@ void	wall_dir(t_data *data)
 	else
 		data->cast.walldist = ABS((data->cast.mapy - data->perso.pos.y + (
 							1 - data->cast.stepy)/2) / data->ray.diry);
-	heightline = ABS((int)(HEIGHT / data->cast.walldist));
-	data->ray.start = (int)(-heightline / 2 + HEIGHT / 2);
-	data->ray.end = (int)(heightline / 2 + HEIGHT / 2);
-	printf("mapx : %d , mapy : %d\n", data->cast.mapx, data->cast.mapy);
-	printf("stepx : %f , stepy : %f\n", data->cast.stepx, data->cast.stepy);
-	printf("heightline : %d , data->cast.walldist : %f\n", heightline, data->cast.walldist);
-	printf("start : %d , end : %d\n", data->ray.start, data->ray.start);
+	heightline = HEIGHT / data->cast.walldist;
+	data->ray.start = (int)(-(heightline / 2) + HEIGHT / 2);
+	data->ray.end = (int)((heightline / 2) + HEIGHT / 2);
 	if (data->ray.start < 0)
 		data->ray.start = 0;
 	if (data->ray.end >= HEIGHT)
@@ -326,15 +310,16 @@ void	wall_dir(t_data *data)
 
 int     ft_move(t_data *data)
 {
-    if (data->event.forward == TRUE)
+    if (data->event.forward == 1)
 		move_forward(data);
-	if (data->event.backward == TRUE)
+	if (data->event.backward == 1)
 		move_backward(data);
-    if (data->event.right == TRUE)
+    if (data->event.right == 1)
 		move_right(data);
-    if (data->event.left == TRUE)
+    if (data->event.left == 1)
 		move_left(data);
-	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, crt_img(data), 0, 0);
+	crt_img(data);
+	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
     return (0);
 }
 
@@ -342,15 +327,15 @@ void	ft_init(t_data *data)
 {
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
-	data->perso.dir.x = 0;
+	data->perso.dir.x = 1;
 	data->perso.dir.y = 0;
-	data->perso.speed = 0.00016;
+	data->perso.speed = 0.016;
 	data->perso.rot = 2 * M_PI / 180;
 	data->perso.plane = 70 / WIDTH;
-	data->event.forward = FALSE;
-	data->event.backward = FALSE;
-	data->event.left = FALSE;
-	data->event.right = FALSE;
+	data->event.forward = 0;
+	data->event.backward = 0;
+	data->event.left = 0;
+	data->event.right = 0;
 	data->event.l_arrow = FALSE;
 	data->event.r_arrow = FALSE;
 	ft_init_map(data);
@@ -363,6 +348,9 @@ int		main()
 	ft_init(&data);
 	data.mlx.ptr = mlx_init();
 	data.mlx.win = mlx_new_window(data.mlx.ptr, WIDTH, HEIGHT, "Cube3d");
+	data.img.ptr = mlx_new_image(data.mlx.ptr, WIDTH, HEIGHT);
+	data.img.buffer = (int*)mlx_get_data_addr(data.img.ptr, &data.img.bpp,
+										&data.img.size, &data.img.endian);
 	mlx_do_key_autorepeatoff(data.mlx.ptr);
 	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
 	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);
