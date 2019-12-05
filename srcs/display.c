@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 01:54:02 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 02:21:12 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,16 @@ void        *crt_img(t_data *data)
 
 long		get_texture(t_data *data)
 {
-	if (data->cast.side == 1)
+	if (data->ray.side == 1)
 	{
-		if (data->cast.stepx
+		if (data->ray.stepy == -1)
+			return (0xFF0000);
+		if (data->ray.stepy == 1)
+			return (0x0000FF);
 	}
+	if (data->ray.stepx == -1)
+		return (0xFFFFFF);
+	return (0xEFD807);
 }
 
 void        crt_column(t_data *data, int column)
@@ -53,22 +59,22 @@ void        crt_column(t_data *data, int column)
 void    raycasting(t_data *data, int x)
 {
 	raycast_value(data, x);
-	while (data->cast.hit == 0)
+	while (data->ray.hit == 0)
 	{
-		if (data->cast.sidedistx < data->cast.sidedisty)
+		if (data->ray.sidedistx < data->ray.sidedisty)
 		{
-			data->cast.sidedistx += data->cast.deltax;
-			data->cast.mapx += data->cast.stepx;
-			data->cast.side = 0; //Nord sud
+			data->ray.sidedistx += data->ray.deltax;
+			data->ray.mapx += data->ray.stepx;
+			data->ray.side = 0; //Nord sud
 		}
 		else
 		{
-			data->cast.sidedisty += data->cast.deltay;
-			data->cast.mapy += data->cast.stepy;
-			data->cast.side = 1; //Est ouest
+			data->ray.sidedisty += data->ray.deltay;
+			data->ray.mapy += data->ray.stepy;
+			data->ray.side = 1; //Est ouest
 		}
-		if (data->map[data->cast.mapx][data->cast.mapy] > '0')
-			data->cast.hit = 1;
+		if (data->map[data->ray.mapx][data->ray.mapy] > '0')
+			data->ray.hit = 1;
 	}
 	wall_dist(data);
 }
@@ -78,27 +84,27 @@ void    raycast_value(t_data *data, int x)
 	init_ray(data, x);
 	if (data->ray.dirx < 0)
 	{
-		data->cast.stepx = -1;
-		data->cast.sidedistx = (
-				data->perso.pos.x - data->cast.mapx) * data->cast.deltax;
+		data->ray.stepx = -1;
+		data->ray.sidedistx = (
+				data->perso.pos.x - data->ray.mapx) * data->ray.deltax;
 	}
 	else
 	{
-		data->cast.stepx = 1;
-		data->cast.sidedistx = (
-				data->cast.mapx + 1.0 - data->perso.pos.x) * data->cast.deltax;
+		data->ray.stepx = 1;
+		data->ray.sidedistx = (
+				data->ray.mapx + 1.0 - data->perso.pos.x) * data->ray.deltax;
 	}
 	if (data->ray.diry < 0)
 	{
-		data->cast.stepy = -1;
-		data->cast.sidedisty = (
-				data->perso.pos.y - data->cast.mapy) * data->cast.deltay;
+		data->ray.stepy = -1;
+		data->ray.sidedisty = (
+				data->perso.pos.y - data->ray.mapy) * data->ray.deltay;
 	}
 	else
 	{
-		data->cast.stepy = 1;
-		data->cast.sidedisty = (
-				data->cast.mapy + 1.0 - data->perso.pos.y) * data->cast.deltay;
+		data->ray.stepy = 1;
+		data->ray.sidedisty = (
+				data->ray.mapy + 1.0 - data->perso.pos.y) * data->ray.deltay;
 	}
 }
 
@@ -106,13 +112,13 @@ void    wall_dist(t_data *data)
 {
 	int heightline;
 
-	if (data->cast.side == 0)
-		data->cast.walldist = ABS((data->cast.mapx - data->perso.pos.x + (
-						1 - data->cast.stepx)/2) / data->ray.dirx);
+	if (data->ray.side == 0)
+		data->ray.walldist = ABS((data->ray.mapx - data->perso.pos.x + (
+						1 - data->ray.stepx)/2) / data->ray.dirx);
 	else
-		data->cast.walldist = ABS((data->cast.mapy - data->perso.pos.y + (
-						1 - data->cast.stepy)/2) / data->ray.diry);
-	heightline = HEIGHT / data->cast.walldist;
+		data->ray.walldist = ABS((data->ray.mapy - data->perso.pos.y + (
+						1 - data->ray.stepy)/2) / data->ray.diry);
+	heightline = HEIGHT / data->ray.walldist;
 	data->ray.start = (int)(-(heightline / 2) + HEIGHT / 2);
 	data->ray.end = (int)((heightline / 2) + HEIGHT / 2);
 	if (data->ray.start < 0)

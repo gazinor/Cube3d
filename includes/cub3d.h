@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 01:53:24 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 02:13:25 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 1110
+# define HEIGHT 1024
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -108,7 +108,6 @@ typedef	struct	s_data
 	t_mlx		mlx;
 	t_event		event;
 	t_ray		ray;
-	t_cast		cast;
 	char		**map;
 }				t_data;
 
