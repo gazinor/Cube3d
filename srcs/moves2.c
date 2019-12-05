@@ -6,14 +6,14 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:18:38 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/04 22:24:49 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 05:40:27 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "cub3d.h"
 
-void    turn_left(t_data *data)
+void    turn_right(t_data *data)
 {
 	double  new_x;
 	double  new_y;
@@ -34,7 +34,7 @@ void    turn_left(t_data *data)
 	data->perso.plany = new_plan_y;
 }
 
-void    turn_right(t_data *data)
+void    turn_left(t_data *data)
 {
 	double  new_x;
 	double  new_y;

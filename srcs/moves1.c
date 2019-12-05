@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:17:45 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/04 22:23:13 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 05:40:14 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void    move_backward(t_data *data)
 		data->perso.pos.y = new_y;
 }
 
-void    move_left(t_data *data)
+void    move_right(t_data *data)
 {
 	double  new_x;
 	double  new_y;
@@ -51,7 +51,7 @@ void    move_left(t_data *data)
 		data->perso.pos.y = new_y;
 }
 
-void    move_right(t_data *data)
+void    move_left(t_data *data)
 {
 	double  new_x;
 	double  new_y;

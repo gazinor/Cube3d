@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 02:06:53 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 05:30:27 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void    ft_init(t_data *data)
 {
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
-	data->perso.dir.x = 1;
+	data->perso.dir.x = 0;
 	data->perso.dir.y = 0;
 	data->perso.speed = 0.066;
 	data->perso.rot = 2 * M_PI / 180;
@@ -50,6 +50,6 @@ void    ft_init(t_data *data)
 	data->event.l_arrow = 0;
 	data->event.r_arrow = 0;
 	data->perso.planx = 0;
-	data->perso.plany = 0.666;
+	data->perso.plany = 0;
 	ft_init_map(data);
 }
