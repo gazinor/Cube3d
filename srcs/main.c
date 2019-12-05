@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/04 22:39:20 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 21:06:10 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int		exit_properly(t_bool error, char *error_msg)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (error == TRUE)
@@ -32,45 +32,45 @@ int		exit_properly(t_bool error, char *error_msg)
 	exit(0);
 }
 
-int			key(int key, t_data *data)
+int		key(int key, t_data *data)
 {
 	if (key == ESC)
 		exit_properly(FALSE, NULL);
 	else if (key == FORWARD)
-        data->event.forward ^= 1;
-    else if (key == BACKWARD)
-        data->event.backward ^= 1;
-    else if (key == RIGHT)
-        data->event.right ^= 1;
-    else if (key == LEFT)
-        data->event.left ^= 1;
-    else if (key == R_ARROW)
-        data->event.r_arrow ^= 1;
-    else if (key == L_ARROW)
-        data->event.l_arrow ^= 1;
+		data->event.forward ^= 1;
+	else if (key == BACKWARD)
+		data->event.backward ^= 1;
+	else if (key == RIGHT)
+		data->event.right ^= 1;
+	else if (key == LEFT)
+		data->event.left ^= 1;
+	else if (key == R_ARROW)
+		data->event.r_arrow ^= 1;
+	else if (key == L_ARROW)
+		data->event.l_arrow ^= 1;
 	return (0);
 }
 
-int     ft_move(t_data *data)
+int		ft_move(t_data *data)
 {
-    if (data->event.forward == 1)
+	if (data->event.forward == 1)
 		move_forward(data);
 	if (data->event.backward == 1)
 		move_backward(data);
-    if (data->event.right == 1)
+	if (data->event.right == 1)
 		move_right(data);
-    if (data->event.left == 1)
+	if (data->event.left == 1)
 		move_left(data);
-    if (data->event.r_arrow == 1)
+	if (data->event.r_arrow == 1)
 		turn_right(data);
-    if (data->event.l_arrow == 1)
+	if (data->event.l_arrow == 1)
 		turn_left(data);
 	crt_img(data);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
-    return (0);
+	return (0);
 }
 
-int		main()
+int		main(void)
 {
 	t_data	data;
 

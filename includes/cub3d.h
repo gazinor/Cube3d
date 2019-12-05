@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 02:13:25 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 20:53:19 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,12 @@ typedef	struct	s_ray
 	double		hit;
 	double		side;
 	double		walldist;
-	int         start;
-    int         end;
-    double      dirx;
-    double      diry;
-    double      camera;
+	int			start;
+	int			end;
+	double		dirx;
+	double		diry;
+	double		camera;
 }				t_ray;
-
 
 typedef	struct	s_data
 {
@@ -111,20 +110,20 @@ typedef	struct	s_data
 	char		**map;
 }				t_data;
 
-void    *crt_img(t_data *data);
-void    crt_column(t_data *data, int column);
-void    raycasting(t_data *data, int x);
-void    raycast_value(t_data *data, int x);
-void    wall_dist(t_data *data);
-void    init_ray(t_data *data, int x);
-void    ft_init(t_data *data);
-void    *ft_init_map(t_data *data);
-void    ft_fill_map(t_data *data);
-void    move_forward(t_data *data);
-void    move_backward(t_data *data);
-void    move_left(t_data *data);
-void    move_right(t_data *data);
-void    turn_left(t_data *data);
-void    turn_right(t_data *data);
+void			*crt_img(t_data *data);
+void			crt_column(t_data *data, int column);
+void			raycasting(t_data *data, int x);
+void			raycast_value(t_data *data, int x);
+void			wall_dist(t_data *data);
+void			init_ray(t_data *data, int x);
+void			ft_init(t_data *data);
+void			*ft_init_map(t_data *data);
+void			ft_fill_map(t_data *data);
+void			move_forward(t_data *data);
+void			move_backward(t_data *data);
+void			move_left(t_data *data);
+void			move_right(t_data *data);
+void			turn_left(t_data *data);
+void			turn_right(t_data *data);
 
 #endif

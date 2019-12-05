@@ -6,13 +6,13 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 05:30:27 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 21:06:39 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void    init_ray(t_data *data, int x)
+void	init_ray(t_data *data, int x)
 {
 	data->ray.start = 0;
 	data->ray.end = 0;
@@ -34,7 +34,7 @@ void    init_ray(t_data *data, int x)
 	data->ray.walldist = 0;
 }
 
-void    ft_init(t_data *data)
+void	ft_init(t_data *data)
 {
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;

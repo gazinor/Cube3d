@@ -6,16 +6,16 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:17:45 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 05:40:14 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 20:59:06 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void    move_forward(t_data *data)
+void	move_forward(t_data *data)
 {
-	double  new_x;
-	double  new_y;
+	double	new_x;
+	double	new_y;
 
 	new_x = (data->perso.pos.x + (data->perso.dir.x * data->perso.speed));
 	new_y = (data->perso.pos.y + (data->perso.dir.y * data->perso.speed));
@@ -25,10 +25,10 @@ void    move_forward(t_data *data)
 		data->perso.pos.y = new_y;
 }
 
-void    move_backward(t_data *data)
+void	move_backward(t_data *data)
 {
-	double  new_x;
-	double  new_y;
+	double	new_x;
+	double	new_y;
 
 	new_x = (data->perso.pos.x - (data->perso.dir.x * data->perso.speed));
 	new_y = (data->perso.pos.y - (data->perso.dir.y * data->perso.speed));
@@ -38,10 +38,10 @@ void    move_backward(t_data *data)
 		data->perso.pos.y = new_y;
 }
 
-void    move_right(t_data *data)
+void	move_right(t_data *data)
 {
-	double  new_x;
-	double  new_y;
+	double	new_x;
+	double	new_y;
 
 	new_x = (data->perso.pos.x) + (data->perso.dir.y * data->perso.speed);
 	new_y = (data->perso.pos.y - (data->perso.dir.x * data->perso.speed));
@@ -51,10 +51,10 @@ void    move_right(t_data *data)
 		data->perso.pos.y = new_y;
 }
 
-void    move_left(t_data *data)
+void	move_left(t_data *data)
 {
-	double  new_x;
-	double  new_y;
+	double	new_x;
+	double	new_y;
 
 	new_x = (data->perso.pos.x) - (data->perso.dir.y * data->perso.speed);
 	new_y = (data->perso.pos.y + (data->perso.dir.x * data->perso.speed));
