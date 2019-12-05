@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/04 22:21:00 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 01:54:02 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,26 @@ void        *crt_img(t_data *data)
 	return (data->img.buffer);
 }
 
+long		get_texture(t_data *data)
+{
+	if (data->cast.side == 1)
+	{
+		if (data->cast.stepx
+	}
+}
+
 void        crt_column(t_data *data, int column)
 {
 	int i;
+	long color;
 
 	i = -1;
+	color = get_texture(data);
 	while (++i < data->ray.start)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
 	i--;
 	while (++i < data->ray.end)
-	{
-		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF0000;
-	}
+		data->img.buffer[column + (i * (data->img.size / 4))] = color;
 	i--;
 	while (++i < HEIGHT)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
@@ -51,13 +59,13 @@ void    raycasting(t_data *data, int x)
 		{
 			data->cast.sidedistx += data->cast.deltax;
 			data->cast.mapx += data->cast.stepx;
-			data->cast.side = 0;
+			data->cast.side = 0; //Nord sud
 		}
 		else
 		{
 			data->cast.sidedisty += data->cast.deltay;
 			data->cast.mapy += data->cast.stepy;
-			data->cast.side = 1;
+			data->cast.side = 1; //Est ouest
 		}
 		if (data->map[data->cast.mapx][data->cast.mapy] > '0')
 			data->cast.hit = 1;

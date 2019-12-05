@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 00:04:25 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/05 01:53:24 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 800
+# define HEIGHT 600
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -82,15 +82,6 @@ typedef	struct	s_event
 
 typedef	struct	s_ray
 {
-	int			start;
-	int			end;
-	double		dirx;
-	double		diry;
-	double		camera;
-}				t_ray;
-
-typedef	struct	s_cast
-{
 	int			mapx;
 	int			mapy;
 	double		sidedistx;
@@ -102,7 +93,12 @@ typedef	struct	s_cast
 	double		hit;
 	double		side;
 	double		walldist;
-}				t_cast;
+	int         start;
+    int         end;
+    double      dirx;
+    double      diry;
+    double      camera;
+}				t_ray;
 
 
 typedef	struct	s_data
