@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/06 01:57:45 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 02:44:17 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int		main(void)
 										&data.img.size, &data.img.endian);
 	data.img.ciel = mlx_new_image(data.mlx.ptr, WIDTH, HEIGHT);
 	data.img.sol = mlx_new_image(data.mlx.ptr, WIDTH , HEIGHT);
-	data.img.ciel = mlx_xpm_file_to_image(data.mlx.ptr, "/Users/gaefourn/Desktop/Textures/XPM/ciel.xpm", &x, &y);
-	data.img.sol = mlx_xpm_file_to_image(data.mlx.ptr, "/Users/gaefourn/Desktop/Textures/XPM/sol.xpm", &x, &y);
+	data.img.ciel = mlx_xpm_file_to_image(data.mlx.ptr, "./textures/ciel.xpm", &x, &y);
+	data.img.sol = mlx_xpm_file_to_image(data.mlx.ptr, "./textures/sol.xpm", &x, &y);
 	mlx_do_key_autorepeatoff(data.mlx.ptr);
 	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
 	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);
