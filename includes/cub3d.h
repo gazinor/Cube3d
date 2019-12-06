@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 20:53:19 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 01:27:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ typedef	struct	s_ray
 	double		walldist;
 	int			start;
 	int			end;
+	int			old_strt[WIDTH];
+	int			old_end[WIDTH];
 	double		dirx;
 	double		diry;
 	double		camera;

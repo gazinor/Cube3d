@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 21:06:39 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 01:28:41 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	init_ray(t_data *data, int x)
 {
-	data->ray.start = 0;
-	data->ray.end = 0;
 	data->ray.camera = (2 * x / (double)WIDTH) - 1;
 	data->ray.dirx = data->perso.dir.x + data->perso.planx * data->ray.camera;
 	data->ray.diry = data->perso.dir.y + data->perso.plany * data->ray.camera;
@@ -36,13 +34,15 @@ void	init_ray(t_data *data, int x)
 
 void	ft_init(t_data *data)
 {
+	int		i;
+
+	i = -1;
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
 	data->perso.dir.x = 0;
 	data->perso.dir.y = 0;
 	data->perso.speed = 0.066;
 	data->perso.rot = 2 * M_PI / 180;
-	data->perso.plane = 70 / WIDTH;
 	data->event.forward = 0;
 	data->event.backward = 0;
 	data->event.left = 0;
@@ -51,5 +51,10 @@ void	ft_init(t_data *data)
 	data->event.r_arrow = 0;
 	data->perso.planx = 0;
 	data->perso.plany = 0;
+	while (++i < WIDTH)
+	{
+		data->ray.old_strt[i] = 0;
+		data->ray.old_end[i] = HEIGHT;
+	}
 	ft_init_map(data);
 }

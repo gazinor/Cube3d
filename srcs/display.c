@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 21:09:20 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 02:20:50 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,21 @@ void	crt_column(t_data *data, int column)
 	int		i;
 	long	color;
 
-	i = -1;
+	if (column == HEIGHT / 2)
+		printf("old  : %d , start : %d\n", data->ray.old_strt[column], data->ray.start);
 	color = get_texture(data);
+	i = data->ray.old_strt[column] - 1;
 	while (++i < data->ray.start)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
-	i--;
-	while (++i < data->ray.end)
+	--i;
+	while (++i < data->ray.end && i < HEIGHT)
 		data->img.buffer[column + (i * (data->img.size / 4))] = color;
-	i--;
-	while (++i < HEIGHT)
+	--i;
+	while (++i < HEIGHT && i <= data->ray.old_end[column])
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
+	data->ray.old_strt[column] = data->ray.start;
+	data->ray.old_end[column] = data->ray.end;
 }
+/*------------------------------------------------------*/
+/* pixel actuel * taille de l'image / taille de l'ecran */
+/*------------------------------------------------------*/
