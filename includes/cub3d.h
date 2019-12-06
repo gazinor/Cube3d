@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/06 02:46:05 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 06:05:58 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1300
-# define HEIGHT 1000
+# define WIDTH 2100
+# define HEIGHT 1500
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -51,8 +51,8 @@ typedef	struct	s_img
 	int			bpp;
 	int			size;
 	int			endian;
-	void		*ciel;
-	void		*sol;
+	int			width;
+	int			height;
 }				t_img;
 
 typedef	struct	s_pos
@@ -69,7 +69,6 @@ typedef	struct	s_perso
 	double		plany;
 	double		speed;
 	double		rot;
-	double		plane;
 }				t_perso;
 
 typedef	struct	s_event
@@ -100,7 +99,6 @@ typedef	struct	s_ray
 	double		dirx;
 	double		diry;
 	double		camera;
-	double		wallx;
 }				t_ray;
 
 typedef	struct	s_data
@@ -110,6 +108,15 @@ typedef	struct	s_data
 	t_mlx		mlx;
 	t_event		event;
 	t_ray		ray;
+	t_img		ciel;
+	t_img		sol;
+	t_img		ntext;
+	t_img		stext;
+	t_img		etext;
+	t_img		wtext;
+	t_img		tmp_ciel;
+	t_img		tmp_sol;
+	t_img		tmp_text;
 	char		**map;
 }				t_data;
 
@@ -128,5 +135,6 @@ void			move_left(t_data *data);
 void			move_right(t_data *data);
 void			turn_left(t_data *data);
 void			turn_right(t_data *data);
+t_img			resize_image(t_data *data, t_img *src, int width, int height);
 
 #endif
