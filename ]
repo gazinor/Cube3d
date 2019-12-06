@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/06 11:51:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/06 07:35:01 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,41 +42,28 @@ long	get_texture(t_data *data)
 long	dark(long *color, double walldist)
 {
 	unsigned char	*blue;
-	double			calcul;
+	unsigned char	*red;
+	unsigned char	*green;
 
-	blue = (unsigned char *)color;
-	calcul = ((walldist / 7.5) + 1);
-	*blue = *blue / calcul;
+	//red = (unsigned char *)(color + 1);
+	//green = (unsigned char *)(color + 2);
+	//blue = (unsigned char *)(color + 3);
+	//*red = *red * (walldist * 255. / 25.);
+	//*green = *green * (walldist * 255. / 25.);
+	//*blue = *blue * (walldist * 255. / 25.);
+	//*color += *red;
+	//*color <<= 2;
+	//*color += *green;
+	//*color <<= 2;
+	//*color += *blue;
+	blue = color;
+	*blue = *blue / (((walldist) / 2.) + 1);
 	++blue;
-	*blue = *blue / calcul;
+	*blue = *blue / (((walldist) / 2.) + 1);
 	++blue;
-	*blue = *blue / calcul;
+	*blue = *blue / (((walldist) / 2.) + 1);
 	++blue;
 	*blue = 0;
-	return (*color);
-}
-
-long	trans(long *color, t_data *data, int i)
-{
-	unsigned char	*blue;
-	double			calcul;
-	double			calcul2;
-
-	blue = (unsigned char *)color;
-	calcul = ((data->ray.walldist / 7.5) + 1);
-	calcul2 = (i * ((data->ray.end - data->ray.start) / HEIGHT) +
-											(data->ray.walldist * 3.5)) * 10.5;
-	*blue = *blue / calcul;
-	++blue;
-	*blue = *blue / calcul;
-	++blue;
-	*blue = *blue / calcul;
-	++blue;
-	if (*blue + calcul2 < 255 && i < data->ray.end +
-											(data->ray.end - data->ray.start))
-		*blue += calcul2;
-	else
-		*blue = 255;
 	return (*color);
 }
 
@@ -84,25 +71,19 @@ void	crt_column(t_data *data, int column)
 {
 	int		i;
 	long	color;
-	long 	rend;
 
 	i = -1;
 	color = get_texture(data);
+	if (column == WIDTH / 2)
+		printf("dist : %f\n", data->ray.walldist);
 	while (++i < data->ray.start)
 		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
 	i--;
 	while (++i < data->ray.end)
-	{
-		rend = color;
-		data->img.buffer[column + (i * (data->img.size / 4))] = dark(&rend, data->ray.walldist);
-	}
+		data->img.buffer[column + (i * (data->img.size / 4))] = dark(&color, data->ray.walldist);
 	i--;
 	while (++i < HEIGHT)
-	{
-		rend = color;
-		//*blue = *blue / ((data->ray.walldist / 16.) + 1);
-		data->img.buffer[column + (i * (data->img.size / 4))] = trans(&rend, data, i);
-	}
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xAA000000;
 }
 
 t_img	resize_image(t_data *data, t_img *src, int width, int height)
