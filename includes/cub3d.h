@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 20:53:19 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 02:14:54 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1110
-# define HEIGHT 1024
+# define WIDTH 1920
+# define HEIGHT 1080
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -51,6 +51,8 @@ typedef	struct	s_img
 	int			bpp;
 	int			size;
 	int			endian;
+	void		*ciel;
+	void		*sol;
 }				t_img;
 
 typedef	struct	s_pos
@@ -98,6 +100,7 @@ typedef	struct	s_ray
 	double		dirx;
 	double		diry;
 	double		camera;
+	double		wallx;
 }				t_ray;
 
 typedef	struct	s_data

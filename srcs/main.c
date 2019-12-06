@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/05 21:06:10 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 01:57:45 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,13 @@ int		ft_move(t_data *data)
 	if (data->event.l_arrow == 1)
 		turn_left(data);
 	crt_img(data);
+	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ciel, 0, 0);
+	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.sol, 0, HEIGHT/2);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
 	return (0);
 }
 
-int		main(void)
+/*int		main(void)
 {
 	t_data	data;
 
@@ -80,6 +82,34 @@ int		main(void)
 	data.img.ptr = mlx_new_image(data.mlx.ptr, WIDTH, HEIGHT);
 	data.img.buffer = (int*)mlx_get_data_addr(data.img.ptr, &data.img.bpp,
 										&data.img.size, &data.img.endian);
+	mlx_do_key_autorepeatoff(data.mlx.ptr);
+	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
+	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);
+	mlx_hook(data.mlx.win, QUIT, 0, exit_properly, &data);
+	mlx_loop_hook(data.mlx.ptr, ft_move, &data);
+	mlx_loop(data.mlx.ptr);
+	return (0);
+}*/
+
+int		main(void)
+{
+	t_data data;
+
+	int x;
+	int y;
+
+	x = WIDTH;
+	y = HEIGHT;
+	ft_init (&data);
+	data.mlx.ptr = mlx_init();
+	data.mlx.win = mlx_new_window(data.mlx.ptr, WIDTH, HEIGHT, "Cub3d");
+	data.img.ptr = mlx_new_image(data.mlx.ptr, WIDTH, HEIGHT);
+	data.img.buffer = (int*)mlx_get_data_addr(data.img.ptr, &data.img.bpp,
+										&data.img.size, &data.img.endian);
+	data.img.ciel = mlx_new_image(data.mlx.ptr, WIDTH, HEIGHT);
+	data.img.sol = mlx_new_image(data.mlx.ptr, WIDTH , HEIGHT);
+	data.img.ciel = mlx_xpm_file_to_image(data.mlx.ptr, "/Users/gaefourn/Desktop/Textures/XPM/ciel.xpm", &x, &y);
+	data.img.sol = mlx_xpm_file_to_image(data.mlx.ptr, "/Users/gaefourn/Desktop/Textures/XPM/sol.xpm", &x, &y);
 	mlx_do_key_autorepeatoff(data.mlx.ptr);
 	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
 	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);

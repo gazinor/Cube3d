@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 21:09:20 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/06 02:26:04 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ void	crt_column(t_data *data, int column)
 	i = -1;
 	color = get_texture(data);
 	while (++i < data->ray.start)
-		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFFFF;
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
 	i--;
 	while (++i < data->ray.end)
 		data->img.buffer[column + (i * (data->img.size / 4))] = color;
 	i--;
 	while (++i < HEIGHT)
-		data->img.buffer[column + (i * (data->img.size / 4))] = 0xA0AAAAAA;
+		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
 }
