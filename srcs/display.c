@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/09 02:18:08 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/09 14:57:52 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,27 @@ void	*crt_img(t_data *data)
 	return (data->img.buffer);
 }
 
-int		*get_texture(t_data *data)
+t_img	get_texture(t_data *data)
 {
-	if (data->ray.side == 1)
+	if (data->map[(int)data->ray.mapx][(int)(data->ray.mapy)] == '0')
 	{
-		if (data->ray.stepy == -1)
-			return (data->ntext.buffer);
-		if (data->ray.stepy == 1)
-			return (data->stext.buffer);
+		if (data->ray.side == 1)
+		{
+			if (data->ray.stepy == -1)
+				return (data->ntext);
+			if (data->ray.stepy == 1)
+				return (data->stext);
+		}
+		if (data->ray.stepx == -1)
+			return (data->etext);
 	}
-	if (data->ray.stepx == -1)
-		return (data->etext.buffer);
-	return (data->wtext.buffer);
+	else if (data->map[(int)data->ray.mapx][(int)(data->ray.mapy)] == '4')
+	{
+		if (data->event.door == 1)
+			return (data->odoor);
+		return (data->cdoor);
+	}
+	return (data->wtext);
 }
 
 long	dark(int color, double walldist)
@@ -82,8 +91,8 @@ long	trans(int color, t_data *data, int i)
 void	crt_column(t_data *data, int column)
 {
 	int		i;
-	int		*texture;
-	int 	*rend;
+	t_img	texture;
+	t_img 	rend;
 
 	i = -1;
 	texture = get_texture(data);
@@ -95,20 +104,25 @@ void	crt_column(t_data *data, int column)
 		rend = texture;
 		if (data->ray.side == 1)
 			data->img.buffer[column + (i * (data->img.size / sizeof(int)))]
-= dark(rend[(int)(((data->ray.walldist * data->ray.dirx + data->perso.pos.x -
-(int)(data->ray.walldist * data->ray.dirx + data->perso.pos.x)) * 750) +
-(int)((int)((i - data->ray.truestart) * (750 / (double)data->ray.heightline)) * (data->ntext.size / sizeof(int))))], data->ray.walldist);
+= dark(rend.buffer[(int)(((data->ray.walldist * data->ray.dirx +
+data->perso.pos.x - (int)(data->ray.walldist * data->ray.dirx +
+data->perso.pos.x)) * texture.height) + (int)((int)((i - data->ray.truestart) *
+(texture.height / (double)data->ray.heightline)) * (rend.size /
+sizeof(int))))], data->ray.walldist);
 		else
 			data->img.buffer[column + (i * (data->img.size / sizeof(int)))]
-= dark(rend[(int)(((data->ray.walldist * data->ray.diry + data->perso.pos.y -
-(int)(data->ray.walldist * data->ray.diry + data->perso.pos.y)) * 750) +
-(int)((int)((i - data->ray.truestart) * (750 / (double)data->ray.heightline)) * (data->ntext.size / sizeof(int))))], data->ray.walldist);
+= dark(rend.buffer[(int)(((data->ray.walldist * data->ray.diry +
+data->perso.pos.y - (int)(data->ray.walldist * data->ray.diry +
+data->perso.pos.y)) * texture.height) + (int)((int)((i - data->ray.truestart) *
+(texture.height / (double)data->ray.heightline)) * (rend.size /
+sizeof(int))))], data->ray.walldist);
 	}
 	i--;
 	while (++i < HEIGHT)
 	{
 		data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) * (data->img.size / sizeof(int)))], data, i);
+trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
+			(data->img.size / sizeof(int)))], data, i);
 	}
 }
 
@@ -138,6 +152,8 @@ t_img	resize_image(t_data *data, t_img *src, int width, int height)
 								(src->size / 4))))];
 		}
 	}
+	dst.height = height;
+	dst.width = width;
 	return (dst);
 }
 

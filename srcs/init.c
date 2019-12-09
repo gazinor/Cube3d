@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/09 02:42:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/09 15:07:18 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void	ft_init(t_data *data)
 	data->event.right = 0;
 	data->event.l_arrow = 0;
 	data->event.r_arrow = 0;
+	data->event.door = 0;
+	data->event.run = 0;
+	data->event.respawn = 0;
 	data->perso.planx = 0;
 	data->perso.plany = 0;
 	ft_init_map(data);

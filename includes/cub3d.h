@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/09 04:49:53 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/09 15:08:33 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define R_ARROW 124
 # define DOOR 14
 # define RUN 257
+# define RESPAWN 15
 # define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
@@ -67,6 +68,7 @@ typedef	struct	s_pos
 typedef	struct	s_perso
 {
 	t_pos		pos;
+	t_pos		depart;
 	t_pos		dir;
 	double		planx;
 	double		plany;
@@ -84,6 +86,7 @@ typedef	struct	s_event
 	t_bool		r_arrow;
 	t_bool		door;
 	t_bool		run;
+	t_bool		respawn;
 }				t_event;
 
 typedef	struct	s_ray
@@ -128,6 +131,12 @@ typedef	struct	s_data
 	t_img		tmp_stext;
 	t_img		tmp_etext;
 	t_img		tmp_wtext;
+	t_img		odoor;
+	t_img		tmp_odoor;
+	t_img		cdoor;
+	t_img		tmp_cdoor;
+	t_img		remote;
+	t_img		tmp_remote;
 	pid_t		music;
 	char		**map;
 }				t_data;
