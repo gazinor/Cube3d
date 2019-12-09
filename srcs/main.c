@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/09 02:44:43 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/09 05:32:56 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		exit_properly(t_bool error, char *error_msg)
 	int	i;
 
 	i = 0;
+	system("killall afplay");
 	if (error == TRUE)
 {
 		while (error_msg[i])
@@ -147,6 +148,7 @@ int		main(void)
 	crt_window(&data);
 	load_background(&data);
 	load_textures(&data);
+	system("afplay sounds/bgm.mp3 &");
 	mlx_do_key_autorepeatoff(data.mlx.ptr);
 	mlx_hook(data.mlx.win, KEYDOWN, 0, key, &data);
 	mlx_hook(data.mlx.win, KEYUP, 0, key, &data);

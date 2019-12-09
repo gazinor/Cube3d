@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/09 02:25:25 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/09 04:49:53 by gaefourn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1600
-# define HEIGHT 1024
+# define WIDTH 1440
+# define HEIGHT 980
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -33,6 +33,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <math.h>
+# include <signal.h>
 
 typedef enum	e_bool
 {
@@ -127,6 +128,7 @@ typedef	struct	s_data
 	t_img		tmp_stext;
 	t_img		tmp_etext;
 	t_img		tmp_wtext;
+	pid_t		music;
 	char		**map;
 }				t_data;
 
