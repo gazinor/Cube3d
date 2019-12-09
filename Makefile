@@ -4,7 +4,7 @@ NAME     =	Cub3D
 CC       =	gcc
 
 #	Flags     #
-CFLAGS   =	-Wall -Wextra -O3 -g3 -fsanitize=address #-Werror
+CFLAGS   =	-Wall -Wextra -O3 -g3 -fsanitize=address -Werror
 GFLAGS   =	-lm -L$(MLX_PATH) -lmlx -I$(MLX_PATH) -framework OpenGL -framework Appkit
 
 # 	Headers   #
@@ -52,12 +52,12 @@ else
 endif
 	
 $(NAME) : $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
 
 -include $(DEP)
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CFLAGS) -MMD -I$(HEADER_P) -o $@ -c $<
+	$(CC) $(CFLAGS) -MMD -I$(HEADER_P) -o $@ -c $<
 	@printf "\e[1;30m$(CC): \e[1;37m./%-30s\e[1;0m\n" "$< -o $@"
 
 clean :

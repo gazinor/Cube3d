@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/05 21:53:40 by gaefourn         ###   ########.fr       */
+/*   Updated: 2019/12/09 00:44:24 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,17 @@ void	raycast_value(t_data *data, int x)
 
 void	wall_dist(t_data *data)
 {
-	int heightline;
-
 	if (data->ray.side == 0)
 		data->ray.walldist = ABS((data->ray.mapx - data->perso.pos.x +
 					(1 - data->ray.stepx) / 2) / data->ray.dirx);
 	else
 		data->ray.walldist = ABS((data->ray.mapy - data->perso.pos.y + (
 						1 - data->ray.stepy) / 2) / data->ray.diry);
-	heightline = HEIGHT / data->ray.walldist;
-	data->ray.start = (int)(-(heightline / 2) + HEIGHT / 2);
-	data->ray.end = (int)((heightline / 2) + HEIGHT / 2);
+	data->ray.heightline = HEIGHT / data->ray.walldist;
+	data->ray.start = (int)(-(data->ray.heightline / 2) + HEIGHT / 2);
+	data->ray.end = (int)((data->ray.heightline / 2) + HEIGHT / 2);
+	data->ray.truestart = (int)(-(data->ray.heightline / 2) + HEIGHT / 2);
+	data->ray.trueend = (int)((data->ray.heightline / 2) + HEIGHT / 2);
 	if (data->ray.start < 0)
 		data->ray.start = 0;
 	if (data->ray.end >= HEIGHT)

@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/06 06:35:11 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/09 02:25:25 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1080
-# define HEIGHT 840
+# define WIDTH 1600
+# define HEIGHT 1024
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -24,6 +24,8 @@
 # define BACKWARD 1
 # define L_ARROW 123
 # define R_ARROW 124
+# define DOOR 14
+# define RUN 257
 # define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
@@ -79,6 +81,8 @@ typedef	struct	s_event
 	t_bool		right;
 	t_bool		l_arrow;
 	t_bool		r_arrow;
+	t_bool		door;
+	t_bool		run;
 }				t_event;
 
 typedef	struct	s_ray
@@ -96,9 +100,12 @@ typedef	struct	s_ray
 	double		walldist;
 	int			start;
 	int			end;
+	int			truestart;
+	int			trueend;
 	double		dirx;
 	double		diry;
 	double		camera;
+	int			heightline;
 }				t_ray;
 
 typedef	struct	s_data
@@ -116,7 +123,10 @@ typedef	struct	s_data
 	t_img		wtext;
 	t_img		tmp_ciel;
 	t_img		tmp_sol;
-	t_img		tmp_text;
+	t_img		tmp_ntext;
+	t_img		tmp_stext;
+	t_img		tmp_etext;
+	t_img		tmp_wtext;
 	char		**map;
 }				t_data;
 
