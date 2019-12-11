@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/09 15:07:18 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/11 10:16:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_init(t_data *data)
 	data->perso.dir.x = 0;
 	data->perso.dir.y = 0;
 	data->perso.speed = 0.066;
-	data->perso.rot = 4 * M_PI / 180;
+	data->perso.rot = 4. * M_PI / 180;
 	data->event.forward = 0;
 	data->event.backward = 0;
 	data->event.left = 0;
@@ -51,5 +51,11 @@ void	ft_init(t_data *data)
 	data->event.respawn = 0;
 	data->perso.planx = 0;
 	data->perso.plany = 0;
+	data->mod.light = 5.;
+	data->mod.i = 0;
+	data->mod.nbr[NORMAL] = TRUE;
+	data->mod.nbr[DARK] = FALSE;
+	data->mod.nbr[MIRROR] = FALSE;
 	ft_init_map(data);
+	data->door = NULL;
 }

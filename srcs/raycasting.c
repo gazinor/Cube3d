@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/09 00:44:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/11 11:08:00 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,18 @@ void	raycasting(t_data *data, int x)
 			data->ray.side = 1;
 		}
 		if (data->map[data->ray.mapx][data->ray.mapy] > '0')
-			data->ray.hit = 1;
+		{
+			if (data->map[data->ray.mapx][data->ray.mapy] == '1')
+				data->ray.hit = 1;
+			wall_dist(data);
+			if (data->map[data->ray.mapx][data->ray.mapy] == '4')
+			{
+				if (!data->event.door)
+					data->ray.hit = 1;
+				create_door(data, &data->door, x);
+			}
+		}
 	}
-	wall_dist(data);
 }
 
 void	raycast_value(t_data *data, int x)

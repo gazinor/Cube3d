@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/09 14:57:52 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/11 11:29:00 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ t_img	get_texture(t_data *data)
 	return (data->wtext);
 }
 
-long	dark(int color, double walldist)
+long	dark(int color, double walldist, t_data *data)
 {
 	unsigned char	*byte;
 	double			calcul;
 
 	byte = (unsigned char *)&color;
-	calcul = ((walldist / 10.5) + 1);
+	calcul = ((walldist / (4.5 * data->mod.light)) + 1);
 	*byte = *byte / calcul;
 	++byte;
 	*byte = *byte / calcul;
@@ -65,23 +65,23 @@ long	dark(int color, double walldist)
 	return ((long)color);
 }
 
-long	trans(int color, t_data *data, int i)
+long	trans(int color, t_data *data, int i, int limit)
 {
 	unsigned char	*byte;
 	double			calcul;
 	double			calcul2;
 
 	byte = (unsigned char *)&color;
-	calcul = ((data->ray.walldist / 10.5) + 1);
-	calcul2 = (i * ((data->ray.end - data->ray.start) / HEIGHT) +
-											(data->ray.walldist)) * 16.5;
+	calcul = ((data->ray.walldist / (2.5 * data->mod.light)) + 1);
+	calcul2 = (i * ((data->ray.end - data->ray.start) / HEIGHT)) +
+											(data->ray.walldist) * 16.5;
 	*byte = *byte / calcul;
 	++byte;
 	*byte = *byte / calcul;
 	++byte;
 	*byte = *byte / calcul;
 	++byte;
-	if (*byte + calcul2 < 255 && i < 2 * data->ray.end - data->ray.start)
+	if (*byte + calcul2 < 255 && i < limit)
 		*byte += calcul2;
 	else
 		*byte = 255;
@@ -92,7 +92,7 @@ void	crt_column(t_data *data, int column)
 {
 	int		i;
 	t_img	texture;
-	t_img 	rend;
+	t_img 	rend; 
 
 	i = -1;
 	texture = get_texture(data);
@@ -108,30 +108,30 @@ void	crt_column(t_data *data, int column)
 data->perso.pos.x - (int)(data->ray.walldist * data->ray.dirx +
 data->perso.pos.x)) * texture.height) + (int)((int)((i - data->ray.truestart) *
 (texture.height / (double)data->ray.heightline)) * (rend.size /
-sizeof(int))))], data->ray.walldist);
+sizeof(int))))], data->ray.walldist, data);
 		else
 			data->img.buffer[column + (i * (data->img.size / sizeof(int)))]
 = dark(rend.buffer[(int)(((data->ray.walldist * data->ray.diry +
 data->perso.pos.y - (int)(data->ray.walldist * data->ray.diry +
 data->perso.pos.y)) * texture.height) + (int)((int)((i - data->ray.truestart) *
 (texture.height / (double)data->ray.heightline)) * (rend.size /
-sizeof(int))))], data->ray.walldist);
+sizeof(int))))], data->ray.walldist, data);
 	}
 	i--;
 	while (++i < HEIGHT)
 	{
-		data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+		if (data->mod.nbr[MIRROR] == 1)
+			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
 trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-			(data->img.size / sizeof(int)))], data, i);
+(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
+		else
+			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+0x0 + (unsigned int)(((i - HEIGHT / 2) / (data->mod.nbr[DARK] == 1 ? 3 : 2)) *
+		0x01000000 + 0x0F000000);
 	}
 }
 
-t_img	resize_image(t_data *data, t_img *src, int width, int height)
-{
-	t_img	dst;
-	double	size_x;
-	double	size_y;
-	int		x;
+t_img	resize_image(t_data *data, t_img *src, int width, int height) { t_img	dst; double	size_x; double	size_y; int		x;
 	int		y;
 
 	size_x = (src->width / (double)width);
@@ -149,14 +149,10 @@ t_img	resize_image(t_data *data, t_img *src, int width, int height)
 		{
 			dst.buffer[x + (y * dst.size / 4)] =
 				src->buffer[(int)(((int)(x * size_x) + ((int)(y * size_y) *
-								(src->size / 4))))];
+				(src->size / 4))))];
 		}
 	}
 	dst.height = height;
 	dst.width = width;
 	return (dst);
 }
-
-/*------------------------------------------------------*/
-/* pixel actuel * taille de l'image / taille de l'ecran */
-/*------------------------------------------------------*/

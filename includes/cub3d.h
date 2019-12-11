@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/09 15:08:33 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/11 11:33:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define DOOR 14
 # define RUN 257
 # define RESPAWN 15
+# define TAB 48
 # define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
@@ -41,6 +42,13 @@ typedef enum	e_bool
 	FALSE,
 	TRUE
 }				t_bool;
+
+typedef enum	e_mod_type
+{
+	NORMAL = 0,
+	DARK,
+	MIRROR
+}				t_mod_type;
 
 typedef	struct	s_mlx
 {
@@ -89,6 +97,13 @@ typedef	struct	s_event
 	t_bool		respawn;
 }				t_event;
 
+typedef	struct	s_mod
+{
+	t_bool		nbr[3];
+	int			i;
+	double		light;
+}				t_mod;
+
 typedef	struct	s_ray
 {
 	int			mapx;
@@ -112,6 +127,13 @@ typedef	struct	s_ray
 	int			heightline;
 }				t_ray;
 
+typedef	struct	s_sprite
+{
+	t_ray			ray;
+	int				column;
+	struct s_sprite	*next;
+}				t_sprite;
+
 typedef	struct	s_data
 {
 	t_perso		perso;
@@ -120,12 +142,14 @@ typedef	struct	s_data
 	t_event		event;
 	t_ray		ray;
 	t_img		ciel;
+	t_img		ciel_etoile;
 	t_img		sol;
 	t_img		ntext;
 	t_img		stext;
 	t_img		etext;
 	t_img		wtext;
 	t_img		tmp_ciel;
+	t_img		tmp_ciel_etoile;
 	t_img		tmp_sol;
 	t_img		tmp_ntext;
 	t_img		tmp_stext;
@@ -137,8 +161,10 @@ typedef	struct	s_data
 	t_img		tmp_cdoor;
 	t_img		remote;
 	t_img		tmp_remote;
+	t_mod		mod;
 	pid_t		music;
 	char		**map;
+	t_sprite	*door;
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -157,5 +183,10 @@ void			move_right(t_data *data);
 void			turn_left(t_data *data);
 void			turn_right(t_data *data);
 t_img			resize_image(t_data *data, t_img *src, int width, int height);
+void			*create_door(t_data *data, t_sprite **obj, int column);
+void			free_obj(t_sprite *obj);
+long			dark(int color, double walldist, t_data *data);
+void			print_door(t_data *data, t_sprite *obj);
+long			trans(int color, t_data *data, int i, int limit);
 
 #endif
