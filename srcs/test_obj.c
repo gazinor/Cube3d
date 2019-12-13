@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/13 08:47:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/13 07:40:35 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_door(t_data *data, t_sprite *obj)
 	t_img	rend;
 	int		color;
 
-	rend = data->event.door == FALSE ? data->cdoor : data->odoor;
+	rend = data->event.door == 0 ? data->cdoor : data->odoor; 
 	while (obj)
 	{
 		i = (HEIGHT / 2) - ((HEIGHT / obj->ray.walldist) / 2);
@@ -55,33 +55,54 @@ sizeof(int))))], obj->ray.walldist, data);
 				data->img.buffer[obj->column + (i * (data->img.size / sizeof(int)))] = color;
     			if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
 					data->img.buffer[obj->column + ((j - i + true_end) *
-(data->img.size / sizeof(int)))] = trans(color, data, j - i + true_end, HEIGHT);
+			(data->img.size / sizeof(int)))] = trans(color, data,
+			 j - i + true_end, HEIGHT);
 			}
 		}
 		obj = obj->next;
 	}
 }
 
-void	*create_door(t_data *data, t_sprite **obj, int column)
+t_sprite	**check_door(t_data *data)
 {
-	char toggle;
+	int		i;
+
+	i = -1;
+	while (data->door[++i])
+	{
+		if (data->door[i].pos.x == data->mapx &&
+				data->door[i].pos.y == data->mapy)
+			return (data->door[i]);
+	}
+	if (!(*obj[i] = malloc(sizeof(*obj))))
+		return (NULL);
+	return (*obj);
+}
+
+void	*create_door(t_data *data int column)
+{
+	t_sprite	*door;
+	char		toggle;
 	
 	toggle = 0;
-	while (*obj)
+	door = check_door(data);
+	while (door)
 	{
-		if ((*obj)->column == column && data->event.door == FALSE)
+		if ((*door)->column == column && data->event.door == FALSE)
 			toggle = 1;
-		obj = &((*obj)->next);
+		door = &((*door)->next);
 	}
 	if (!toggle)
 	{
-		if (!(*obj = malloc(sizeof(t_sprite))))
+		if (!(*door = malloc(sizeof(t_sprite))
 			return (NULL);
-		(*obj)->ray = data->ray;
-		(*obj)->column = column;
-		(*obj)->next = NULL;
+		(*door)->ray = data->ray;
+		(*door)->column = column;
+		(*door)->pos.x = data->mapx;
+		(*door)->pos.y = data->mapy;
+		(*door)->next = NULL;
 	}
-	return (obj);
+	return (*obj);
 }
 
 void	free_obj(t_sprite *obj)

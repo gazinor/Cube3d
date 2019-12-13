@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/11 11:33:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/13 07:51:42 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ typedef	struct	s_sprite
 {
 	t_ray			ray;
 	int				column;
+	t_pos			pos;
 	struct s_sprite	*next;
 }				t_sprite;
 

@@ -6,11 +6,26 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/11 11:08:00 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/13 08:13:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	check_wall_type(t_data *data, int x)
+{
+
+	if (data->map[data->ray.mapx][data->ray.mapy] == '1' ||
+			data->map[data->ray.mapx][data->ray.mapy] == '3')
+		data->ray.hit = 1;
+	wall_dist(data);
+	if (data->map[data->ray.mapx][data->ray.mapy] == '4')
+	{
+		if (!data->event.door)
+			data->ray.hit = 1;
+		create_door(data, &data->door, x);
+	}
+}
 
 void	raycasting(t_data *data, int x)
 {
@@ -30,17 +45,7 @@ void	raycasting(t_data *data, int x)
 			data->ray.side = 1;
 		}
 		if (data->map[data->ray.mapx][data->ray.mapy] > '0')
-		{
-			if (data->map[data->ray.mapx][data->ray.mapy] == '1')
-				data->ray.hit = 1;
-			wall_dist(data);
-			if (data->map[data->ray.mapx][data->ray.mapy] == '4')
-			{
-				if (!data->event.door)
-					data->ray.hit = 1;
-				create_door(data, &data->door, x);
-			}
-		}
+			check_wall_type(data, x);
 	}
 }
 

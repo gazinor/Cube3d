@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/11 10:41:54 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/13 07:54:41 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,16 @@ void	check_mod(t_data *data)
 		data->mod.light = 5;
 }
 
+void	do_in_order(t_data *data)
+{
+	check_mod(data);
+	crt_img(data);
+	print_door(data, data->door);
+	free_obj(data->door);
+	data->door = NULL;
+	put_image_to_window(data);
+}
+
 int		ft_move(t_data *data)
 {
 	if (data->event.forward == 1)
@@ -147,12 +157,7 @@ int		ft_move(t_data *data)
 		data->perso.pos.x = data->perso.depart.x;
 		data->perso.pos.y = data->perso.depart.y;
 	}
-	check_mod(data);
-	crt_img(data);
-	print_door(data, data->door);
-	free_obj(data->door);
-	data->door = NULL;
-	put_image_to_window(data);
+	do_in_order(data);
 	return (0);
 }
 

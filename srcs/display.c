@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/11 11:29:00 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/13 03:43:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ long	trans(int color, t_data *data, int i, int limit)
 	double			calcul2;
 
 	byte = (unsigned char *)&color;
-	calcul = ((data->ray.walldist / (2.5 * data->mod.light)) + 1);
+	calcul = ((data->ray.walldist / (3.5 * data->mod.light)) + 1);
 	calcul2 = (i * ((data->ray.end - data->ray.start) / HEIGHT)) +
-											(data->ray.walldist) * 16.5;
+											(data->ray.walldist + 1) * 16.5;
 	*byte = *byte / calcul;
 	++byte;
 	*byte = *byte / calcul;
@@ -131,7 +131,12 @@ trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
 	}
 }
 
-t_img	resize_image(t_data *data, t_img *src, int width, int height) { t_img	dst; double	size_x; double	size_y; int		x;
+t_img	resize_image(t_data *data, t_img *src, int width, int height) 
+{
+   	t_img	dst;
+   	double	size_x; 
+	double	size_y; 
+	int		x;
 	int		y;
 
 	size_x = (src->width / (double)width);
