@@ -21,7 +21,9 @@ SRC_NAME =	main.c \
 			moves1.c \
 			moves2.c \
 			raycasting.c \
-			obj.c
+			obj.c \
+			menu.c
+
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
 DEP  = $(OBJ:%.o=%.d)

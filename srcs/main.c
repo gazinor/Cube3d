@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/13 07:54:41 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 04:35:35 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,16 @@ void	load_objs(t_data *data)
 	data->remote = data->tmp_remote;
 }
 
+void	loop(t_data *data)
+{
+	mlx_do_key_autorepeatoff(data->mlx.ptr);
+	mlx_hook(data->mlx.win, KEYDOWN, 0, key_on, data);
+	mlx_hook(data->mlx.win, KEYUP, 0, key_off, data);
+	mlx_hook(data->mlx.win, QUIT, 0, exit_properly, data);
+	mlx_loop_hook(data->mlx.ptr, ft_move, data);
+	mlx_loop(data->mlx.ptr);
+}
+
 int		main(void)
 {
 	t_data data;
@@ -243,12 +253,9 @@ int		main(void)
 	load_background(&data);
 	load_dir_textures(&data);
 	load_objs(&data);
-	system("afplay sounds/metal_bgm.mp3 &");
-	mlx_do_key_autorepeatoff(data.mlx.ptr);
-	mlx_hook(data.mlx.win, KEYDOWN, 0, key_on, &data);
-	mlx_hook(data.mlx.win, KEYUP, 0, key_off, &data);
-	mlx_hook(data.mlx.win, QUIT, 0, exit_properly, &data);
-	mlx_loop_hook(data.mlx.ptr, ft_move, &data);
-	mlx_loop(data.mlx.ptr);
+	load_menu(&data);
+	system("afplay sounds/bgm.mp3 &");
+	menu(&data);
+//	loop(&data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/13 07:51:42 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 04:36:10 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # define BACKWARD 1
 # define L_ARROW 123
 # define R_ARROW 124
+# define U_ARROW 126
+# define D_ARROW 125
+# define ENTER 36
 # define DOOR 14
 # define RUN 257
 # define RESPAWN 15
@@ -95,7 +98,14 @@ typedef	struct	s_event
 	t_bool		door;
 	t_bool		run;
 	t_bool		respawn;
+	t_bool		menu;
 }				t_event;
+
+typedef struct	s_menu
+{
+	int			i;
+	t_bool		button[3];
+}				t_menu;
 
 typedef	struct	s_mod
 {
@@ -162,7 +172,14 @@ typedef	struct	s_data
 	t_img		tmp_cdoor;
 	t_img		remote;
 	t_img		tmp_remote;
+	t_img		i_menu;
+	t_img		tmp_menu;
+	t_img		s_contour;
+	t_img		tmp_s_contour;
+	t_img		uns_contour;
+	t_img		tmp_uns_contour;
 	t_mod		mod;
+	t_menu		menu;
 	pid_t		music;
 	char		**map;
 	t_sprite	*door;
@@ -189,5 +206,9 @@ void			free_obj(t_sprite *obj);
 long			dark(int color, double walldist, t_data *data);
 void			print_door(t_data *data, t_sprite *obj);
 long			trans(int color, t_data *data, int i, int limit);
+void			menu(t_data *data);
+void			load_menu(t_data *data);
+int				exit_properly(t_data *data, t_bool error, char *error_msg);
+void			loop(t_data *data);
 
 #endif
