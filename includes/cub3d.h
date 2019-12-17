@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/17 04:36:10 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 09:27:44 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,11 +178,14 @@ typedef	struct	s_data
 	t_img		tmp_s_contour;
 	t_img		uns_contour;
 	t_img		tmp_uns_contour;
+	t_img		sprite;
+	t_img		tmp_sprite;
 	t_mod		mod;
 	t_menu		menu;
 	pid_t		music;
 	char		**map;
 	t_sprite	*door;
+	t_sprite	*obj;
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -210,5 +213,7 @@ void			menu(t_data *data);
 void			load_menu(t_data *data);
 int				exit_properly(t_data *data, t_bool error, char *error_msg);
 void			loop(t_data *data);
+void			print_obj(t_data *data, t_sprite *obj);
+void			*create_obj(t_data *data, t_sprite **obj, int column);
 
 #endif

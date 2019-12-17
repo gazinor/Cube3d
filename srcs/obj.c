@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/13 08:47:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 11:29:49 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,25 +62,75 @@ sizeof(int))))], obj->ray.walldist, data);
 	}
 }
 
+void	print_obj(t_data *data, t_sprite *obj)
+{
+	int		i;
+	int		j;
+	int		true_start;
+	int		true_end;
+	t_img	rend;
+	int		color;
+	int		tmp;
+
+	rend = data->sprite;
+	tmp = obj->column + obj->ray.heightline;
+	while (obj)
+	{
+		while (obj->column < tmp && obj->column < WIDTH)
+		{
+			i = obj->ray.start;
+			true_start = i;
+			i = i < 0 ? -1 : i - 1;
+			j = obj->ray.end;
+			true_end = j;
+			j = j > HEIGHT ? HEIGHT : j;
+			while (++i < j)
+			{
+				color = dark(rend.buffer[(obj->column + obj->ray.heightline - tmp) + ((int)((int)(i - true_start) * (rend.height / (true_end - true_start) * (rend.size / sizeof(int)))))], obj->ray.walldist, data);
+				if (color)
+				{
+					data->img.buffer[obj->column + (i * (data->img.size / sizeof(int)))] = color;
+	    			if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
+						data->img.buffer[obj->column + ((j - i + true_end) *
+	(data->img.size / sizeof(int)))] = trans(color, data, j - i + true_end, HEIGHT);
+				}
+			}
+			++obj->column;
+		}
+		obj = obj->next;
+	}
+}
+
 void	*create_door(t_data *data, t_sprite **obj, int column)
 {
-	char toggle;
-	
-	toggle = 0;
 	while (*obj)
 	{
 		if ((*obj)->column == column && data->event.door == FALSE)
-			toggle = 1;
+			return (obj);
 		obj = &((*obj)->next);
 	}
-	if (!toggle)
+	if (!(*obj = malloc(sizeof(t_sprite))))
+		return (NULL);
+	(*obj)->ray = data->ray;
+	(*obj)->column = column;
+	(*obj)->next = NULL;
+	return (obj);
+}
+
+void	*create_obj(t_data *data, t_sprite **obj, int column)
+{
+	while (*obj)
 	{
-		if (!(*obj = malloc(sizeof(t_sprite))))
-			return (NULL);
-		(*obj)->ray = data->ray;
-		(*obj)->column = column;
-		(*obj)->next = NULL;
+		if ((int)((*obj)->ray.mapx) == (int)(data->ray.mapx) &&
+				(int)(data->ray.mapy) == (int)((*obj)->ray.mapy))
+			return (obj);
+		obj = &((*obj)->next);
 	}
+	if (!(*obj = malloc(sizeof(t_sprite))))
+		return (NULL);
+	(*obj)->ray = data->ray;
+	(*obj)->column = column;
+	(*obj)->next = NULL;
 	return (obj);
 }
 

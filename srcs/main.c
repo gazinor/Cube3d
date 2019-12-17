@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/17 04:35:35 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 09:58:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,18 @@ void	do_in_order(t_data *data)
 {
 	check_mod(data);
 	crt_img(data);
-	print_door(data, data->door);
-	free_obj(data->door);
-	data->door = NULL;
+	if (data->door)
+	{
+		print_door(data, data->door);
+		free_obj(data->door);
+		data->door = NULL;
+	}
+	if (data->obj)
+	{
+		print_obj(data, data->obj);
+		free_obj(data->obj);
+		data->obj = NULL;
+	}
 	put_image_to_window(data);
 }
 
@@ -232,6 +241,11 @@ void	load_objs(t_data *data)
 	data->tmp_remote = resize_image(data, &data->remote, WIDTH/2, HEIGHT/2);
 	mlx_destroy_image(data->mlx.ptr, data->remote.ptr);
 	data->remote = data->tmp_remote;
+	data->sprite.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
+		"./textures/sprite.xpm", &(data->sprite.width), &(data->sprite.height));
+	data->tmp_sprite = resize_image(data, &data->sprite, 1000, 1000);
+	mlx_destroy_image(data->mlx.ptr, data->sprite.ptr);
+	data->sprite = data->tmp_sprite;
 }
 
 void	loop(t_data *data)
@@ -256,6 +270,5 @@ int		main(void)
 	load_menu(&data);
 	system("afplay sounds/bgm.mp3 &");
 	menu(&data);
-//	loop(&data);
 	return (0);
 }

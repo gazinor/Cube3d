@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/13 07:54:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/17 08:19:04 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,5 @@ void	ft_init(t_data *data)
 	data->mod.nbr[MIRROR] = FALSE;
 	ft_init_map(data);
 	data->door = NULL;
+	data->obj = NULL;
 }
