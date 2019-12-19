@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/17 08:19:04 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/19 08:04:21 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ void	ft_init(t_data *data)
 	ft_init_map(data);
 	data->door = NULL;
 	data->obj = NULL;
+	data->save = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/17 09:27:44 by glaurent         ###   ########.fr       */
+/*   Updated: 2019/12/19 09:18:45 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,18 @@ typedef	struct	s_sprite
 {
 	t_ray			ray;
 	int				column;
+	int				nbray;
+	int				moyenne;
 	t_pos			pos;
 	struct s_sprite	*next;
 }				t_sprite;
+
+typedef struct	s_save
+{
+	int			max;
+	int			min;
+	void		*next;
+}				t_save;
 
 typedef	struct	s_data
 {
@@ -186,6 +195,7 @@ typedef	struct	s_data
 	char		**map;
 	t_sprite	*door;
 	t_sprite	*obj;
+	t_save		*save;
 }				t_data;
 
 void			*crt_img(t_data *data);
