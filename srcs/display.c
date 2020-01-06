@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/13 03:43:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/06 09:19:51 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,15 @@ void	crt_column(t_data *data, int column)
 
 	i = -1;
 	texture = get_texture(data);
-	while (++i < data->ray.start)
-		data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
+	if (data->event.screenshot == 1)
+	{
+		while (++i < data->ray.start)
+			data->img.buffer[column + (i * (data->img.size / 4))] =
+				data->ciel.buffer[column + (i * (data->img.size / 4))];
+	}
+	else
+		while (++i < data->ray.start)
+			data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
 	i--;
 	while (++i < data->ray.end)
 	{
@@ -118,17 +125,38 @@ data->perso.pos.y)) * texture.height) + (int)((int)((i - data->ray.truestart) *
 sizeof(int))))], data->ray.walldist, data);
 	}
 	i--;
-	while (++i < HEIGHT)
-	{
-		if (data->mod.nbr[MIRROR] == 1)
-			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+	if (data->event.screenshot == 1)
+		while (++i < HEIGHT)
+		{
+			if (data->mod.nbr[MIRROR] == 1)
+			{
+				if (i < data->ray.end + data->ray.heightline)
+					data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
 trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
 (data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
-		else
-			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-0x0 + (unsigned int)(((i - HEIGHT / 2) / (data->mod.nbr[DARK] == 1 ? 3 : 2)) *
+				else
+					data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end) - data->ray.heightline) *
+(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
+			}
+			else
+				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+0x0 + ((data->sol.buffer[column + ((i - (HEIGHT / 2)) * (data->img.size / 4))]
++ 0xFF000000) - (unsigned int)(((i - (HEIGHT / 2)) /
+(data->mod.nbr[DARK] == 1 ? 3 : 2)) * 0x01000000 + 0x0F000000));
+		}
+	else
+		while (++i < HEIGHT)
+		{
+			if (data->mod.nbr[MIRROR] == 1)
+				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
+(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
+			else
+				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+0x0 + (unsigned int)(((i - (HEIGHT / 2)) / (data->mod.nbr[DARK] == 1 ? 3 : 2)) *
 		0x01000000 + 0x0F000000);
-	}
+		}
 }
 
 t_img	resize_image(t_data *data, t_img *src, int width, int height) 

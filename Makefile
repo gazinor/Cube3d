@@ -22,6 +22,7 @@ SRC_NAME =	main.c \
 			moves2.c \
 			raycasting.c \
 			obj.c \
+			screenshot.c \
 			menu.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/19 10:22:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/06 05:26:34 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,137 +25,200 @@ void	print_door(t_data *data, t_sprite *obj)
 	rend = data->event.door == FALSE ? data->cdoor : data->odoor;
 	while (obj)
 	{
-		i = (HEIGHT / 2) - ((HEIGHT / obj->ray.walldist) / 2);
+		i = (HEIGHT / 2) - ((HEIGHT / obj->sac.ray.walldist) / 2);
 		true_start = i;
 		i = i < 0 ? 0 : i - 1;
-		j = (HEIGHT / 2) + ((HEIGHT / obj->ray.walldist) / 2);
+		j = (HEIGHT / 2) + ((HEIGHT / obj->sac.ray.walldist) / 2);
 		true_end = j;
 		j = j > HEIGHT ? HEIGHT : j;
 		while (++i < j)
 		{
-			if (obj->ray.side == 1)
+			if (obj->sac.ray.side == 1)
 			{
-				color = dark(rend.buffer[(int)(((obj->ray.walldist * obj->ray.dirx +
-	data->perso.pos.x - (int)(obj->ray.walldist * obj->ray.dirx +
-	data->perso.pos.x)) * rend.height) + (int)((int)((i - true_start) *
-	(rend.height / (double)(true_end - true_start))) * (rend.size /
-sizeof(int))))], obj->ray.walldist, data);
+				color = dark(rend.buffer[(int)(((obj->sac.ray.walldist * obj->sac.ray.dirx +
+				data->perso.pos.x - (int)(obj->sac.ray.walldist * obj->sac.ray.dirx +
+			data->perso.pos.x)) * rend.height) + (int)((int)((i - true_start) *
+				(rend.height / (double)(true_end - true_start))) * (rend.size /
+									sizeof(int))))], obj->sac.ray.walldist, data);
 			}
 			else
 			{
-				color = dark(rend.buffer[(int)(((obj->ray.walldist * obj->ray.diry +
-	data->perso.pos.y - (int)(obj->ray.walldist * obj->ray.diry +
-	data->perso.pos.y)) * rend.height) + (int)((int)((i - true_start) *
-	(rend.height / (double)(true_end - true_start))) * (rend.size /
-sizeof(int))))], obj->ray.walldist, data);
+				color = dark(rend.buffer[(int)(((obj->sac.ray.walldist * obj->sac.ray.diry +
+				data->perso.pos.y - (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
+			data->perso.pos.y)) * rend.height) + (int)((int)((i - true_start) *
+				(rend.height / (double)(true_end - true_start))) * (rend.size /
+									sizeof(int))))], obj->sac.ray.walldist, data);
 			}
 			if (color)
 			{
-				data->img.buffer[obj->column + (i * (data->img.size / sizeof(int)))] = color;
-    			if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
-					data->img.buffer[obj->column + ((j - i + true_end) *
-(data->img.size / sizeof(int)))] = trans(color, data, j - i + true_end, HEIGHT);
+				data->img.buffer[obj->sac.column + (i * (data->img.size / sizeof(int)))] = color;
+				if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
+					data->img.buffer[obj->sac.column + ((j - i + true_end) *
+							(data->img.size / sizeof(int)))] = trans(color, data, j - i + true_end, HEIGHT);
 			}
 		}
 		obj = obj->next;
 	}
 }
+/*
+   void	print_obj(t_data *data, t_sprite *obj)
+   {
+   int		i;
+   int		j;
+   t_img	rend;
+   int		color;
+   int		tmp;
+   int		tmp2;
+   t_save	*head;
+
+   rend = data->sprite;
+   head = data->save;
+   while (obj && data->save)
+   {
+   tmp = obj->sac.column + obj->sac.nbray;
+   tmp2 = obj->sac.column + obj->sac.ray.heightline;
+//		printf("ternaire : %d\n", (tmp / 2 < tmp2 / 2 && ((data->save->max < tmp && data->save->min >= tmp - obj->sac.nbray) || (data->save->max < tmp && data->save->min > tmp - obj->sac.nbray)) ? obj->sac.ray.heightline - obj->sac.nbray : 0));
+//		printf("max : %d | tmp : %d\n | min : %d | expected %d\n\n", data->save->max, tmp, data->save->min, tmp - obj->sac.nbray);
+while (obj->sac.column < tmp && obj->sac.column < WIDTH && obj->sac.column < tmp2)
+{
+i = obj->sac.ray.start;
+j = obj->sac.ray.end;
+while (++i < j)
+{
+color = dark(rend.buffer[(int)((((obj->sac.column + obj->sac.nbray - tmp)
++ (tmp / 2 < tmp2 / 2 && ((data->save->max > tmp && data->save->min >= tmp - obj->sac.nbray) || (data->save->max < tmp && data->save->min <= tmp - obj->sac.nbray) || (data->save->max == tmp && !(data->save->min > 0 || data->save->min < tmp - obj->sac.nbray))) ? obj->sac.ray.heightline - obj->sac.nbray : 0))
+ * obj->sac.ray.walldist) + (int)((int)((i - obj->sac.ray.truestart) * 
+ (rend.height / (double)(obj->sac.ray.trueend - obj->sac.ray.truestart))) * (rend.size / sizeof(int))))], obj->sac.ray.walldist, data);
+ if (color)
+ {
+ data->img.buffer[obj->sac.column + (i * (data->img.size / sizeof(int)))] = color;
+ if (data->mod.nbr[MIRROR] == 1 && (j - i + obj->sac.ray.trueend) < HEIGHT)
+ data->img.buffer[obj->sac.column + ((j - i + obj->sac.ray.trueend) *
+ (data->img.size / sizeof(int)))] = trans(color, data, j - i + obj->sac.ray.trueend, HEIGHT);
+ }
+ }
+ ++obj->sac.column;
+ }
+ data->save->max = tmp;
+ data->save->min = tmp - obj->sac.nbray;
+ data->save = data->save->next;
+ obj = obj->sac.next;
+ }
+ data->save = head;
+ }
+ */
+void	sort_list(t_sprite **obj)
+{
+	t_sac tmp;
+	t_sprite *head;
+
+	head = *obj;
+	while (*obj && (*obj)->next)
+	{
+		if ((*obj)->sac.ray.walldist < (*obj)->next->sac.ray.walldist)
+		{
+			tmp = (*obj)->sac;
+			(*obj)->sac = (*obj)->next->sac;
+			(*obj)->next->sac = tmp;
+			obj = &head;
+		}
+		else
+			obj = &(*obj)->next;
+	}
+}
 
 void	print_obj(t_data *data, t_sprite *obj)
 {
-	int		i;
-	int		j;
-	t_img	rend;
-	int		color;
-	int		tmp;
-	int		tmp2;
-	t_save	*head;
+	int	stripe;
+	int	y;
 
-	rend = data->sprite;
-	head = data->save;
-	while (obj && data->save)
+	sort_list(&obj);
+	while (obj)
 	{
-		tmp = obj->column + obj->nbray;
-		tmp2 = obj->column + obj->ray.heightline;
-//		printf("ternaire : %d\n", (tmp / 2 < tmp2 / 2 && ((data->save->max < tmp && data->save->min >= tmp - obj->nbray) || (data->save->max < tmp && data->save->min > tmp - obj->nbray)) ? obj->ray.heightline - obj->nbray : 0));
-//		printf("max : %d | tmp : %d\n | min : %d | expected %d\n\n", data->save->max, tmp, data->save->min, tmp - obj->nbray);
-		while (obj->column < tmp && obj->column < WIDTH && obj->column < tmp2)
+		double spriteX = obj->sac.ray.mapx - data->perso.pos.x + 0.5;
+		double spriteY = obj->sac.ray.mapy - data->perso.pos.y + 0.5;
+		double invDet = 1.0 / (data->perso.planx * data->perso.dir.y -
+				data->perso.dir.x * data->perso.plany);
+		double transformX = invDet * (data->perso.dir.y * spriteX -
+				data->perso.dir.x * spriteY);
+		double transformY = invDet * (-data->perso.plany * spriteX +
+				data->perso.planx * spriteY);
+		int spriteScreenX = (int)((WIDTH / 2) * (1 + transformX / transformY));
+		int spriteHeight = ABS((int)(HEIGHT / transformY));
+		int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
+		if(drawStartY < 0)
+			drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + HEIGHT / 2;
+		if(drawEndY >= HEIGHT)
+			drawEndY = HEIGHT - 1;
+		int spriteWidth = ABS((int)(HEIGHT / (transformY)));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if(drawStartX < 0)
+			drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if(drawEndX >= WIDTH)
+			drawEndX = WIDTH - 1;
+		stripe = drawStartX - 1;
+		while (++stripe < drawEndX)
 		{
-			i = obj->ray.start;
-			j = obj->ray.end;
-			while (++i < j)
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
+					* data->sprite.width / spriteWidth) / 256;
+			if (transformY > 0 && stripe > 0 && stripe < WIDTH
+					&& transformY < data->ZBuffer[stripe])
 			{
-				color = dark(rend.buffer[(int)((((obj->column + obj->nbray - tmp)
-+ (tmp / 2 < tmp2 / 2 && ((data->save->max > tmp && data->save->min >= tmp - obj->nbray) || (data->save->max < tmp && data->save->min <= tmp - obj->nbray) || (data->save->max == tmp && !(data->save->min > 0 || data->save->min < tmp - obj->nbray))) ? obj->ray.heightline - obj->nbray : 0))
-	* obj->ray.walldist) + (int)((int)((i - obj->ray.truestart) * 
-	(rend.height / (double)(obj->ray.trueend - obj->ray.truestart))) * (rend.size / sizeof(int))))], obj->ray.walldist, data);
-				if (color)
+				y = drawStartY - 1;
+				while (++y < drawEndY)
 				{
-					data->img.buffer[obj->column + (i * (data->img.size / sizeof(int)))] = color;
-	    			if (data->mod.nbr[MIRROR] == 1 && (j - i + obj->ray.trueend) < HEIGHT)
-						data->img.buffer[obj->column + ((j - i + obj->ray.trueend) *
-	(data->img.size / sizeof(int)))] = trans(color, data, j - i + obj->ray.trueend, HEIGHT);
+					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
+					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
+					int color = dark(data->sprite.buffer[data->sprite.width *
+							texY + texX], obj->sac.ray.walldist, data);
+					if((color & 0x00FFFFFF) != 0)
+					{
+						data->img.buffer[stripe + (y *
+								(data->img.size / sizeof(int)))] = color;
+						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
+							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
+(data->img.size / sizeof(int)))] = trans(color, data, drawEndY - y + drawEndY, HEIGHT);
+					}
 				}
 			}
-			++obj->column;
 		}
-		data->save->max = tmp;
-		data->save->min = tmp - obj->nbray;
-		data->save = data->save->next;
 		obj = obj->next;
 	}
-	data->save = head;
 }
 
 void	*create_door(t_data *data, t_sprite **obj, int column)
 {
 	while (*obj)
 	{
-		if ((*obj)->column == column && data->event.door == FALSE)
+		if ((*obj)->sac.column == column && data->event.door == FALSE)
 			return (obj);
 		obj = &((*obj)->next);
 	}
 	if (!(*obj = malloc(sizeof(t_sprite))))
 		return (NULL);
-	(*obj)->ray = data->ray;
-	(*obj)->column = column;
+	(*obj)->sac.ray = data->ray;
+	(*obj)->sac.column = column;
 	(*obj)->next = NULL;
 	return (obj);
-}
-
-void	*create_save(t_save **save)
-{
-	while (*save)
-		save = &((*save)->next);
-	if (!(*save = malloc(sizeof(t_save))))
-		return (NULL);
-	(*save)->max = 0;
-	(*save)->min = 0;
-	(*save)->next = NULL;
-	return (save);
 }
 
 void	*create_obj(t_data *data, t_sprite **obj, int column)
 {
 	while (*obj)
 	{
-		if ((int)((*obj)->ray.mapx) == (int)(data->ray.mapx) &&
-				(int)(data->ray.mapy) == (int)((*obj)->ray.mapy))
-		{
-			if ((*obj)->ray.heightline < data->ray.heightline)
-				(*obj)->ray = data->ray;
-			++(*obj)->nbray;
+		if ((int)((*obj)->sac.ray.mapx) == (int)(data->ray.mapx) &&
+				(int)(data->ray.mapy) == (int)((*obj)->sac.ray.mapy))
 			return (obj);
-		}
 		obj = &((*obj)->next);
 	}
 	if (!(*obj = malloc(sizeof(t_sprite))))
 		return (NULL);
-	(*obj)->ray = data->ray;
-	(*obj)->column = column;
-	(*obj)->nbray = 0;
+	++data->numSprites;
+	(*obj)->sac.ray = data->ray;
+	(*obj)->sac.column = column;
 	(*obj)->next = NULL;
-	create_save(&data->save);
 	return (obj);
 }
 

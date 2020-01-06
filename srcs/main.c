@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/18 22:34:26 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/06 08:23:47 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	intern_key(int key, t_data *data)
 		data->event.run ^= 1;
 	else if (key == RESPAWN)
 		data->event.respawn ^= 1;
+	else if (key == SCREENSHOT)
+		data->event.screenshot ^= 1;
 }
 
 int		key_on(int key, t_data *data)
@@ -166,6 +168,8 @@ int		ft_move(t_data *data)
 		data->perso.pos.x = data->perso.depart.x;
 		data->perso.pos.y = data->perso.depart.y;
 	}
+	if (data->event.screenshot == 1)
+		screenshot(data);
 	do_in_order(data);
 	return (0);
 }

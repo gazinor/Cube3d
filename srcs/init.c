@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2019/12/19 08:04:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/06 05:37:43 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_ray(t_data *data, int x)
 	data->ray.hit = 0;
 	data->ray.side = 0;
 	data->ray.walldist = 0;
+	data->numSprites = 0;
 }
 
 void	ft_init(t_data *data)
@@ -51,6 +52,7 @@ void	ft_init(t_data *data)
 	data->event.door = 0;
 	data->event.run = 0;
 	data->event.respawn = 0;
+	data->event.screenshot = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/19 09:18:45 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/06 05:45:41 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define RUN 257
 # define RESPAWN 15
 # define TAB 48
+# define SCREENSHOT 105
 # define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
@@ -39,6 +40,7 @@
 # include <unistd.h>
 # include <math.h>
 # include <signal.h>
+# include <fcntl.h>
 
 typedef enum	e_bool
 {
@@ -99,6 +101,7 @@ typedef	struct	s_event
 	t_bool		run;
 	t_bool		respawn;
 	t_bool		menu;
+	t_bool		screenshot;
 }				t_event;
 
 typedef struct	s_menu
@@ -137,13 +140,15 @@ typedef	struct	s_ray
 	int			heightline;
 }				t_ray;
 
+typedef struct	s_sac
+{
+	t_ray 		ray;
+	int			column;
+}				t_sac;
+
 typedef	struct	s_sprite
 {
-	t_ray			ray;
-	int				column;
-	int				nbray;
-	int				moyenne;
-	t_pos			pos;
+	t_sac		sac;
 	struct s_sprite	*next;
 }				t_sprite;
 
@@ -195,7 +200,9 @@ typedef	struct	s_data
 	char		**map;
 	t_sprite	*door;
 	t_sprite	*obj;
+	int			numSprites;
 	t_save		*save;
+	double		ZBuffer[WIDTH];
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -225,5 +232,6 @@ int				exit_properly(t_data *data, t_bool error, char *error_msg);
 void			loop(t_data *data);
 void			print_obj(t_data *data, t_sprite *obj);
 void			*create_obj(t_data *data, t_sprite **obj, int column);
+void			screenshot(t_data *data);
 
 #endif
