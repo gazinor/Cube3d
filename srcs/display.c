@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/06 09:19:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/07 06:25:01 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,20 @@ long	dark(int color, double walldist, t_data *data)
 	return ((long)color);
 }
 
-long	trans(int color, t_data *data, int i, int limit)
+long	ground_dark(long color, double dist)
 {
-	unsigned char	*byte;
-	double			calcul;
-	double			calcul2;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
 
-	byte = (unsigned char *)&color;
-	calcul = ((data->ray.walldist / (3.5 * data->mod.light)) + 1);
-	calcul2 = (i * ((data->ray.end - data->ray.start) / HEIGHT)) +
-											(data->ray.walldist + 1) * 16.5;
-	*byte = *byte / calcul;
-	++byte;
-	*byte = *byte / calcul;
-	++byte;
-	*byte = *byte / calcul;
-	++byte;
-	if (*byte + calcul2 < 255 && i < limit)
-		*byte += calcul2;
-	else
-		*byte = 255;
-	return ((long)color);
+	dist = (7. / 100.) * dist > 0.9 ? 0.9 : (7. / 100.) * dist;
+	if ((r = color) > 0)
+		r = r - r * dist;
+	if ((g = (color >> 8)) > 0)
+		g = g - g * dist;
+	if ((b = (color >> 16)) > 0)
+		b = b - b * dist;
+	return(r + (g << 8) + (b << 16));	
 }
 
 void	crt_column(t_data *data, int column)
@@ -96,15 +89,14 @@ void	crt_column(t_data *data, int column)
 
 	i = -1;
 	texture = get_texture(data);
-	if (data->event.screenshot == 1)
-	{
-		while (++i < data->ray.start)
-			data->img.buffer[column + (i * (data->img.size / 4))] =
-				data->ciel.buffer[column + (i * (data->img.size / 4))];
-	}
-	else
-		while (++i < data->ray.start)
-			data->img.buffer[column + (i * (data->img.size / 4))] = 0xFF000000;
+	if (data->mod.nbr[DARK] == 1)
+       while (++i < data->ray.start)
+           data->img.buffer[column + (i * (data->img.size / 4))] =
+               data->ciel_etoile.buffer[column + (i * (data->img.size / 4))];
+   else
+       while (++i < data->ray.start)
+           data->img.buffer[column + (i * (data->img.size / 4))] =
+               data->ciel.buffer[column + (i * (data->img.size / 4))];
 	i--;
 	while (++i < data->ray.end)
 	{
@@ -125,38 +117,23 @@ data->perso.pos.y)) * texture.height) + (int)((int)((i - data->ray.truestart) *
 sizeof(int))))], data->ray.walldist, data);
 	}
 	i--;
-	if (data->event.screenshot == 1)
-		while (++i < HEIGHT)
+	while (++i < HEIGHT)
+	{
+		if (data->mod.nbr[MIRROR] == 1)
 		{
-			if (data->mod.nbr[MIRROR] == 1)
-			{
-				if (i < data->ray.end + data->ray.heightline)
-					data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
-				else
-					data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end) - data->ray.heightline) *
-(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
-			}
+			if (i < data->ray.end + data->ray.heightline)
+				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
+(data->img.size / sizeof(int)))], 5);
 			else
 				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-0x0 + ((data->sol.buffer[column + ((i - (HEIGHT / 2)) * (data->img.size / 4))]
-+ 0xFF000000) - (unsigned int)(((i - (HEIGHT / 2)) /
-(data->mod.nbr[DARK] == 1 ? 3 : 2)) * 0x01000000 + 0x0F000000));
+					ground_dark(data->ciel.buffer[column + ((data->ray.end - (i
+- data->ray.end) - data->ray.heightline) * (data->ciel.size / sizeof(int)))], (HEIGHT - i) * (0.040 * 600 / HEIGHT));
 		}
-	else
-		while (++i < HEIGHT)
-		{
-			if (data->mod.nbr[MIRROR] == 1)
-				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-trans(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-(data->img.size / sizeof(int)))], data, i, 2 * data->ray.end - data->ray.start);
-			else
-				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-0x0 + (unsigned int)(((i - (HEIGHT / 2)) / (data->mod.nbr[DARK] == 1 ? 3 : 2)) *
-		0x01000000 + 0x0F000000);
-		}
+		else
+			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+ground_dark(data->sol.buffer[column + ((i - (HEIGHT / 2)) * (data->sol.size / sizeof(int)))], (HEIGHT - i) * (0.040 * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1)));
+	}
 }
 
 t_img	resize_image(t_data *data, t_img *src, int width, int height) 

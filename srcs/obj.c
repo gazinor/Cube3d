@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/06 05:26:34 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/07 06:06:19 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,59 +54,13 @@ void	print_door(t_data *data, t_sprite *obj)
 				data->img.buffer[obj->sac.column + (i * (data->img.size / sizeof(int)))] = color;
 				if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
 					data->img.buffer[obj->sac.column + ((j - i + true_end) *
-							(data->img.size / sizeof(int)))] = trans(color, data, j - i + true_end, HEIGHT);
+							(data->img.size / sizeof(int)))] = ground_dark(color, 5);
 			}
 		}
 		obj = obj->next;
 	}
 }
-/*
-   void	print_obj(t_data *data, t_sprite *obj)
-   {
-   int		i;
-   int		j;
-   t_img	rend;
-   int		color;
-   int		tmp;
-   int		tmp2;
-   t_save	*head;
 
-   rend = data->sprite;
-   head = data->save;
-   while (obj && data->save)
-   {
-   tmp = obj->sac.column + obj->sac.nbray;
-   tmp2 = obj->sac.column + obj->sac.ray.heightline;
-//		printf("ternaire : %d\n", (tmp / 2 < tmp2 / 2 && ((data->save->max < tmp && data->save->min >= tmp - obj->sac.nbray) || (data->save->max < tmp && data->save->min > tmp - obj->sac.nbray)) ? obj->sac.ray.heightline - obj->sac.nbray : 0));
-//		printf("max : %d | tmp : %d\n | min : %d | expected %d\n\n", data->save->max, tmp, data->save->min, tmp - obj->sac.nbray);
-while (obj->sac.column < tmp && obj->sac.column < WIDTH && obj->sac.column < tmp2)
-{
-i = obj->sac.ray.start;
-j = obj->sac.ray.end;
-while (++i < j)
-{
-color = dark(rend.buffer[(int)((((obj->sac.column + obj->sac.nbray - tmp)
-+ (tmp / 2 < tmp2 / 2 && ((data->save->max > tmp && data->save->min >= tmp - obj->sac.nbray) || (data->save->max < tmp && data->save->min <= tmp - obj->sac.nbray) || (data->save->max == tmp && !(data->save->min > 0 || data->save->min < tmp - obj->sac.nbray))) ? obj->sac.ray.heightline - obj->sac.nbray : 0))
- * obj->sac.ray.walldist) + (int)((int)((i - obj->sac.ray.truestart) * 
- (rend.height / (double)(obj->sac.ray.trueend - obj->sac.ray.truestart))) * (rend.size / sizeof(int))))], obj->sac.ray.walldist, data);
- if (color)
- {
- data->img.buffer[obj->sac.column + (i * (data->img.size / sizeof(int)))] = color;
- if (data->mod.nbr[MIRROR] == 1 && (j - i + obj->sac.ray.trueend) < HEIGHT)
- data->img.buffer[obj->sac.column + ((j - i + obj->sac.ray.trueend) *
- (data->img.size / sizeof(int)))] = trans(color, data, j - i + obj->sac.ray.trueend, HEIGHT);
- }
- }
- ++obj->sac.column;
- }
- data->save->max = tmp;
- data->save->min = tmp - obj->sac.nbray;
- data->save = data->save->next;
- obj = obj->sac.next;
- }
- data->save = head;
- }
- */
 void	sort_list(t_sprite **obj)
 {
 	t_sac tmp;
@@ -179,7 +133,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 								(data->img.size / sizeof(int)))] = color;
 						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
 							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
-(data->img.size / sizeof(int)))] = trans(color, data, drawEndY - y + drawEndY, HEIGHT);
+(data->img.size / sizeof(int)))] = ground_dark(color, 5);
 					}
 				}
 			}

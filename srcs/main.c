@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/06 08:23:47 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/07 01:11:42 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ void	put_image_to_window(t_data *data)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->ciel_etoile.ptr, 0, 0);
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->ciel.ptr, 0, 0);
-	mlx_put_image_to_window(data->mlx.ptr,
+	if (data->mod.nbr[MIRROR] == 0)
+		mlx_put_image_to_window(data->mlx.ptr,
 	data->mlx.win, data->sol.ptr, 0, HEIGHT / 2);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
 	if (data->event.door == 1)

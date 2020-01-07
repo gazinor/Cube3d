@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/06 05:45:41 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/07 05:27:45 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,5 +233,6 @@ void			loop(t_data *data);
 void			print_obj(t_data *data, t_sprite *obj);
 void			*create_obj(t_data *data, t_sprite **obj, int column);
 void			screenshot(t_data *data);
+long			ground_dark(long color, double dist);
 
 #endif
