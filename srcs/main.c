@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/08 17:53:59 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/08 18:42:47 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,14 +193,14 @@ void	load_background(t_data *data)
 	data->ciel_etoile.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
 					"./textures/ciel_etoile.xpm", 
 					&(data->ciel_etoile.width), &(data->ciel_etoile.height));
-	data->tmp_ciel = resize_image(data, &data->ciel, 4 * WIDTH, HEIGHT / 2);
+	data->tmp_ciel = resize_image(data, &data->ciel, 360 * WIDTH, HEIGHT / 2);
 	mlx_destroy_image(data->mlx.ptr, data->ciel.ptr);
 	data->ciel = data->tmp_ciel;
 	data->tmp_sol = resize_image(data, &data->sol, WIDTH, HEIGHT / 2);
 	mlx_destroy_image(data->mlx.ptr, data->sol.ptr);
 	data->sol = data->tmp_sol;
 	data->tmp_ciel_etoile = resize_image(data, &data->ciel_etoile,
-	4 * WIDTH, HEIGHT / 2);
+	360 * WIDTH, HEIGHT / 2);
 	mlx_destroy_image(data->mlx.ptr, data->ciel_etoile.ptr);
 	data->ciel_etoile = data->tmp_ciel_etoile;
 }
