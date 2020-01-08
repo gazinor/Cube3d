@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/07 06:25:01 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/08 17:24:06 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,31 @@ void	crt_column(t_data *data, int column)
 	t_img 	rend; 
 
 	i = -1;
+	if (column == WIDTH / 2)
+	{
+		printf("calc      : %d\n", (int)(column + (360 / (double)WIDTH * atan(data->ray.dirx / data->ray.diry))));
+		printf("inv calc  : %d\n", (int)(column + ((double)WIDTH / 360 * atan(data->ray.dirx / data->ray.diry))));
+		printf("atan      : %f\n", atan2(data->ray.dirx, data->ray.diry) / M_PI * 180);
+		printf("x         : %f\n", data->ray.dirx);
+		printf("y         : %f\n", data->ray.diry);
+	}
 	texture = get_texture(data);
 	if (data->mod.nbr[DARK] == 1)
        while (++i < data->ray.start)
            data->img.buffer[column + (i * (data->img.size / 4))] =
-               data->ciel_etoile.buffer[column + (i * (data->img.size / 4))];
+		data->ciel_etoile.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
+/ (2 * M_PI)) * data->ciel_etoile.width) % data->ciel_etoile.width + (i * (data->ciel_etoile.size / 4))
+/*(ABS((int)((column + 2 * WIDTH) +
+((double)data->ciel_etoile.width / 360 * 4 * (atan2(data->ray.dirx, data->ray.diry)
+/ M_PI * 180)))) % (data->ciel_etoile.width)) + (i * (data->ciel_etoile.size / 4))*/];
    else
        while (++i < data->ray.start)
            data->img.buffer[column + (i * (data->img.size / 4))] =
-               data->ciel.buffer[column + (i * (data->img.size / 4))];
+		data->ciel.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
+/ (2 * M_PI)) * data->ciel.width) % data->ciel.width + (i * (data->ciel.size / 4))
+        /*       data->ciel.buffer[(ABS((int)((column + WIDTH) +
+((double)data->ciel.width / 360 * (atan2(data->ray.dirx, data->ray.diry)
+/ M_PI * 180)))) % data->ciel.width) + (i * (data->ciel.size / 4))*/];
 	i--;
 	while (++i < data->ray.end)
 	{
@@ -127,7 +143,8 @@ ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
 (data->img.size / sizeof(int)))], 5);
 			else
 				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-					ground_dark(data->ciel.buffer[column + ((data->ray.end - (i
+					ground_dark(data->ciel.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
+/ (2 * M_PI)) * data->ciel.width) % data->ciel.width + ((data->ray.end - (i
 - data->ray.end) - data->ray.heightline) * (data->ciel.size / sizeof(int)))], (HEIGHT - i) * (0.040 * 600 / HEIGHT));
 		}
 		else
