@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/08 17:24:06 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/09 17:29:19 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,3 +183,6 @@ t_img	resize_image(t_data *data, t_img *src, int width, int height)
 	dst.width = width;
 	return (dst);
 }
+/*------------------------------------------------------*/
+/* pixel actuel * taille de l'image / taille de l'ecran */
+/*------------------------------------------------------*/

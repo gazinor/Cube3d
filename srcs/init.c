@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/06 05:37:43 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/09 17:29:45 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ void	init_ray(t_data *data, int x)
 
 void	ft_init(t_data *data)
 {
+	int		i;
+
+	i = -1;
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
 	data->perso.dir.x = 0;
