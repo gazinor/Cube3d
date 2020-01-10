@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/09 17:29:45 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 13:19:59 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@ void	init_ray(t_data *data, int x)
 	data->numSprites = 0;
 }
 
+void	init_filenames(t_data *data)
+{
+	data->ciel.filename = "./textures/ciel.xpm";
+	data->sol.filename = "./textures/sol.xpm";
+	data->ciel_etoile.filename = "./textures/ciel_etoile.xpm";
+	data->ntext.filename = "./textures/ntext.xpm";
+	data->stext.filename = "./textures/stext.xpm";
+	data->etext.filename = "./textures/etext.xpm";
+	data->wtext.filename = "./textures/wtext.xpm";
+	data->cdoor.filename = "./textures/cdoor.xpm";
+	data->odoor.filename = "./textures/odoor.xpm";
+	data->remote.filename = "./textures/remote.xpm";
+	data->sprite.filename = "./textures/sprite.xpm";
+	data->i_menu.filename = "./textures/menu.xpm";
+	data->play_s_contour.filename = "./textures/play_s_contour.xpm";
+	data->play_uns_contour.filename = "./textures/play_uns_contour.xpm";
+	data->option_s_contour.filename = "./textures/option_s_contour.xpm";
+	data->option_uns_contour.filename = "./textures/option_uns_contour.xpm";
+	data->quit_s_contour.filename = "./textures/quit_s_contour.xpm";
+	data->quit_uns_contour.filename = "./textures/quit_uns_contour.xpm";
+}
+
 void	ft_init(t_data *data)
 {
 	int		i;
@@ -43,7 +65,7 @@ void	ft_init(t_data *data)
 	data->perso.dir.x = 0;
 	data->perso.dir.y = 0;
 	data->perso.speed = 0.066;
-	data->perso.rot = 4. * M_PI / 180;
+	data->perso.rot = 6. / 180;
 	data->perso.planx = 0;
 	data->perso.plany = 0;
 	data->event.forward = 0;
@@ -61,8 +83,10 @@ void	ft_init(t_data *data)
 	data->mod.nbr[NORMAL] = TRUE;
 	data->mod.nbr[DARK] = FALSE;
 	data->mod.nbr[MIRROR] = FALSE;
+	data->map_mid.x = 0;
+	data->map_mid.y = 0;
 	ft_init_map(data);
 	data->door = NULL;
 	data->obj = NULL;
-	data->save = NULL;
+	init_filenames(data);
 }

@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:12:13 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/09 17:30:16 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 10:54:21 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,9 @@ void	*ft_init_map(t_data *data)
 	i = 0;
 	while (G_BUFFER[i])
 		i++;
-	if (!(data->map = malloc(sizeof(char*) * i + 1)))
+	if (!(data->map = malloc(sizeof(char *) * i + 1)))
 		return (NULL);
+	data->map_mid.x = i / 2.;
 	i = 0;
 	while (G_BUFFER[i])
 	{
@@ -114,6 +115,8 @@ void	*ft_init_map(t_data *data)
 			j++;
 		if (!(data->map[i] = malloc(sizeof(char) * j + 1)))
 			return (NULL);
+		if (data->map_mid.y < j)
+			data->map_mid.y = j / 2.;
 		i++;
 	}
 	ft_fill_map(data);

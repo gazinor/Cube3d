@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/09 17:28:39 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 12:47:34 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef	struct	s_img
 	int			endian;
 	int			width;
 	int			height;
+	char		*filename;
 }				t_img;
 
 typedef	struct	s_pos
@@ -173,31 +174,22 @@ typedef	struct	s_data
 	t_img		stext;
 	t_img		etext;
 	t_img		wtext;
-	t_img		tmp_ciel;
-	t_img		tmp_ciel_etoile;
-	t_img		tmp_sol;
-	t_img		tmp_ntext;
-	t_img		tmp_stext;
-	t_img		tmp_etext;
-	t_img		tmp_wtext;
 	t_img		odoor;
-	t_img		tmp_odoor;
 	t_img		cdoor;
-	t_img		tmp_cdoor;
 	t_img		remote;
-	t_img		tmp_remote;
 	t_img		i_menu;
-	t_img		tmp_menu;
-	t_img		s_contour;
-	t_img		tmp_s_contour;
-	t_img		uns_contour;
-	t_img		tmp_uns_contour;
+	t_img		play_s_contour;
+	t_img		play_uns_contour;
+	t_img		option_s_contour;
+	t_img		option_uns_contour;
+	t_img		quit_s_contour;
+	t_img		quit_uns_contour;
 	t_img		sprite;
-	t_img		tmp_sprite;
 	t_mod		mod;
 	t_menu		menu;
 	pid_t		music;
 	char		**map;
+	t_pos		map_mid;
 	t_sprite	*door;
 	t_sprite	*obj;
 	int			numSprites;
@@ -234,5 +226,6 @@ void			print_obj(t_data *data, t_sprite *obj);
 void			*create_obj(t_data *data, t_sprite **obj, int column);
 void			screenshot(t_data *data);
 long			ground_dark(long color, double dist);
+void			load_image(t_data *data, t_img *img, int width, int height);
 
 #endif

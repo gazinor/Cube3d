@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/09 17:29:19 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 11:48:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,72 +85,58 @@ void	crt_column(t_data *data, int column)
 {
 	int		i;
 	t_img	texture;
-	t_img 	rend; 
+	t_img 	rend;
+	double	calcx;
+	double	calcy;
+	double	ratio;
+	double	luminosity;
+	double	offset;
 
 	i = -1;
-	if (column == WIDTH / 2)
-	{
-		printf("calc      : %d\n", (int)(column + (360 / (double)WIDTH * atan(data->ray.dirx / data->ray.diry))));
-		printf("inv calc  : %d\n", (int)(column + ((double)WIDTH / 360 * atan(data->ray.dirx / data->ray.diry))));
-		printf("atan      : %f\n", atan2(data->ray.dirx, data->ray.diry) / M_PI * 180);
-		printf("x         : %f\n", data->ray.dirx);
-		printf("y         : %f\n", data->ray.diry);
-	}
 	texture = get_texture(data);
+	rend = texture;
+	offset = (atan2(data->ray.dirx, data->ray.diry) + M_PI) * M_1_PI * .5;
+//	zoom = ;
+	calcx = ((data->ray.walldist * data->ray.dirx + data->perso.pos.x - (int)(
+	data->ray.walldist * data->ray.dirx + data->perso.pos.x)) * texture.height);
+	calcy = ((data->ray.walldist * data->ray.diry + data->perso.pos.y - (int)(
+	data->ray.walldist * data->ray.diry + data->perso.pos.y)) * texture.height);
+	ratio = (texture.height / (double)data->ray.heightline);
+	data->img.width = data->img.size / 4;
+	luminosity = (0.040 * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1));
 	if (data->mod.nbr[DARK] == 1)
        while (++i < data->ray.start)
-           data->img.buffer[column + (i * (data->img.size / 4))] =
-		data->ciel_etoile.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
-/ (2 * M_PI)) * data->ciel_etoile.width) % data->ciel_etoile.width + (i * (data->ciel_etoile.size / 4))
-/*(ABS((int)((column + 2 * WIDTH) +
-((double)data->ciel_etoile.width / 360 * 4 * (atan2(data->ray.dirx, data->ray.diry)
-/ M_PI * 180)))) % (data->ciel_etoile.width)) + (i * (data->ciel_etoile.size / 4))*/];
+           data->img.buffer[column + (i * (data->img.width))] =
+	   data->ciel_etoile.buffer[(int)((offset + i) * data->ciel_etoile.width)];
    else
        while (++i < data->ray.start)
-           data->img.buffer[column + (i * (data->img.size / 4))] =
-		data->ciel.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
-/ (2 * M_PI)) * data->ciel.width) % data->ciel.width + (i * (data->ciel.size / 4))
-        /*       data->ciel.buffer[(ABS((int)((column + WIDTH) +
-((double)data->ciel.width / 360 * (atan2(data->ray.dirx, data->ray.diry)
-/ M_PI * 180)))) % data->ciel.width) + (i * (data->ciel.size / 4))*/];
+           data->img.buffer[column + (i * (data->img.width))] =
+		data->ciel.buffer[(int)((offset + i) * data->ciel.width)];
 	i--;
 	while (++i < data->ray.end)
-	{
-		rend = texture;
 		if (data->ray.side == 1)
-			data->img.buffer[column + (i * (data->img.size / sizeof(int)))]
-= dark(rend.buffer[(int)(((data->ray.walldist * data->ray.dirx +
-data->perso.pos.x - (int)(data->ray.walldist * data->ray.dirx +
-data->perso.pos.x)) * texture.height) + (int)((int)((i - data->ray.truestart) *
-(texture.height / (double)data->ray.heightline)) * (rend.size /
-sizeof(int))))], data->ray.walldist, data);
+			data->img.buffer[column + (i * (data->img.width))]
+= dark(rend.buffer[(int)(calcx + (int)((int)((i - data->ray.truestart) * ratio)
+		* rend.width))], data->ray.walldist, data);
 		else
-			data->img.buffer[column + (i * (data->img.size / sizeof(int)))]
-= dark(rend.buffer[(int)(((data->ray.walldist * data->ray.diry +
-data->perso.pos.y - (int)(data->ray.walldist * data->ray.diry +
-data->perso.pos.y)) * texture.height) + (int)((int)((i - data->ray.truestart) *
-(texture.height / (double)data->ray.heightline)) * (rend.size /
-sizeof(int))))], data->ray.walldist, data);
-	}
+			data->img.buffer[column + (i * data->img.width)]
+= dark(rend.buffer[(int)(calcy + (int)((int)((i - data->ray.truestart) * ratio)
+		* (rend.width)))], data->ray.walldist, data);
 	i--;
-	while (++i < HEIGHT)
-	{
-		if (data->mod.nbr[MIRROR] == 1)
-		{
+	if (data->mod.nbr[MIRROR] == 1)
+		while (++i < HEIGHT)
 			if (i < data->ray.end + data->ray.heightline)
-				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
+				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-(data->img.size / sizeof(int)))], 5);
+(data->img.width))], 5);
 			else
-				data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-					ground_dark(data->ciel.buffer[(unsigned int)((1 - (atan2(data->ray.dirx, data->ray.diry) + M_PI)
-/ (2 * M_PI)) * data->ciel.width) % data->ciel.width + ((data->ray.end - (i
-- data->ray.end) - data->ray.heightline) * (data->ciel.size / sizeof(int)))], (HEIGHT - i) * (0.040 * 600 / HEIGHT));
-		}
-		else
-			data->img.buffer[column + (i * (data->img.size / sizeof(int)))] =
-ground_dark(data->sol.buffer[column + ((i - (HEIGHT / 2)) * (data->sol.size / sizeof(int)))], (HEIGHT - i) * (0.040 * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1)));
-	}
+				data->img.buffer[column + (i * (data->img.width))] =
+					ground_dark(data->img.buffer[column + (data->ray.end - (i
+- data->ray.end) - data->ray.heightline) * data->img.width], (HEIGHT - i) * luminosity);
+	else
+		while (++i < HEIGHT)
+			data->img.buffer[column + (i * (data->img.width))] =
+ground_dark(data->sol.buffer[column + ((i - (HEIGHT / 2)) * data->sol.width)], (HEIGHT - i) * luminosity);
 }
 
 t_img	resize_image(t_data *data, t_img *src, int width, int height) 

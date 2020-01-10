@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/08 18:42:47 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 11:51:32 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,6 @@ int		key_off(int key, t_data *data)
 
 void	put_image_to_window(t_data *data)
 {
-	if (data->mod.nbr[DARK] == 1)
-		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->ciel_etoile.ptr, 0, 0);
-	else
-		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->ciel.ptr, 0, 0);
-	if (data->mod.nbr[MIRROR] == 0)
-		mlx_put_image_to_window(data->mlx.ptr,
-	data->mlx.win, data->sol.ptr, 0, HEIGHT / 2);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
 	if (data->event.door == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
@@ -184,73 +177,38 @@ void	crt_window(t_data *data)
 										&data->img.size, &data->img.endian);
 }
 
+void	load_image(t_data *data, t_img *img, int width, int height)
+{
+	t_img	tmp;
+
+	img->ptr = mlx_xpm_file_to_image(data->mlx.ptr, img->filename,
+					&(img->width), &(img->height));
+	tmp = resize_image(data, img, width, height);
+	mlx_destroy_image(data->mlx.ptr, img->ptr);
+	*img = tmp;
+}
+
 void	load_background(t_data *data)
 {
-	data->ciel.ptr = mlx_xpm_file_to_image(data->mlx.ptr, "./textures/ciel.xpm",
-					&(data->ciel.width), &(data->ciel.height));
-	data->sol.ptr = mlx_xpm_file_to_image(data->mlx.ptr, "./textures/sol.xpm",
-					&(data->sol.width), &(data->sol.height));
-	data->ciel_etoile.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-					"./textures/ciel_etoile.xpm", 
-					&(data->ciel_etoile.width), &(data->ciel_etoile.height));
-	data->tmp_ciel = resize_image(data, &data->ciel, 360 * WIDTH, HEIGHT / 2);
-	mlx_destroy_image(data->mlx.ptr, data->ciel.ptr);
-	data->ciel = data->tmp_ciel;
-	data->tmp_sol = resize_image(data, &data->sol, WIDTH, HEIGHT / 2);
-	mlx_destroy_image(data->mlx.ptr, data->sol.ptr);
-	data->sol = data->tmp_sol;
-	data->tmp_ciel_etoile = resize_image(data, &data->ciel_etoile,
-	360 * WIDTH, HEIGHT / 2);
-	mlx_destroy_image(data->mlx.ptr, data->ciel_etoile.ptr);
-	data->ciel_etoile = data->tmp_ciel_etoile;
+	load_image(data, &data->ciel, 9 * HEIGHT, HEIGHT / 2);
+	load_image(data, &data->sol, WIDTH, HEIGHT / 2);
+	load_image(data, &data->ciel_etoile, 9 * HEIGHT, HEIGHT / 2);
 }
 
 void	load_dir_textures(t_data *data)
 {
-	data->ntext.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/ntext.xpm", &(data->ntext.width), &(data->ntext.height));
-	data->stext.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/stext.xpm", &(data->stext.width), &(data->stext.height));
-	data->etext.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/etext.xpm", &(data->etext.width), &(data->etext.height));
-	data->wtext.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/wtext.xpm", &(data->wtext.width), &(data->wtext.height));
-	data->tmp_ntext = resize_image(data, &data->ntext, 1000, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->ntext.ptr);
-	data->ntext = data->tmp_ntext;
-	data->tmp_stext = resize_image(data, &data->stext, 1000, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->stext.ptr);
-	data->stext = data->tmp_stext;
-	data->tmp_etext = resize_image(data, &data->etext, 1000, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->etext.ptr);
-	data->etext = data->tmp_etext;
-	data->tmp_wtext = resize_image(data, &data->wtext, 1000, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->wtext.ptr);
-	data->wtext = data->tmp_wtext;
+	load_image(data, &data->ntext, 1000, 1000);
+	load_image(data, &data->stext, 1000, 1000);
+	load_image(data, &data->etext, 1000, 1000);
+	load_image(data, &data->wtext, 1000, 1000);
 }
 
 void	load_objs(t_data *data)
 {
-	data->cdoor.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/cdoor.xpm", &(data->cdoor.width), &(data->cdoor.height));
-	data->tmp_cdoor = resize_image(data, &data->cdoor, 500, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->cdoor.ptr);
-	data->cdoor = data->tmp_cdoor;
-	data->odoor.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/odoor.xpm", &(data->odoor.width), &(data->odoor.height));
-	data->tmp_odoor = resize_image(data, &data->odoor, 500, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->odoor.ptr);
-	data->odoor = data->tmp_odoor;
-	data->remote.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/remote.xpm", &(data->remote.width), &(data->remote.height));
-	data->tmp_remote = resize_image(data, &data->remote, WIDTH/2, HEIGHT/2);
-	mlx_destroy_image(data->mlx.ptr, data->remote.ptr);
-	data->remote = data->tmp_remote;
-	data->sprite.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/sprite.xpm", &(data->sprite.width), &(data->sprite.height));
-	data->tmp_sprite = resize_image(data, &data->sprite, 1000, 1000);
-	mlx_destroy_image(data->mlx.ptr, data->sprite.ptr);
-	data->sprite = data->tmp_sprite;
+	load_image(data, &data->cdoor, 500, 1000);
+	load_image(data, &data->odoor, 500, 1000);
+	load_image(data, &data->remote, WIDTH / 2, HEIGHT / 2);
+	load_image(data, &data->sprite, 1000, 1000);
 }
 
 void	loop(t_data *data)

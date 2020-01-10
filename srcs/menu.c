@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 21:08:23 by glaurent          #+#    #+#             */
-/*   Updated: 2019/12/17 05:00:00 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/10 13:44:19 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,13 @@
 
 void	load_menu(t_data *data)
 {
-	data->i_menu.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/menu.xpm", &(data->i_menu.width), &(data->i_menu.height));
-	data->tmp_menu = resize_image(data, &data->i_menu, WIDTH, HEIGHT);
-	mlx_destroy_image(data->mlx.ptr, data->i_menu.ptr);
-	data->i_menu = data->tmp_menu;
-	data->s_contour.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/selected_contour.xpm", &(data->s_contour.width),
-		&(data->s_contour.height));
-	data->tmp_s_contour = resize_image(data, &data->s_contour, WIDTH / 3.3,
-			HEIGHT / 3.5);
-	mlx_destroy_image(data->mlx.ptr, data->s_contour.ptr);
-	data->s_contour = data->tmp_s_contour;
-	data->uns_contour.ptr = mlx_xpm_file_to_image(data->mlx.ptr,
-		"./textures/unselected_contour.xpm", &(data->uns_contour.width),
-		&(data->uns_contour.height));
-	data->tmp_uns_contour = resize_image(data, &data->uns_contour, WIDTH / 3.3,
-			HEIGHT / 3.5);
-	mlx_destroy_image(data->mlx.ptr, data->uns_contour.ptr);
-	data->uns_contour = data->tmp_uns_contour;
+	load_image(data, &data->i_menu, WIDTH, HEIGHT);
+	load_image(data, &data->play_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->option_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->quit_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->play_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->option_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->quit_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
 }
 
 int		menu_key(t_data *data)
@@ -41,22 +29,22 @@ int		menu_key(t_data *data)
 			data->i_menu.ptr, 0, 0);
 	if (data->menu.button[0] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->s_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), 5 * HEIGHT / 12 - (HEIGHT / 7.));
+				data->play_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 7.));
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->uns_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), 5 * HEIGHT / 12 - (HEIGHT / 7.));
+			data->play_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 7.));
 	if (data->menu.button[1] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->s_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT / 2);
+				data->option_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2);
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->uns_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT / 2);
+			data->option_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2);
 	if (data->menu.button[2] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->s_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT - (HEIGHT / 3.5));
+				data->quit_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5));
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->uns_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT - (HEIGHT / 3.5));
+			data->quit_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5));
 	return (0);
 }
 
@@ -104,11 +92,11 @@ void	menu(t_data *data)
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
 			data->i_menu.ptr, 0, 0);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->s_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), 5 * HEIGHT / 12 - (HEIGHT / 7.));
+	data->play_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 9.));
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->uns_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT / 2);
+	data->option_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + (HEIGHT / 18.));
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->uns_contour.ptr, WIDTH / 2 - (WIDTH / 6.3), HEIGHT - (HEIGHT / 3.5));
+	data->quit_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + (HEIGHT / 18.));
 	mlx_do_key_autorepeatoff(data->mlx.ptr);
 	mlx_hook(data->mlx.win, KEYDOWN, 0, key_on_menu, data);
 	mlx_hook(data->mlx.win, QUIT, 0, exit_properly, data);
