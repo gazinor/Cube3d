@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/20 10:46:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 09:25:10 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	print_door(t_data *data, t_sprite *obj)
 	int		true_end;
 	t_img	rend;
 	int		color;
-	double  calc1;
-	double  calc2;
-	double  ratio;
-	double  luminosity;
+	double	calc1;
+	double	calc2;
+	double	ratio;
+	double	luminosity;
 
 	rend = data->event.door == FALSE ? data->cdoor : data->odoor;
 	while (obj)
@@ -42,21 +42,27 @@ void	print_door(t_data *data, t_sprite *obj)
 			- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
 				data->perso.pos.y)) * rend.height);
 		ratio = (rend.height / (double)(true_end - true_start));
-		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1);
+		luminosity = (0.040 * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1));
 		while (++i < j)
 		{
 			if (obj->sac.ray.side == 1)
-				color = ground_dark(rend.buffer[(int)(calc1 + (int)((int)((i -
-true_start) * ratio) * (rend.width)))], luminosity);
+			{
+				color = ground_dark(rend.buffer[(int)(calc1 + (int)((int)(
+	(i - true_start) * ratio) * (rend.width)))], data->ray.walldist * 30 * luminosity);
+			}
 			else
-				color = ground_dark(rend.buffer[(int)(calc2 + (int)((int)((i -
-true_start) * ratio) * (rend.width)))], luminosity);
+			{
+				color = ground_dark(rend.buffer[(int)(calc2 + (int)((int)(
+	(i - true_start) * ratio) * (rend.width)))], data->ray.walldist * 30 * luminosity);
+			}
 			if (color)
 			{
-				data->img.buffer[obj->sac.column + (i * (data->img.width))] = color;
 				if (data->mod.nbr[MIRROR] == 1 && (j - i + true_end) < HEIGHT)
-					data->img.buffer[obj->sac.column + ((j - i + true_end) *
-							(data->img.width))] = ground_dark(color, 5);
+					data->img.buffer[obj->sac.column + (i * data->img.width)] = 
+						data->img.buffer[obj->sac.column + ((j - i + true_end) *
+							(data->img.width))];
+				else
+					data->img.buffer[obj->sac.column + (i * (data->img.width))] = color;
 			}
 		}
 		obj = obj->next;
@@ -115,7 +121,6 @@ void	print_obj(t_data *data, t_sprite *obj)
 		if(drawEndX >= WIDTH)
 			drawEndX = WIDTH - 1;
 		stripe = drawStartX - 1;
-		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1));
 		while (++stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
@@ -129,7 +134,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
 					int color = ground_dark(data->sprite.buffer[data->sprite.width *
-texY + texX], luminosity);
+							texY + texX], 5);
 					if((color & 0x00FFFFFF) != 0)
 					{
 						data->img.buffer[stripe + (y *

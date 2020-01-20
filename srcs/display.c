@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/10 11:48:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 09:44:34 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,6 @@ t_img	get_texture(t_data *data)
 		}
 		if (data->ray.stepx == -1)
 			return (data->etext);
-	}
-	else if (data->map[(int)data->ray.mapx][(int)(data->ray.mapy)] == '4')
-	{
-		if (data->event.door == 1)
-			return (data->odoor);
-		return (data->cdoor);
 	}
 	return (data->wtext);
 }
@@ -96,7 +90,6 @@ void	crt_column(t_data *data, int column)
 	texture = get_texture(data);
 	rend = texture;
 	offset = (atan2(data->ray.dirx, data->ray.diry) + M_PI) * M_1_PI * .5;
-//	zoom = ;
 	calcx = ((data->ray.walldist * data->ray.dirx + data->perso.pos.x - (int)(
 	data->ray.walldist * data->ray.dirx + data->perso.pos.x)) * texture.height);
 	calcy = ((data->ray.walldist * data->ray.diry + data->perso.pos.y - (int)(
@@ -113,26 +106,28 @@ void	crt_column(t_data *data, int column)
            data->img.buffer[column + (i * (data->img.width))] =
 		data->ciel.buffer[(int)((offset + i) * data->ciel.width)];
 	i--;
-	while (++i < data->ray.end)
-		if (data->ray.side == 1)
+	if (data->ray.side == 1)
+		while (++i < data->ray.end)
 			data->img.buffer[column + (i * (data->img.width))]
-= dark(rend.buffer[(int)(calcx + (int)((int)((i - data->ray.truestart) * ratio)
-		* rend.width))], data->ray.walldist, data);
-		else
-			data->img.buffer[column + (i * data->img.width)]
-= dark(rend.buffer[(int)(calcy + (int)((int)((i - data->ray.truestart) * ratio)
-		* (rend.width)))], data->ray.walldist, data);
+= ground_dark(rend.buffer[(int)(calcx + (int)((int)((i - data->ray.truestart) * ratio)
+		* rend.width))], data->ray.walldist / 0.040 * luminosity);
+	else
+		while (++i < data->ray.end)
+			data->img.buffer[column + (i * (data->img.width))]
+= ground_dark(rend.buffer[(int)(calcy + (int)((int)((i - data->ray.truestart) * ratio)
+		* rend.width))], data->ray.walldist / 0.040 * luminosity);
 	i--;
 	if (data->mod.nbr[MIRROR] == 1)
-		while (++i < HEIGHT)
-			if (i < data->ray.end + data->ray.heightline)
+	{
+		while (++i < HEIGHT && i < data->ray.end + data->ray.heightline)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
 (data->img.width))], 5);
-			else
+		while (++i < HEIGHT)
 				data->img.buffer[column + (i * (data->img.width))] =
-					ground_dark(data->img.buffer[column + (data->ray.end - (i
-- data->ray.end) - data->ray.heightline) * data->img.width], (HEIGHT - i) * luminosity);
+ground_dark(data->img.buffer[column + (data->ray.end - (i - data->ray.end) -
+data->ray.heightline) *	data->img.width], (HEIGHT - i) * luminosity);
+	}
 	else
 		while (++i < HEIGHT)
 			data->img.buffer[column + (i * (data->img.width))] =
@@ -169,6 +164,3 @@ t_img	resize_image(t_data *data, t_img *src, int width, int height)
 	dst.width = width;
 	return (dst);
 }
-/*------------------------------------------------------*/
-/* pixel actuel * taille de l'image / taille de l'ecran */
-/*------------------------------------------------------*/

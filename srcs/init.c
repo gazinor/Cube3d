@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/10 13:19:59 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 07:51:12 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,15 @@ void	init_filenames(t_data *data)
 	data->option_uns_contour.filename = "./textures/option_uns_contour.xpm";
 	data->quit_s_contour.filename = "./textures/quit_s_contour.xpm";
 	data->quit_uns_contour.filename = "./textures/quit_uns_contour.xpm";
+	data->on_button.filename = "./textures/on_button.xpm";
+	data->off_button.filename = "./textures/off_button.xpm";
+	data->retour_s.filename = "./textures/retour_s.xpm";
+	data->retour_uns.filename = "./textures/retour_uns.xpm";
+	data->mode_bonus.filename = "./textures/mode_bonus.xpm";
 }
 
 void	ft_init(t_data *data)
 {
-	int		i;
-
-	i = -1;
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
 	data->perso.dir.x = 0;
@@ -88,5 +90,6 @@ void	ft_init(t_data *data)
 	ft_init_map(data);
 	data->door = NULL;
 	data->obj = NULL;
+	data->option.status = 0;
 	init_filenames(data);
 }

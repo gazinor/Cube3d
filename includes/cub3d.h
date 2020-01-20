@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/10 12:47:34 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 06:47:04 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define RESPAWN 15
 # define TAB 48
 # define SCREENSHOT 105
+# define MENU 35
 # define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
@@ -103,6 +104,7 @@ typedef	struct	s_event
 	t_bool		respawn;
 	t_bool		menu;
 	t_bool		screenshot;
+	t_bool		option;
 }				t_event;
 
 typedef struct	s_menu
@@ -110,6 +112,13 @@ typedef struct	s_menu
 	int			i;
 	t_bool		button[3];
 }				t_menu;
+
+typedef struct	s_option
+{
+	int			i;
+	t_bool		status;
+	t_bool		button[2];
+}				t_option;
 
 typedef	struct	s_mod
 {
@@ -153,13 +162,6 @@ typedef	struct	s_sprite
 	struct s_sprite	*next;
 }				t_sprite;
 
-typedef struct	s_save
-{
-	int			max;
-	int			min;
-	void		*next;
-}				t_save;
-
 typedef	struct	s_data
 {
 	t_perso		perso;
@@ -184,16 +186,21 @@ typedef	struct	s_data
 	t_img		option_uns_contour;
 	t_img		quit_s_contour;
 	t_img		quit_uns_contour;
+	t_img		on_button;
+	t_img		off_button;
+	t_img		mode_bonus;
+	t_img		retour_s;
+	t_img		retour_uns;
 	t_img		sprite;
 	t_mod		mod;
 	t_menu		menu;
+	t_option	option;
 	pid_t		music;
 	char		**map;
 	t_pos		map_mid;
 	t_sprite	*door;
 	t_sprite	*obj;
 	int			numSprites;
-	t_save		*save;
 	double		ZBuffer[WIDTH];
 }				t_data;
 
@@ -227,5 +234,6 @@ void			*create_obj(t_data *data, t_sprite **obj, int column);
 void			screenshot(t_data *data);
 long			ground_dark(long color, double dist);
 void			load_image(t_data *data, t_img *img, int width, int height);
+void			load_option(t_data *data);
 
 #endif

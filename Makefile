@@ -23,7 +23,8 @@ SRC_NAME =	main.c \
 			raycasting.c \
 			obj.c \
 			screenshot.c \
-			menu.c
+			menu.c \
+			option.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
 

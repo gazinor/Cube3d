@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 21:08:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/10 13:44:19 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 08:27:03 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,29 @@ int		menu_key(t_data *data)
 			data->i_menu.ptr, 0, 0);
 	if (data->menu.button[0] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->play_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 7.));
+				data->play_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 12.));
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->play_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 7.));
+			data->play_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 12.));
 	if (data->menu.button[1] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->option_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2);
+				data->option_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 18.);
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->option_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2);
+			data->option_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 18.);
 	if (data->menu.button[2] == 1)
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-				data->quit_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5));
+				data->quit_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + HEIGHT / 18.);
 	else
 		mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->quit_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5));
+			data->quit_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + HEIGHT / 18.);
 	return (0);
 }
 
 int		key_on_menu(int key, t_data *data)
 {
+	if (data->event.option == 1)
+		return (0);
 	if (key == ESC)
 		exit_properly(data, FALSE, NULL);
 	if (key == U_ARROW)
@@ -74,9 +76,9 @@ int		key_on_menu(int key, t_data *data)
 			mlx_clear_window(data->mlx.ptr, data->mlx.win);
 			loop(data);
 		}
-//		if (data->menu.i == 1)
-//			option(data);
-		if (data->menu.i == 2)
+		else if (data->menu.i == 1)
+			option(data);
+		else if (data->menu.i == 2)
 			exit_properly(data, 0, NULL);
 	}
 	menu_key(data);
@@ -89,14 +91,7 @@ void	menu(t_data *data)
 	data->menu.button[1] = 0;
 	data->menu.button[2] = 0;
 	data->menu.i = 0;
-	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-			data->i_menu.ptr, 0, 0);
-	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->play_s_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 9.));
-	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->option_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + (HEIGHT / 18.));
-	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
-	data->quit_uns_contour.ptr, WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + (HEIGHT / 18.));
+	menu_key(data);
 	mlx_do_key_autorepeatoff(data->mlx.ptr);
 	mlx_hook(data->mlx.win, KEYDOWN, 0, key_on_menu, data);
 	mlx_hook(data->mlx.win, QUIT, 0, exit_properly, data);

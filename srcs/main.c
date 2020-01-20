@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/10 11:51:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/20 08:30:29 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void	intern_key(int key, t_data *data)
 
 int		key_on(int key, t_data *data)
 {
+	if (data->event.menu == 1 || data->event.option == 1)
+		return (0);
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4')
 		data->event.door ^= 1;
@@ -83,8 +85,12 @@ int		key_on(int key, t_data *data)
 
 int		key_off(int key, t_data *data)
 {
+	if (data->event.menu == 1 || data->event.option == 1)
+		return (0);
 	if (key == TAB)
 		data->mod.nbr[++data->mod.i % 3] ^= 1;
+	else if (key == MENU)
+		data->event.menu = 1;
 	else
 		intern_key(key, data);
 	return (0);
@@ -139,6 +145,8 @@ void	do_in_order(t_data *data)
 
 int		ft_move(t_data *data)
 {
+	if (data->event.menu == 1)
+		menu(data);
 	if (data->event.forward == 1)
 		move_forward(data);
 	if (data->event.backward == 1)
@@ -231,6 +239,7 @@ int		main(void)
 	load_dir_textures(&data);
 	load_objs(&data);
 	load_menu(&data);
+	load_option(&data);
 	system("afplay sounds/bgm.mp3 &");
 	menu(&data);
 	return (0);
