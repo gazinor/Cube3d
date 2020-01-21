@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/20 07:51:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/21 06:54:38 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	ft_init(t_data *data)
 	data->event.run = 0;
 	data->event.respawn = 0;
 	data->event.screenshot = 0;
+	data->event.option = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;
@@ -91,5 +92,7 @@ void	ft_init(t_data *data)
 	data->door = NULL;
 	data->obj = NULL;
 	data->option.status = 0;
+	data->parse.width = 0;
+	data->parse.height = 0;
 	init_filenames(data);
 }

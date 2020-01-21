@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/20 06:47:04 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/21 09:23:16 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,28 @@ typedef	struct	s_sprite
 	struct s_sprite	*next;
 }				t_sprite;
 
+typedef struct	s_parse
+{
+	int			width;
+	int			height;
+	t_img		ntext;
+	t_img		wtext;
+	t_img		stext;
+	t_img		etext;
+	t_img		sprite_text;
+	long		f_color;
+	long		c_color;
+}				t_parse;
+
+typedef struct	s_calc
+{
+	double		calcx;
+	double		calcy;
+	double		ratio;
+	double		lum;
+	double		offset;
+}				t_calc;
+
 typedef	struct	s_data
 {
 	t_perso		perso;
@@ -195,6 +217,8 @@ typedef	struct	s_data
 	t_mod		mod;
 	t_menu		menu;
 	t_option	option;
+	t_parse		parse;
+	t_calc		calc;
 	pid_t		music;
 	char		**map;
 	t_pos		map_mid;
@@ -235,5 +259,11 @@ void			screenshot(t_data *data);
 long			ground_dark(long color, double dist);
 void			load_image(t_data *data, t_img *img, int width, int height);
 void			load_option(t_data *data);
+void			option(t_data *data);
+int				get_next_line(int fd, char **line);
+char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_strdup(const char *s1);
+char			*ft_substr(const char *s, unsigned int start, size_t len);
+void			parsing(char *parse, t_data *data);
 
 #endif

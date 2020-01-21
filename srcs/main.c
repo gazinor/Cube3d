@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/20 08:30:29 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/21 08:56:59 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	check_mod(t_data *data)
 }
 
 void	do_in_order(t_data *data)
-{
+{ 
 	check_mod(data);
 	crt_img(data);
 	if (data->door)
@@ -229,12 +229,15 @@ void	loop(t_data *data)
 	mlx_loop(data->mlx.ptr);
 }
 
-int		main(void)
+int		main(int ac, char **av)
 {
 	t_data data;
 
+	if (ac != 2)
+		return (0);
 	ft_init(&data);
 	crt_window(&data);
+	parsing(av[1], &data);
 	load_background(&data);
 	load_dir_textures(&data);
 	load_objs(&data);

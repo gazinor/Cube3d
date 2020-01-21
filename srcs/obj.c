@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/20 10:46:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/21 08:45:45 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_door(t_data *data, t_sprite *obj)
 			- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
 				data->perso.pos.y)) * rend.height);
 		ratio = (rend.height / (double)(true_end - true_start));
-		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1);
+		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.8 : 1);
 		while (++i < j)
 		{
 			if (obj->sac.ray.side == 1)
@@ -115,7 +115,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 		if(drawEndX >= WIDTH)
 			drawEndX = WIDTH - 1;
 		stripe = drawStartX - 1;
-		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.3 : 1));
+		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.8 : 1));
 		while (++stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
@@ -133,10 +133,10 @@ texY + texX], luminosity);
 					if((color & 0x00FFFFFF) != 0)
 					{
 						data->img.buffer[stripe + (y *
-								(data->img.size / sizeof(int)))] = color;
+								(data->img.width))] = color;
 						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
 							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
-(data->img.size / sizeof(int)))] = ground_dark(color, 5);
+(data->img.width))] = ground_dark(color, 5);
 					}
 				}
 			}

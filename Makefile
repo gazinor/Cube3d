@@ -24,7 +24,10 @@ SRC_NAME =	main.c \
 			obj.c \
 			screenshot.c \
 			menu.c \
-			option.c
+			option.c \
+			parse.c \
+			get_next_line.c \
+			get_next_line_utils.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
