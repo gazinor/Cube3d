@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/21 10:32:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 06:23:25 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,24 @@ void	crt_ground(t_data *data, int column)
 			while (++i < HEIGHT && i < data->ray.end + data->ray.heightline)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-					(data->img.width))], (HEIGHT - i) * 0.08 * data->calc.lum);
+					(data->img.width))], (HEIGHT - i) * data->calc.lum);
 			--i;
 			while (++i < HEIGHT)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + (data->ray.end - (i - data->ray.end) -
-data->ray.heightline) *	data->img.width], (HEIGHT - i) * 0.08 *	data->calc.lum);
+data->ray.heightline) *	data->img.width], (HEIGHT - i) * data->calc.lum);
 		}
 		else
 			while (++i < HEIGHT)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->sol.buffer[column + ((i - (HEIGHT / 2)) * data->sol.width)],
-						(HEIGHT - i) * data->calc.lum);
+						(HEIGHT - i) / (data->mod.nbr[DARK] == 1 ? 2 : 1) * data->calc.lum);
 	else
 		while (++i < HEIGHT)
 			data->img.buffer[column + (i * (data->img.width))] =
 						data->parse.f_color;
 }
+
 void	init_calc(t_data *data, t_img texture)
 {
 	data->calc.calcx = ((data->ray.walldist * data->ray.dirx + data->perso.pos.x
@@ -120,32 +121,30 @@ void	init_calc(t_data *data, t_img texture)
 															texture.height);
 	data->calc.ratio = (texture.height / (double)data->ray.heightline);
 	data->img.width = data->img.size / 4;
-	data->calc.lum = (24. / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.8 : 1));
+	data->calc.lum = (24. / HEIGHT * (data->mod.nbr[DARK] == 1 ? 3.8 : 1));
 }
 
 void	crt_column(t_data *data, int column)
 {
 	int		i;
-	t_img	texture;
 	t_img 	rend;
 
-	texture = get_texture(data);
-	rend = texture;
-	init_calc(data, texture);
+	rend = get_texture(data);
+	init_calc(data, rend);
 	crt_sky(data, column);
 	i = data->ray.start - 1;
 	if (data->ray.side == 1)
 		while (++i < data->ray.end)
 			data->img.buffer[column + (i * (data->img.width))] =
-				ground_dark(rend.buffer[(int)(data->calc.calcx + (int)((int)(
-				(i - data->ray.truestart) * data->calc.ratio) * rend.width))],
-								data->ray.walldist / 0.080 * data->calc.lum);
+	ground_dark(rend.buffer[(int)(data->calc.calcx + (int)((int)((i -
+data->ray.truestart) * data->calc.ratio) * rend.width))], data->ray.walldist *
+		20 * (data->mod.nbr[DARK] == 1 ? 1.4 : 1) * data->calc.lum);
 	else
 		while (++i < data->ray.end)
 			data->img.buffer[column + (i * (data->img.width))] =
-				ground_dark(rend.buffer[(int)(data->calc.calcy + (int)((int)(
-				(i - data->ray.truestart) * data->calc.ratio) * rend.width))],
-								data->ray.walldist / 0.080 * data->calc.lum);
+	ground_dark(rend.buffer[(int)(data->calc.calcy + (int)((int)((i -
+data->ray.truestart) * data->calc.ratio) * rend.width))], data->ray.walldist *
+		20 * (data->mod.nbr[DARK] == 1 ? 1.4 : 1) * data->calc.lum);
 	crt_ground(data, column);
 }
 

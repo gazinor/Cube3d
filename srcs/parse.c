@@ -6,13 +6,13 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/21 08:57:20 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 12:40:30 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int		ft_atoi_parse(char *str, int *res)
+int		ft_atoi_parse(char *str, int *res, t_data *data)
 {
 	int		i;
 	int		nb;
@@ -22,10 +22,7 @@ int		ft_atoi_parse(char *str, int *res)
 	while (str[i] == '\t' || str[i] == ' ' || str[i] == ',')
 		++i;
 	if (!(str[i] >= '0' && str[i] <= '9'))
-	{
-		printf("mauvais prototype, ce n'est pas un nombre\n");
-		exit(0);
-	}
+		exit_properly(data, 1, "mauvais prototype, ce n'est pas un nombre\n");
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		nb = nb * 10 + (str[i] - 48);
@@ -56,10 +53,7 @@ void	check_tex(char *line, t_data *data)
 				line[i] == '\t' || line[i] == ' ')
 			++i;
 		if ((open(line + i, O_RDONLY)) == -1)
-		{
-			printf("mauvais nom de fichier de texture\n");
-			exit(0);
-		}
+			exit_properly(data, 1, "mauvais nom de fichier de texture\n");
 		img->filename = line + i;
 		load_image(data, img, 1000, 1000);
 	}
@@ -75,21 +69,68 @@ void	check_floor_n_sky(char *line, t_data *data)
 	i = 1;
 	if (line[0] == 'F' && line [1] == ' ')
 	{
-		i += ft_atoi_parse(line + i, &r);
-		i += ft_atoi_parse(line + i, &g);
-		i += ft_atoi_parse(line + i, &b);
+		i += ft_atoi_parse(line + i, &r, data);
+		i += ft_atoi_parse(line + i, &g, data);
+		i += ft_atoi_parse(line + i, &b, data);
 		data->parse.f_color = (r << 16) + (g << 8) + b;
+		data->parse.check_f = TRUE;
 	}
 	else if (line[0] == 'C' && line[1] == ' ')
 	{
-		i += ft_atoi_parse(line + i, &r);
-		i += ft_atoi_parse(line + i, &g);
-		i += ft_atoi_parse(line + i, &b);
+		i += ft_atoi_parse(line + i, &r, data);
+		i += ft_atoi_parse(line + i, &g, data);
+		i += ft_atoi_parse(line + i, &b, data);
 		data->parse.c_color = (r << 16) + (g << 8) + b;
+		data->parse.check_c = TRUE;
 	}
 }
 
-void	parsing(char *path, t_data *data)
+void	check_parse_map(t_data *data)
+{
+	if (!data->parse.check_map)
+	{
+		if (!data->parse.check_r || !data->parse.check_s || !data->parse.check_f
+|| !data->parse.check_c || !data->parse.ntext.check || !data->parse.etext.check
+			|| !data->parse.stext.check || !data->parse.wtext.check)
+			exit_properly(data, 1, "manque d'element dans le fichier\n");
+		data->parse.check_map = TRUE;
+	}
+}
+
+void	fill_parse_map(char *line, t_data *data)
+{
+	check_parse_map(data);
+	while (*line)
+	{
+		if (*line == '0' || *line == '1')
+		{
+			**data->parse.map = *line;
+			++*data->parse.map;
+		}
+		++*line;
+	}
+	++data->parse.map;
+}
+
+//					if ((*line != '0' && *line != '1' && *line != ' ') ||
+//	((*line == '0' || *line == '1') && (*line + 1 == '0' || *line + 1 == '1'))
+//						|| (*line == ' ' && *line + 1 == ' '))
+//						exit_properly(data, 1, "mauvaise map (ex : 1 0 0 1)\n");
+
+void	malloc_map(t_data *data)
+{
+	int		i;
+
+	i = -1;
+	if (!(data->parse.map = malloc(sizeof(char *) * (data->parse.nb_line + 1))))
+		exit_properly(data, 1, "malloc qui foire\n");
+	while (++i < data->parse.nb_line)
+		if (!(data->parse.map[i] = malloc(sizeof(char) *
+				(data->parse.sizeline + 1))))
+			exit_properly(data, 1, "malloc qui foire\n");
+}
+
+void	init_parse_map(t_data *data, char *path)
 {
 	int		fd;
 	char	*line;
@@ -99,20 +140,48 @@ void	parsing(char *path, t_data *data)
 	fd = open(path, O_RDONLY);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		i = 0;
-		check_tex(line, data);
-		check_floor_n_sky(line, data);
-		if (line[0] == 'R')
+		if (*line == '1')
 		{
-			i += ft_atoi_parse(line + i + 1, &data->parse.width);
-			i += ft_atoi_parse(line + i + 1, &data->parse.height);
-		}
+			i = -1;
+			if (data->parse.sizeline == 0)
+				while (line[++i])
+				{
+					if (line[i] != '1' && line [i] != ' ')
+						exit_properly(data, 1, "map n'a pas que des 1 en premiere ligne\n");
+					++data->parse.sizeline;
+				}
+			++data->parse.nb_line;
+		}	
 		free(line);
 	}
-	if (ret == -1)
+	ret == 0 ? free(line) : 1;
+	close(fd);
+	malloc_map(data);
+}
+
+void	parsing(char *path, t_data *data)
+{
+	int		fd;
+	char	*line;
+	int		ret;
+
+	fd = open(path, O_RDONLY);
+	init_parse_map(data, path);
+	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		printf("mauvais fichier\n");
-		exit(0);
+		check_tex(line, data);
+		check_floor_n_sky(line, data);
+		if (line[0] == 'R' && line[1] == ' ')
+		{
+			ft_atoi_parse(line + (ft_atoi_parse(line + 1, &data->parse.width,
+			data)) + 1, &data->parse.height, data);
+			data->parse.check_r = TRUE;
+		}
+		line[0] == '1' ? fill_parse_map(line, data) : 1;
+		free(line);
 	}
-	printf("fin du parsing\n");
+	ret == 0 ? free(line) : 1;
+	if (ret == -1)
+		exit_properly(data, 1, "l'argument n'est pas un fichier valable\n"); 
+	close(fd);
 }

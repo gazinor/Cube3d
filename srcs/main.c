@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/21 08:56:59 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 12:04:53 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,43 @@
 #include <unistd.h>
 #include <math.h>
 
+void	free_img(t_data *data, t_img *img)
+{
+	if (img->ptr)
+		mlx_destroy_image(data->mlx.ptr, img->ptr);
+}
+
+void	clean_images(t_data *data)
+{
+	free_img(data, data->ntext.ptr);
+	free_img(data, data->stext.ptr);
+	free_img(data, data->etext.ptr);
+	free_img(data, data->wtext.ptr);
+	free_img(data, data->ciel.ptr);
+	free_img(data, data->ciel_etoile.ptr);
+	free_img(data, data->remote.ptr);
+	free_img(data, data->sol.ptr);
+	free_img(data, data->odoor.ptr);
+	free_img(data, data->cdoor.ptr);
+	free_img(data, data->img.ptr);
+	free_img(data, data->mlx.win);
+}
 int		exit_properly(t_data *data, t_bool error, char *error_msg)
 {
 	int	i;
 
 	i = 0;
 	system("killall afplay");
-	mlx_destroy_image(data->mlx.ptr, data->ntext.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->stext.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->etext.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->wtext.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->ciel.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->ciel_etoile.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->remote.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->sol.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->odoor.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->cdoor.ptr);
-	mlx_destroy_image(data->mlx.ptr, data->img.ptr);
-	mlx_destroy_window(data->mlx.ptr, data->mlx.win);
+	(void)data;
 	if (error == TRUE)
-{
+	{
 		while (error_msg[i])
 			++i;
 		write(2, error_msg, i);
+//		clean_images(data);
 		exit(1);
 	}
+//	clean_images(data);
 	exit(0);
 }
 
@@ -74,9 +86,9 @@ int		key_on(int key, t_data *data)
 	if (data->event.menu == 1 || data->event.option == 1)
 		return (0);
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
-			[(int)data->perso.pos.y] != '4')
+[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 		data->event.door ^= 1;
-	else if (key == TAB)
+	else if (key == TAB && data->option.status == 1)
 		data->mod.nbr[data->mod.i % 3] ^= 1;
 	else
 		intern_key(key, data);
@@ -87,7 +99,7 @@ int		key_off(int key, t_data *data)
 {
 	if (data->event.menu == 1 || data->event.option == 1)
 		return (0);
-	if (key == TAB)
+	if (key == TAB && data->option.status == 1)
 		data->mod.nbr[++data->mod.i % 3] ^= 1;
 	else if (key == MENU)
 		data->event.menu = 1;
@@ -115,31 +127,35 @@ void	check_door(t_data *data)
 }
 
 void	check_mod(t_data *data)
-{
-	if (data->mod.nbr[NORMAL] == 1 && data->mod.light != 5)
-		data->mod.light = 5;
-	if (data->mod.nbr[DARK] == 1 && data->mod.light != 1)
-		data->mod.light = 0.5;
-	if (data->mod.nbr[MIRROR] == 1 && data->mod.light != 5)
-		data->mod.light = 5;
+{ 
+	if (data->option.status == 1)
+	{
+		if (data->mod.nbr[NORMAL] == 1 && data->mod.light != 5)
+			data->mod.light = 5;
+		if (data->mod.nbr[DARK] == 1 && data->mod.light != 1)
+			data->mod.light = 0.5;
+		if (data->mod.nbr[MIRROR] == 1 && data->mod.light != 5)
+			data->mod.light = 5;
+	}
 }
 
 void	do_in_order(t_data *data)
 { 
 	check_mod(data);
 	crt_img(data);
-	if (data->door)
-	{
-		print_door(data, data->door);
-		free_obj(data->door);
-		data->door = NULL;
-	}
+	if (data->option.status == 1)
+		if (data->door)
+		{
+			print_door(data, data->door);
+			free_obj(data->door);
+			data->door = NULL;
+		}
 	if (data->obj)
 	{
 		print_obj(data, data->obj);
 		free_obj(data->obj);
 		data->obj = NULL;
-	}
+	}	
 	put_image_to_window(data);
 }
 
@@ -194,6 +210,7 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 	tmp = resize_image(data, img, width, height);
 	mlx_destroy_image(data->mlx.ptr, img->ptr);
 	*img = tmp;
+	img->check = TRUE;
 }
 
 void	load_background(t_data *data)
@@ -235,14 +252,14 @@ int		main(int ac, char **av)
 
 	if (ac != 2)
 		return (0);
-	ft_init(&data);
 	crt_window(&data);
-	parsing(av[1], &data);
+	ft_init(&data);
 	load_background(&data);
 	load_dir_textures(&data);
 	load_objs(&data);
 	load_menu(&data);
 	load_option(&data);
+	parsing(av[1], &data);
 	system("afplay sounds/bgm.mp3 &");
 	menu(&data);
 	return (0);

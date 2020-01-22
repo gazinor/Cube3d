@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/21 09:23:16 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 09:50:52 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 
 typedef enum	e_bool
 {
-	FALSE,
+	FALSE = 0,
 	TRUE
 }				t_bool;
 
@@ -72,6 +72,7 @@ typedef	struct	s_img
 	int			width;
 	int			height;
 	char		*filename;
+	t_bool		check;
 }				t_img;
 
 typedef	struct	s_pos
@@ -173,6 +174,14 @@ typedef struct	s_parse
 	t_img		sprite_text;
 	long		f_color;
 	long		c_color;
+	char		**map;
+	int			sizeline;
+	int			nb_line;
+	t_bool		check_r;
+	t_bool		check_s;
+	t_bool		check_f;
+	t_bool		check_c;
+	t_bool		check_map;
 }				t_parse;
 
 typedef struct	s_calc

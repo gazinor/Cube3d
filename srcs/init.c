@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/21 06:54:38 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 11:03:29 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,7 @@ void	ft_init(t_data *data)
 	data->option.status = 0;
 	data->parse.width = 0;
 	data->parse.height = 0;
+	data->parse.nb_line = 0;
+	data->parse.sizeline = 0;
 	init_filenames(data);
 }

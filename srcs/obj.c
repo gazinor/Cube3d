@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/21 08:45:45 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/22 06:01:21 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_door(t_data *data, t_sprite *obj)
 			- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
 				data->perso.pos.y)) * rend.height);
 		ratio = (rend.height / (double)(true_end - true_start));
-		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.8 : 1);
+		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1);
 		while (++i < j)
 		{
 			if (obj->sac.ray.side == 1)
@@ -115,7 +115,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 		if(drawEndX >= WIDTH)
 			drawEndX = WIDTH - 1;
 		stripe = drawStartX - 1;
-		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 1.8 : 1));
+		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1));
 		while (++stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
