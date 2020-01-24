@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/22 09:50:52 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/24 09:05:12 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef	struct	s_event
 	t_bool		menu;
 	t_bool		screenshot;
 	t_bool		option;
+	t_bool		music;
 }				t_event;
 
 typedef struct	s_menu
@@ -177,6 +178,11 @@ typedef struct	s_parse
 	char		**map;
 	int			sizeline;
 	int			nb_line;
+	int			i;
+	t_pos		pos;
+	t_pos		dir;
+	double		planx;
+	double		plany;
 	t_bool		check_r;
 	t_bool		check_s;
 	t_bool		check_f;

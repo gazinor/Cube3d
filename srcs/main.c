@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/22 12:04:53 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/24 09:48:00 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 #include <unistd.h>
 #include <math.h>
 
-void	free_img(t_data *data, t_img *img)
+void	free_img(t_data *data, void *ptr)
 {
-	if (img->ptr)
-		mlx_destroy_image(data->mlx.ptr, img->ptr);
+	if (ptr)
+		mlx_destroy_image(data->mlx.ptr, ptr);
 }
 
 void	clean_images(t_data *data)
@@ -38,22 +38,26 @@ void	clean_images(t_data *data)
 	free_img(data, data->img.ptr);
 	free_img(data, data->mlx.win);
 }
+
 int		exit_properly(t_data *data, t_bool error, char *error_msg)
 {
 	int	i;
 
 	i = 0;
-	system("killall afplay");
+	if (data->event.music == 1)
+		system("killall afplay");
 	(void)data;
 	if (error == TRUE)
 	{
+		write(2, "\e[31mErreur\n", 12);
 		while (error_msg[i])
 			++i;
 		write(2, error_msg, i);
-//		clean_images(data);
+		clean_images(data);
 		exit(1);
 	}
-//	clean_images(data);
+	clean_images(data);
+	write(1, "\e[32mCub3D s'est correctement eteint.\n\e[0m", 37);
 	exit(0);
 }
 
@@ -207,6 +211,8 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 
 	img->ptr = mlx_xpm_file_to_image(data->mlx.ptr, img->filename,
 					&(img->width), &(img->height));
+	if (img->ptr == 0)
+		exit_properly(data, 1, "ouverture d'une image impossible\n");
 	tmp = resize_image(data, img, width, height);
 	mlx_destroy_image(data->mlx.ptr, img->ptr);
 	*img = tmp;
@@ -254,13 +260,13 @@ int		main(int ac, char **av)
 		return (0);
 	crt_window(&data);
 	ft_init(&data);
+	parsing(av[1], &data);
 	load_background(&data);
 	load_dir_textures(&data);
 	load_objs(&data);
 	load_menu(&data);
 	load_option(&data);
-	parsing(av[1], &data);
-	system("afplay sounds/bgm.mp3 &");
+	data.event.music = system("afplay sounds/bgm.mp3 &");
 	menu(&data);
 	return (0);
 }

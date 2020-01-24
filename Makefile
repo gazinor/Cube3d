@@ -60,20 +60,21 @@ else
 endif
 	
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
+	@$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
 
 -include $(DEP)
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(OBJ_PATH)
-	$(CC) $(CFLAGS) -MMD -I$(HEADER_P) -o $@ -c $<
-	@printf "\e[1;30m$(CC): \e[1;37m./%-30s\e[1;0m\n" "$< -o $@"
+	@$(CC) $(CFLAGS) -MMD -I$(HEADER_P) -o $@ -c $<
+	@printf "\e[1;30m$(CC): \e[1;37m./%-51s\e[1;0m" "$<"
+	@printf "\e[32mcheck\e[1;0m\n"
 
 clean :
-	make -C $(MLX_PATH) clean
-	rm -rf $(OBJ_PATH) $(MLX_LIB) 
+	@make -C $(MLX_PATH) clean
+	@rm -rf $(OBJ_PATH) $(MLX_LIB) 
 
 fclean : clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 re : fclean all
 

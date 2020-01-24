@@ -7,14 +7,12 @@ SO ./textures/unselected_contour.xpm
 WE ./textures/remote.xpm
 EA ./textures/menu.xpm
 
-S ./path_to_the_sprite_texture
+S ./textures/off_button.xpm
 
 F 220,100,0
+
+
 C 225,30,0
-
-
-
-
 
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1

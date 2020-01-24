@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/22 11:03:29 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/24 09:28:58 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,33 @@ void	init_filenames(t_data *data)
 	data->mode_bonus.filename = "./textures/mode_bonus.xpm";
 }
 
+void	init_img(t_data *data)
+{
+	data->ciel.ptr = NULL;
+	data->ciel_etoile.ptr = NULL;
+	data->sol.ptr = NULL;
+	data->ntext.ptr = NULL;
+	data->stext.ptr = NULL;
+	data->etext.ptr = NULL;
+	data->wtext.ptr = NULL;
+	data->odoor.ptr = NULL;
+	data->cdoor.ptr = NULL;
+	data->remote.ptr = NULL;
+	data->i_menu.ptr = NULL;
+	data->play_s_contour.ptr = NULL;
+	data->play_uns_contour.ptr = NULL;
+	data->option_s_contour.ptr = NULL;
+	data->option_uns_contour.ptr = NULL;
+	data->quit_s_contour.ptr = NULL;
+	data->quit_uns_contour.ptr = NULL;
+	data->on_button.ptr = NULL;
+	data->off_button.ptr = NULL;
+	data->mode_bonus.ptr = NULL;
+	data->retour_s.ptr = NULL;
+	data->retour_uns.ptr = NULL;
+	data->sprite.ptr = NULL;
+}
+
 void	ft_init(t_data *data)
 {
 	data->perso.pos.x = 0;
@@ -96,5 +123,11 @@ void	ft_init(t_data *data)
 	data->parse.height = 0;
 	data->parse.nb_line = 0;
 	data->parse.sizeline = 0;
+	data->parse.check_map = FALSE;
+	data->parse.check_c = FALSE;
+	data->parse.check_f = FALSE;
+	data->parse.check_r = FALSE;
+	data->parse.check_s = FALSE;
 	init_filenames(data);
+	init_img(data);
 }
