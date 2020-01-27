@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 08:04:27 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 00:29:10 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	clean_images(t_data *data)
 	int		i;
 
 	i = -1;
-	while (++i < 83)
+	while (++i < NB_PORTAL_IMG)
 		free_img(data, data->portal[i].ptr);
 	free_img(data, data->ntext.ptr);
 	free_img(data, data->stext.ptr);
@@ -61,7 +61,7 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 		exit(1);
 	}
 	clean_images(data);
-	write(1, "\e[32mCub3D s'est correctement eteint 😍.\n\e[0m", 43);
+	write(1, "\e[32mCub3D s'est correctement eteint.\n\e[0m", 43);
 	exit(0);
 }
 
@@ -164,12 +164,20 @@ void	do_in_order(t_data *data)
 		free_obj(data->obj);
 		data->obj = NULL;
 	}	
+	if (check_portal(data, data->perso.pos.x, data->perso.pos.y) == TRUE)
+	{
+		data->perso.dir = set_dir_portal(data->map[(int)data->perso.pos.x][(int)data->perso.pos.y]);
+		data->perso.pos.x += (data->perso.dir.x * 3);
+		data->perso.pos.y += (data->perso.dir.y * 3);
+		data->perso.planx = 0.66 * data->perso.dir.y;
+		data->perso.plany = -0.66 * data->perso.dir.x;
+	}
 	if (data->portal_lst)
 	{
-		data->portal_lst->index = (data->portal_lst->index + 1) % 83;
+		data->portal_index = (data->portal_index + 1) % NB_PORTAL_IMG;
 		print_portal(data, data->portal_lst);
-//      free_obj(data->portal_lst);
-//      data->obj = NULL;
+		free_portal(data->portal_lst);
+		data->portal_lst = NULL;
 	}
 
 	put_image_to_window(data);
@@ -275,7 +283,7 @@ void    load_portal(t_data *data)
 	int     i;
 
 	i = -1;
-	while (++i < 83)
+	while (++i < NB_PORTAL_IMG)
 		load_image(data, &data->portal[i], 1000, 1000);
 }
 

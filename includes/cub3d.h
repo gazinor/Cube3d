@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 08:15:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 00:15:12 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define TAB 48
 # define SCREENSHOT 105
 # define MENU 35
+# define NB_PORTAL_IMG 83
 
 # include "mlx.h"
 # include <stdlib.h>
@@ -42,7 +43,7 @@
 # include <signal.h>
 # include <fcntl.h>
 
-extern char     *g_portal[83];
+extern char     *g_portal[NB_PORTAL_IMG];
 
 typedef enum	e_bool
 {
@@ -209,10 +210,6 @@ typedef struct	s_bonus
 
 typedef struct  s_portal
 {
-    char            portal_id;
-    int             index;
-    t_pos           pos;
-    t_pos           dir;
 	t_ray			ray;
     struct s_portal *next;
 }               t_portal;
@@ -247,7 +244,7 @@ typedef	struct	s_data
 	t_img		retour_s;
 	t_img		retour_uns;
 	t_img		sprite;
-	t_img		portal[83];
+	t_img		portal[NB_PORTAL_IMG];
 	t_portal	*portal_lst;
 	t_mod		mod;
 	t_menu		menu;
@@ -264,6 +261,7 @@ typedef	struct	s_data
 	t_bonus		bonus;
 	int			w;
 	int			h;
+    int			portal_index;
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -284,6 +282,7 @@ void			turn_right(t_data *data);
 t_img			resize_image(t_data *data, t_img *src, int width, int height);
 void			*create_door(t_data *data, t_sprite **obj, int column);
 void			free_obj(t_sprite *obj);
+void			free_portal(t_portal *obj);
 long			dark(int color, double walldist, t_data *data);
 void			print_door(t_data *data, t_sprite *obj);
 long			trans(int color, t_data *data, int i, int limit);
@@ -306,5 +305,7 @@ void			parsing(char *parse, t_data *data);
 double			my_abs(double value);
 void			print_portal(t_data *data, t_portal *portal);
 void			*create_portal(t_data *data, t_portal **portal_lst);
+t_bool			check_portal(t_data *data, double new_x, double new_y);
+t_pos			set_dir_portal(char c);
 
 #endif

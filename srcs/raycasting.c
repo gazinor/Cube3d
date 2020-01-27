@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 08:13:47 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 23:56:39 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@ double	my_abs(double value)
 {
 	value < 0 ? value *= -1 : value;
 	return (value);
+}
+
+t_bool	check_portal(t_data *data, double new_x, double new_y)
+{
+	if (data->map[(int)new_x][(int)new_y] == 'P' ||
+		data->map[(int)new_x][(int)new_y] == 'O' ||
+		data->map[(int)new_x][(int)new_y] == 'R' ||
+		data->map[(int)new_x][(int)new_y] == 'T' ||
+		data->map[(int)new_x][(int)new_y] == 'A' ||
+		data->map[(int)new_x][(int)new_y] == 'L')
+		return (TRUE);
+	return (FALSE);
 }
 
 void	check_wall_type(t_data *data, int x)
@@ -34,12 +46,7 @@ void	check_wall_type(t_data *data, int x)
 	}
 	else if (data->map[data->ray.mapx][data->ray.mapy] == '2')
 		create_obj(data, &data->obj, x);
-	else if (data->map[data->ray.mapx][data->ray.mapy] == 'P' ||
-			data->map[data->ray.mapx][data->ray.mapy] == 'O' ||
-			data->map[data->ray.mapx][data->ray.mapy] == 'R' ||
-			data->map[data->ray.mapx][data->ray.mapy] == 'T' ||
-			data->map[data->ray.mapx][data->ray.mapy] == 'A' ||
-			data->map[data->ray.mapx][data->ray.mapy] == 'L')
+	else if (check_portal(data, data->ray.mapx, data->ray.mapy) == TRUE)
 		create_portal(data, &data->portal_lst);
 }
 

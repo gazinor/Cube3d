@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 08:16:29 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 00:33:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	print_portal(t_data *data, t_portal *portal)
 				{
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
-					int color = ground_dark(data->portal[portal->index].buffer[data->sprite.width *
+					int color = ground_dark(data->portal[data->portal_index].buffer[data->sprite.width *
 							texY + texX], luminosity);
 					if((color & 0x00FFFFFF) != 0)
 					{
@@ -227,22 +227,22 @@ t_pos	set_dir_portal(char c)
 {
 	t_pos	dir;
 
-	dir.x = 0;
-	dir.y = -1;
+	dir.y = 0;
+	dir.x = -1;
 	if (c == 'P' || c == 'T')
 	{
-		dir.x = 0;
-		dir.y = 1;
+		dir.y = (c == 'P') ? 0 : 0;
+		dir.x = (c == 'P') ? 1 : -1;
 	}
 	else if (c == 'O' || c == 'A')
 	{
-		dir.x = -1;
-		dir.y = 0;
+		dir.y = (c == 'O') ? -1 : 1;
+		dir.x = (c == 'O') ? 0 : 0;
 	}
 	else if (c == 'R' || c == 'L')
 	{
-		dir.x = 1;
-		dir.y = 0;
+		dir.y = (c == 'R') ? 1 : -1;
+		dir.x = (c == 'R') ? 0 : 0;
 	}
 	return (dir);
 }
@@ -251,18 +251,13 @@ void    *create_portal(t_data *data, t_portal **portal_lst)
 {
 	while (*portal_lst)
 	{
-		if ((*portal_lst)->pos.x == data->ray.mapx &&
-				(*portal_lst)->pos.y == data->ray.mapy)
+		if ((*portal_lst)->ray.mapx == data->ray.mapx &&
+				(*portal_lst)->ray.mapy == data->ray.mapy)
 			return (portal_lst);
 		portal_lst = &((*portal_lst)->next);
 	}
 	if (!(*portal_lst = malloc(sizeof(t_portal))))
 		return (NULL);
-	(*portal_lst)->portal_id = data->map[data->ray.mapx][data->ray.mapy];
-	(*portal_lst)->index = 0;
-	(*portal_lst)->pos.x = data->ray.mapx;
-	(*portal_lst)->pos.y = data->ray.mapy;
-	(*portal_lst)->dir = set_dir_portal((*portal_lst)->portal_id);
 	(*portal_lst)->ray = data->ray;
 	(*portal_lst)->next = NULL;
 	return (portal_lst);
@@ -289,6 +284,19 @@ void	*create_obj(t_data *data, t_sprite **obj, int column)
 void	free_obj(t_sprite *obj)
 {
 	t_sprite	*tmp;
+
+	while (obj)
+	{
+		tmp =  obj->next;
+		free(obj);
+		obj = tmp;
+	}
+	obj = NULL;
+}
+
+void	free_portal(t_portal *obj)
+{
+	t_portal	*tmp;
 
 	while (obj)
 	{

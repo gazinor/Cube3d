@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 07:52:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 22:01:05 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	init_filenames(t_data *data)
 	data->retour_uns.filename = "./textures/retour_uns.xpm";
 	data->mode_bonus.filename = "./textures/mode_bonus.xpm";
 	i = -1;
-	while (++i < 83)
+	while (++i < NB_PORTAL_IMG)
 		data->portal[i].filename = g_portal[i];
 }
 
@@ -93,7 +93,7 @@ void	init_img(t_data *data)
 	data->retour_uns.ptr = NULL;
 	data->sprite.ptr = NULL;
 	i = -1;
-	while (++i < 83)
+	while (++i < NB_PORTAL_IMG)
 		data->portal[i].ptr = NULL;
 }
 
@@ -149,7 +149,7 @@ void	ft_init(t_data *data)
 	init_img(data);
 }
 
-char    *g_portal[83] =
+char    *g_portal[NB_PORTAL_IMG] =
 {
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-0.xpm",
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-1.xpm",
