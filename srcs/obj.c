@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/22 06:01:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 05:56:49 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,14 @@ void	print_obj(t_data *data, t_sprite *obj)
 		double transformY = invDet * (-data->perso.plany * spriteX +
 				data->perso.planx * spriteY);
 		int spriteScreenX = (int)((WIDTH / 2) * (1 + transformX / transformY));
-		int spriteHeight = ABS((int)(HEIGHT / transformY));
+		int spriteHeight = my_abs((int)(HEIGHT / transformY));
 		int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
 		if(drawStartY < 0)
 			drawStartY = 0;
 		int drawEndY = spriteHeight / 2 + HEIGHT / 2;
 		if(drawEndY >= HEIGHT)
 			drawEndY = HEIGHT - 1;
-		int spriteWidth = ABS((int)(HEIGHT / (transformY)));
+		int spriteWidth = my_abs((int)(HEIGHT / (transformY)));
 		int drawStartX = -spriteWidth / 2 + spriteScreenX;
 		if(drawStartX < 0)
 			drawStartX = 0;

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/24 09:05:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 04:11:18 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define TAB 48
 # define SCREENSHOT 105
 # define MENU 35
-# define ABS(Value) (Value < 0) ? -Value : Value
 
 # include "mlx.h"
 # include <stdlib.h>
@@ -166,8 +165,6 @@ typedef	struct	s_sprite
 
 typedef struct	s_parse
 {
-	int			width;
-	int			height;
 	t_img		ntext;
 	t_img		wtext;
 	t_img		stext;
@@ -198,6 +195,15 @@ typedef struct	s_calc
 	double		lum;
 	double		offset;
 }				t_calc;
+
+typedef struct	s_bonus
+{
+	char		**map;
+	t_pos		dir;
+	t_pos		pos;
+	double		planx;
+	double		plany;
+}				t_bonus;
 
 typedef	struct	s_data
 {
@@ -241,6 +247,9 @@ typedef	struct	s_data
 	t_sprite	*obj;
 	int			numSprites;
 	double		ZBuffer[WIDTH];
+	t_bonus		bonus;
+	int			w;
+	int			h;
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -280,5 +289,6 @@ char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strdup(const char *s1);
 char			*ft_substr(const char *s, unsigned int start, size_t len);
 void			parsing(char *parse, t_data *data);
+double			my_abs(double value);
 
 #endif

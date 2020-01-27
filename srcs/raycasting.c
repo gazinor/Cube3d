@@ -6,11 +6,17 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/06 02:45:45 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 01:21:01 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+double	my_abs(double value)
+{
+	value < 0 ? value *= -1 : value;
+	return (value);
+}
 
 void	check_wall_type(t_data *data, int x)
 {
@@ -84,10 +90,10 @@ void	raycast_value(t_data *data, int x)
 void	wall_dist(t_data *data)
 {
 	if (data->ray.side == 0)
-		data->ray.walldist = ABS((data->ray.mapx - data->perso.pos.x +
+		data->ray.walldist = my_abs((data->ray.mapx - data->perso.pos.x +
 					(1 - data->ray.stepx) / 2) / data->ray.dirx);
 	else
-		data->ray.walldist = ABS((data->ray.mapy - data->perso.pos.y + (
+		data->ray.walldist = my_abs((data->ray.mapy - data->perso.pos.y + (
 						1 - data->ray.stepy) / 2) / data->ray.diry);
 	data->ray.heightline = HEIGHT / data->ray.walldist;
 	data->ray.start = (int)(-(data->ray.heightline / 2) + HEIGHT / 2);

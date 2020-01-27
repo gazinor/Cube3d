@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/24 09:28:58 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/26 21:59:48 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	ft_init(t_data *data)
 	data->perso.pos.y = 0;
 	data->perso.dir.x = 0;
 	data->perso.dir.y = 0;
+	data->map = NULL;
 	data->perso.speed = 0.066;
 	data->perso.rot = 6. / 180;
 	data->perso.planx = 0;
@@ -119,8 +120,8 @@ void	ft_init(t_data *data)
 	data->door = NULL;
 	data->obj = NULL;
 	data->option.status = 0;
-	data->parse.width = 0;
-	data->parse.height = 0;
+	data->w = 0;
+	data->h = 0;
 	data->parse.nb_line = 0;
 	data->parse.sizeline = 0;
 	data->parse.check_map = FALSE;

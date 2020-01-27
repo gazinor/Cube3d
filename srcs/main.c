@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/24 09:48:00 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 06:20:40 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	i = 0;
 	if (data->event.music == 1)
 		system("killall afplay");
-	(void)data;
 	if (error == TRUE)
 	{
 		write(2, "\e[31mErreur\n", 12);
@@ -57,7 +56,7 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 		exit(1);
 	}
 	clean_images(data);
-	write(1, "\e[32mCub3D s'est correctement eteint.\n\e[0m", 37);
+	write(1, "\e[32mCub3D s'est correctement eteint 😍.\n\e[0m", 43);
 	exit(0);
 }
 
@@ -182,10 +181,16 @@ int		ft_move(t_data *data)
 	if (data->event.door == 1)
 		check_door(data);
 	if (data->event.run == 1)
+	{
+		data->perso.rot = 0.0612;
 		data->perso.speed = 0.158;
+	}
 	if (data->event.run == 0)
+	{
+		data->perso.rot = 0.0333;
 		data->perso.speed = 0.086;
-	if (data->event.respawn == 1)
+	}
+	if (data->option.status == 1 && data->event.respawn == 1)
 	{
 		data->perso.pos.x = data->perso.depart.x;
 		data->perso.pos.y = data->perso.depart.y;
@@ -266,7 +271,8 @@ int		main(int ac, char **av)
 	load_objs(&data);
 	load_menu(&data);
 	load_option(&data);
-	data.event.music = system("afplay sounds/bgm.mp3 &");
+	system("afplay sounds/bgm.mp3 &");
+	data.event.music = 1;
 	menu(&data);
 	return (0);
 }

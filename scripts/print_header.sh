@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in {0..4} ; do
+for i in {0..2} ; do
     for color in {0..214} ; do # Colors
         # Display the color
 		clear

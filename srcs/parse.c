@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/24 09:49:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 04:33:08 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,17 @@ int		ft_atoi_parse(char *str, int *res, t_data *data)
 	nb = 0;
 	while (str[i] == '\t' || str[i] == ' ' || str[i] == ',')
 		++i;
-	if (!(str[i] >= '0' && str[i] <= '9'))
-		exit_properly(data, 1, "mauvais prototype, ce n'est pas un nombre\n");
+	str[i] == '-' ? exit_properly(data, 1,
+		"Pas de nombres negatifs hein 😉\n") : 1;
+	!(str[i] >= '0' && str[i] <= '9') ?	exit_properly(data, 1,
+		"Mauvais prototype, les nombres ne sont pas tous corrects.\n") : 1;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		nb = nb * 10 + (str[i] - 48);
 		++i;
 	}
+	if (str[i] != '\0' && str[i] != ' ' && str[i] != ',')
+		exit_properly(data, 1, "Mauvais caracteres en fin de nombre.\n");
 	*res = nb;
 	return (i);
 }
@@ -56,6 +60,8 @@ void	check_tex(char *line, t_data *data)
 				|| (line[0] == 'S' && line[1] == ' '))
 	{
 		img = get_img(line, data);
+		if (img->check == TRUE)
+			exit_properly(data, 1, "Texture en double.\n");
 		while ((line[i] >= 'A' && line[i] <= 'Z') ||
 				line[i] == '\t' || line[i] == ' ')
 			++i;
@@ -96,9 +102,6 @@ void	check_floor_n_sky(char *line, t_data *data)
 
 void	check_parse_map(t_data *data)
 {
-		printf("r%d s%d f%d c%d no%d ea%d so%d we%d\n", data->parse.check_r, data->parse.check_s, data->parse.check_f,
- data->parse.check_c, data->parse.ntext.check, data->parse.etext.check
-			, data->parse.stext.check, data->parse.wtext.check);
 	if (!data->parse.check_map)
 	{
 		if (!data->parse.check_r || !data->parse.check_s || !data->parse.check_f
@@ -118,6 +121,9 @@ int		ft_strlen_map(t_data *data, char *str)
 	count = 0;
 	while (str[++i])
 	{
+		if (data->parse.i == data->parse.nb_line - 1 &&
+				str[i] != '1' && str[i] != ' ')
+			exit_properly(data, 1, "Only '1' on last line.\n");
 		if (str[i] == '1' || str[i] == '0' || str[i] == '2' || str[i] == 'N' ||
 			str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
 			count++;
@@ -152,24 +158,20 @@ void	fill_parse_map(char *line, t_data *data)
 		if (line[i] == '1' || line[i] == '0' || line[i] == '2' || line[i] == 'N'
 		|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
 		{
+			data->parse.map[data->parse.i][j] = line[i];
 			if (line[i] == 'N' || line[i] == 'S' ||
 				line[i] == 'E' || line[i] == 'W')
 			{
 				data->parse.pos.x = data->parse.i;
-				data->parse.pos.y = i;
+				data->parse.pos.y = j;
 				set_parse_dir(data, line[i]);
+				data->parse.map[data->parse.i][j] = '0';
 			}
-			data->parse.map[data->parse.i][j] = line[i];
 			++j;
 		}
 	data->parse.map[data->parse.i][j] = '\0';
 	++data->parse.i;
 }
-
-//					if ((*line != '0' && *line != '1' && *line != ' ') ||
-//	((*line == '0' || *line == '1') && (*line + 1 == '0' || *line + 1 == '1'))
-//						|| (*line == ' ' && *line + 1 == ' '))
-//						exit_properly(data, 1, "mauvaise map (ex : 1 0 0 1)\n");
 
 void	malloc_map(t_data *data)
 {
@@ -183,6 +185,7 @@ void	malloc_map(t_data *data)
 		if (!(data->parse.map[i] = malloc(sizeof(char) *
 				(data->parse.sizeline + 1))))
 			exit_properly(data, 1, "Malloc qui foire.\n");
+	data->parse.map[i] = 0;
 }
 
 void	init_parse_map(t_data *data, char *path)
@@ -220,10 +223,10 @@ void	check_all_cases(char *line, t_data *data)
 		return ;
 	printf("%s\n", line);
 	if (!(line[0] == 'R' && line[1] == ' ') &&
-		!(line[0] == 'N' && line[1] == 'O')	&&
-		!(line[0] == 'E' && line[1] == 'A') &&
-		!(line[0] == 'S' && line[1] == 'O') &&
-		!(line[0] == 'W' && line[1] == 'E') &&
+		!(line[0] == 'N' && line[1] == 'O' && line[2] == ' ') &&
+		!(line[0] == 'E' && line[1] == 'A' && line[2] == ' ') &&
+		!(line[0] == 'S' && line[1] == 'O' && line[2] == ' ') &&
+		!(line[0] == 'W' && line[1] == 'E' && line[2] == ' ') &&
 		!(line[0] == 'S' && line[1] == ' ') &&
 		!(line[0] == 'F' && line[1] == ' ') &&
 		!(line[0] == 'C' && line[1] == ' ') &&
@@ -238,8 +241,10 @@ void	check_res(char *line, t_data *data)
 		if (data->parse.check_r == TRUE)
 			exit_properly(data, 1, "2x R arg.\n");
 		data->parse.check_r = TRUE;
-		ft_atoi_parse(line + (ft_atoi_parse(line + 1, &data->parse.width,
-		data)) + 1, &data->parse.height, data);
+		ft_atoi_parse(line + (ft_atoi_parse(line + 1, &data->w,
+		data)) + 1, &data->h, data);
+		if (data->w > 2560 || data->h > 1440 || data->w < 0 || data->h < 0)
+			exit_properly(data, 1, "Resolutions sup. a la taille de l'ecran\n");
 	}
 }
 
@@ -260,8 +265,10 @@ void	parsing(char *path, t_data *data)
 		line[0] == '1' ? fill_parse_map(line, data) : 1;
 		free(line);
 	}
-	ret == 0 ? free(line) : 1;
 	if (ret == -1)
 		exit_properly(data, 1, "l'argument n'est pas un fichier valable\n"); 
+	*line == 1 ? fill_parse_map(line, data) : 1;
+	ret == 0 ? free(line) : 0;
+
 	close(fd);
 }
