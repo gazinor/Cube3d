@@ -53,7 +53,7 @@ all : $(MLX_LIB) $(NAME)
 
 $(MLX_LIB) :
 ifeq ($(PRINT), 0)
-	@sh $(SCRIPT_P)/print_header.sh
+	@sh $(SCRIPT_P)/print_header2.sh
 	@$(MAKE) PRINT=1
 else
 	@make -C $(MLX_PATH)
