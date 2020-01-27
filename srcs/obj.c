@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 05:56:49 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 08:16:29 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,21 @@ void	print_door(t_data *data, t_sprite *obj)
 		true_end = j;
 		j = j > HEIGHT ? HEIGHT : j;
 		calc1 = ((obj->sac.ray.walldist * obj->sac.ray.dirx + data->perso.pos.x
-			- (int)(obj->sac.ray.walldist * obj->sac.ray.dirx +
-				data->perso.pos.x)) * rend.height);
+					- (int)(obj->sac.ray.walldist * obj->sac.ray.dirx +
+						data->perso.pos.x)) * rend.height);
 		calc2 = ((obj->sac.ray.walldist * obj->sac.ray.diry + data->perso.pos.y
-			- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
-				data->perso.pos.y)) * rend.height);
+					- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
+						data->perso.pos.y)) * rend.height);
 		ratio = (rend.height / (double)(true_end - true_start));
 		luminosity = obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1);
 		while (++i < j)
 		{
 			if (obj->sac.ray.side == 1)
 				color = ground_dark(rend.buffer[(int)(calc1 + (int)((int)((i -
-true_start) * ratio) * (rend.width)))], luminosity);
+										true_start) * ratio) * (rend.width)))], luminosity);
 			else
 				color = ground_dark(rend.buffer[(int)(calc2 + (int)((int)((i -
-true_start) * ratio) * (rend.width)))], luminosity);
+										true_start) * ratio) * (rend.width)))], luminosity);
 			if (color)
 			{
 				data->img.buffer[obj->sac.column + (i * (data->img.width))] = color;
@@ -129,14 +129,14 @@ void	print_obj(t_data *data, t_sprite *obj)
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
 					int color = ground_dark(data->sprite.buffer[data->sprite.width *
-texY + texX], luminosity);
+							texY + texX], luminosity);
 					if((color & 0x00FFFFFF) != 0)
 					{
 						data->img.buffer[stripe + (y *
 								(data->img.width))] = color;
 						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
 							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
-(data->img.width))] = ground_dark(color, 5);
+									(data->img.width))] = ground_dark(color, 5);
 					}
 				}
 			}
@@ -144,6 +144,68 @@ texY + texX], luminosity);
 		obj = obj->next;
 	}
 }
+
+void	print_portal(t_data *data, t_portal *portal)
+{
+	int	stripe;
+	int	y;
+
+	while (portal)
+	{
+		double spriteX = portal->ray.mapx - data->perso.pos.x + 0.5;
+		double spriteY = portal->ray.mapy - data->perso.pos.y + 0.5;
+		double invDet = 1.0 / (data->perso.planx * data->perso.dir.y -
+				data->perso.dir.x * data->perso.plany);
+		double transformX = invDet * (data->perso.dir.y * spriteX -
+				data->perso.dir.x * spriteY);
+		double transformY = invDet * (-data->perso.plany * spriteX +
+				data->perso.planx * spriteY);
+		int spriteScreenX = (int)((WIDTH / 2) * (1 + transformX / transformY));
+		int spriteHeight = my_abs((int)(HEIGHT / transformY));
+		int drawStartY = -spriteHeight / 2 + HEIGHT / 2;
+		if(drawStartY < 0)
+			drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + HEIGHT / 2;
+		if(drawEndY >= HEIGHT)
+			drawEndY = HEIGHT - 1;
+		int spriteWidth = my_abs((int)(HEIGHT / (transformY)));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if(drawStartX < 0)
+			drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if(drawEndX >= WIDTH)
+			drawEndX = WIDTH - 1;
+		stripe = drawStartX - 1;
+		double luminosity = (portal->ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1));
+		while (++stripe < drawEndX)
+		{
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
+					* data->sprite.width / spriteWidth) / 256;
+			if (transformY > 0 && stripe > 0 && stripe < WIDTH
+					&& transformY < data->ZBuffer[stripe])
+			{
+				y = drawStartY - 1;
+				while (++y < drawEndY)
+				{
+					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
+					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
+					int color = ground_dark(data->portal[portal->index].buffer[data->sprite.width *
+							texY + texX], luminosity);
+					if((color & 0x00FFFFFF) != 0)
+					{
+						data->img.buffer[stripe + (y *
+								(data->img.width))] = color;
+						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
+							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
+									(data->img.width))] = ground_dark(color, 5);
+					}
+				}
+			}
+		}
+		portal = portal->next;
+	}
+}
+
 
 void	*create_door(t_data *data, t_sprite **obj, int column)
 {
@@ -159,6 +221,51 @@ void	*create_door(t_data *data, t_sprite **obj, int column)
 	(*obj)->sac.column = column;
 	(*obj)->next = NULL;
 	return (obj);
+}
+
+t_pos	set_dir_portal(char c)
+{
+	t_pos	dir;
+
+	dir.x = 0;
+	dir.y = -1;
+	if (c == 'P' || c == 'T')
+	{
+		dir.x = 0;
+		dir.y = 1;
+	}
+	else if (c == 'O' || c == 'A')
+	{
+		dir.x = -1;
+		dir.y = 0;
+	}
+	else if (c == 'R' || c == 'L')
+	{
+		dir.x = 1;
+		dir.y = 0;
+	}
+	return (dir);
+}
+
+void    *create_portal(t_data *data, t_portal **portal_lst)
+{
+	while (*portal_lst)
+	{
+		if ((*portal_lst)->pos.x == data->ray.mapx &&
+				(*portal_lst)->pos.y == data->ray.mapy)
+			return (portal_lst);
+		portal_lst = &((*portal_lst)->next);
+	}
+	if (!(*portal_lst = malloc(sizeof(t_portal))))
+		return (NULL);
+	(*portal_lst)->portal_id = data->map[data->ray.mapx][data->ray.mapy];
+	(*portal_lst)->index = 0;
+	(*portal_lst)->pos.x = data->ray.mapx;
+	(*portal_lst)->pos.y = data->ray.mapy;
+	(*portal_lst)->dir = set_dir_portal((*portal_lst)->portal_id);
+	(*portal_lst)->ray = data->ray;
+	(*portal_lst)->next = NULL;
+	return (portal_lst);
 }
 
 void	*create_obj(t_data *data, t_sprite **obj, int column)

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 06:20:40 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 08:04:27 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	free_img(t_data *data, void *ptr)
 
 void	clean_images(t_data *data)
 {
+	int		i;
+
+	i = -1;
+	while (++i < 83)
+		free_img(data, data->portal[i].ptr);
 	free_img(data, data->ntext.ptr);
 	free_img(data, data->stext.ptr);
 	free_img(data, data->etext.ptr);
@@ -89,7 +94,7 @@ int		key_on(int key, t_data *data)
 	if (data->event.menu == 1 || data->event.option == 1)
 		return (0);
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
-[(int)data->perso.pos.y] != '4' && data->option.status == 1)
+			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 		data->event.door ^= 1;
 	else if (key == TAB && data->option.status == 1)
 		data->mod.nbr[data->mod.i % 3] ^= 1;
@@ -122,11 +127,11 @@ void	put_image_to_window(t_data *data)
 void	check_door(t_data *data)
 {
 	if (data->map[(int)(data->perso.pos.x + (data->perso.dir.x *
-			data->perso.speed))][(int)(data->perso.pos.y +
-			(data->perso.dir.y * data->perso.speed))] == '3')
+					data->perso.speed))][(int)(data->perso.pos.y +
+					(data->perso.dir.y * data->perso.speed))] == '3')
 		data->map[(int)(data->perso.pos.x + (data->perso.dir.x *
-			data->perso.speed))][(int)(data->perso.pos.y + 
-			(data->perso.dir.y * data->perso.speed))] = '0';
+					data->perso.speed))][(int)(data->perso.pos.y + 
+					(data->perso.dir.y * data->perso.speed))] = '0';
 }
 
 void	check_mod(t_data *data)
@@ -159,6 +164,14 @@ void	do_in_order(t_data *data)
 		free_obj(data->obj);
 		data->obj = NULL;
 	}	
+	if (data->portal_lst)
+	{
+		data->portal_lst->index = (data->portal_lst->index + 1) % 83;
+		print_portal(data, data->portal_lst);
+//      free_obj(data->portal_lst);
+//      data->obj = NULL;
+	}
+
 	put_image_to_window(data);
 }
 
@@ -207,7 +220,7 @@ void	crt_window(t_data *data)
 	data->mlx.win = mlx_new_window(data->mlx.ptr, WIDTH, HEIGHT, "Cub3d");
 	data->img.ptr = mlx_new_image(data->mlx.ptr, WIDTH, HEIGHT);
 	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
-										&data->img.size, &data->img.endian);
+			&data->img.size, &data->img.endian);
 }
 
 void	load_image(t_data *data, t_img *img, int width, int height)
@@ -215,7 +228,7 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 	t_img	tmp;
 
 	img->ptr = mlx_xpm_file_to_image(data->mlx.ptr, img->filename,
-					&(img->width), &(img->height));
+			&(img->width), &(img->height));
 	if (img->ptr == 0)
 		exit_properly(data, 1, "ouverture d'une image impossible\n");
 	tmp = resize_image(data, img, width, height);
@@ -257,6 +270,15 @@ void	loop(t_data *data)
 	mlx_loop(data->mlx.ptr);
 }
 
+void    load_portal(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < 83)
+		load_image(data, &data->portal[i], 1000, 1000);
+}
+
 int		main(int ac, char **av)
 {
 	t_data data;
@@ -269,6 +291,7 @@ int		main(int ac, char **av)
 	load_background(&data);
 	load_dir_textures(&data);
 	load_objs(&data);
+	load_portal(&data);
 	load_menu(&data);
 	load_option(&data);
 	system("afplay sounds/bgm.mp3 &");

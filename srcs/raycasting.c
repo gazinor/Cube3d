@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 01:21:01 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 08:13:47 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ void	check_wall_type(t_data *data, int x)
 	}
 	else if (data->map[data->ray.mapx][data->ray.mapy] == '2')
 		create_obj(data, &data->obj, x);
+	else if (data->map[data->ray.mapx][data->ray.mapy] == 'P' ||
+			data->map[data->ray.mapx][data->ray.mapy] == 'O' ||
+			data->map[data->ray.mapx][data->ray.mapy] == 'R' ||
+			data->map[data->ray.mapx][data->ray.mapy] == 'T' ||
+			data->map[data->ray.mapx][data->ray.mapy] == 'A' ||
+			data->map[data->ray.mapx][data->ray.mapy] == 'L')
+		create_portal(data, &data->portal_lst);
 }
 
 void	raycasting(t_data *data, int x)

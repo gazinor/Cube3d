@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 04:11:18 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/27 08:15:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # include <math.h>
 # include <signal.h>
 # include <fcntl.h>
+
+extern char     *g_portal[83];
 
 typedef enum	e_bool
 {
@@ -205,6 +207,16 @@ typedef struct	s_bonus
 	double		plany;
 }				t_bonus;
 
+typedef struct  s_portal
+{
+    char            portal_id;
+    int             index;
+    t_pos           pos;
+    t_pos           dir;
+	t_ray			ray;
+    struct s_portal *next;
+}               t_portal;
+
 typedef	struct	s_data
 {
 	t_perso		perso;
@@ -235,6 +247,8 @@ typedef	struct	s_data
 	t_img		retour_s;
 	t_img		retour_uns;
 	t_img		sprite;
+	t_img		portal[83];
+	t_portal	*portal_lst;
 	t_mod		mod;
 	t_menu		menu;
 	t_option	option;
@@ -290,5 +304,7 @@ char			*ft_strdup(const char *s1);
 char			*ft_substr(const char *s, unsigned int start, size_t len);
 void			parsing(char *parse, t_data *data);
 double			my_abs(double value);
+void			print_portal(t_data *data, t_portal *portal);
+void			*create_portal(t_data *data, t_portal **portal_lst);
 
 #endif
