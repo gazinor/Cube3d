@@ -45,20 +45,19 @@ MLX      =	$(addprefix $(MLX_PATH)/,$(MLX_LIB))
 
 # unecessary vars  #
 SCRIPT_P =	./scripts
-PRINT    =	0
 
 ################################################################################
 
 all : $(MLX_LIB) $(NAME)
 
 $(MLX_LIB) :
-ifeq ($(PRINT), 0)
-	@sh $(SCRIPT_P)/print_header2.sh
-	@$(MAKE) PRINT=1
-else
+	@sh $(SCRIPT_P)/print_header.sh
 	@make -C $(MLX_PATH)
-endif
 	
+f :
+	@sh $(SCRIPT_P)/print_header2.sh
+	@make -C $(MLX_PATH)
+
 $(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
 

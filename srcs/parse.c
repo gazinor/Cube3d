@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/27 04:33:08 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 01:03:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void	check_parse_map(t_data *data)
 		if (!data->parse.check_r || !data->parse.check_s || !data->parse.check_f
 || !data->parse.check_c || !data->parse.ntext.check || !data->parse.etext.check
 			|| !data->parse.stext.check || !data->parse.wtext.check)
-			exit_properly(data, 1, "Manque d'element dans le fichier.\n");
+			exit_properly(data, 1, "Manque d'element dans le fichier, \
+ou ne sont-ils pas dans le bon ordre ? Corrige ca.\n");
 		data->parse.check_map = TRUE;
 	}
 }
@@ -116,6 +117,7 @@ int		ft_strlen_map(t_data *data, char *str)
 {
 	int		i;
 	int		count;
+	int		token;
 
 	i = -1;
 	count = 0;
@@ -126,13 +128,17 @@ int		ft_strlen_map(t_data *data, char *str)
 			exit_properly(data, 1, "Only '1' on last line.\n");
 		if (str[i] == '1' || str[i] == '0' || str[i] == '2' || str[i] == 'N' ||
 			str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
+		{
+			token = i;
 			count++;
+		}
 		else if (str[i] == ' ')
 			continue ;
 		else
 			exit_properly(data, 1, 
 			"Mauvais caractere dans la map (seulement : 0,1,2,N,S,W,E).\n");
 	}
+	str[token] != '1' ? exit_properly(data, 1, "Lines must end by '1'.\n") : 1;
 	return (count);
 }
 
@@ -263,6 +269,8 @@ void	parsing(char *path, t_data *data)
 		check_floor_n_sky(line, data);
 		check_res(line, data);
 		line[0] == '1' ? fill_parse_map(line, data) : 1;
+		if (data->parse.check_map == 1 && line[0] != '1')
+			exit_properly(data, 1, "Pas de \\n dans la map, merci.\n");
 		free(line);
 	}
 	if (ret == -1)

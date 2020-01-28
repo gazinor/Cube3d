@@ -1,9 +1,7 @@
 #!/bin/bash
-for i in {0..2} ; do
-    for color in {0..214} ; do # Colors
-        # Display the color
+
 		clear
-        printf "\e[38;5;%sm" $color
+        printf "\e[38;5;214m"
 		echo "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§"
 		echo "§                                                                             §"
 		echo "§                                                                             §"
@@ -15,11 +13,8 @@ for i in {0..2} ; do
 		echo "§   ▩▩▩▤▩▩▩▩▩      ▩▩▩▤▩▩▩▩▩  ▤   ▩▩▩▤▩▩▩▩   ▤  ▩▩▩▩▩▩▩  ▤   ▩▩▩▤▩▩▩▩    ▤    §"
 		echo "§      ▤▤▤▤▤▤▤▤▤      ▤▤▤▤▤▤▤▤▤      ▤▤▤▤▤▤▤▤     ▤▤▤▤▤▤▤       ▤▤▤▤▤▤▤▤      §"
 		echo "§                                                                             §"
-		printf "§                                                  \e[36;1mGlaurent\e[38;5;%sm                   §\n" $color
+		printf "§                                                  \e[36;1mGlaurent\e[38;5;214m                   §\n"
 		echo "§                                                                             §"
 		echo "§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§"
 		echo
-        # Display 6 colors per lines and clear
-    done
-done
 exit 0
