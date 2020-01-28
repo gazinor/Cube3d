@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 01:03:07 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 05:47:21 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,12 +254,25 @@ void	check_res(char *line, t_data *data)
 	}
 }
 
+void	check_file_extension(t_data *data, char *path)
+{
+	int		i;
+
+	i = 0;
+	while (path[i])
+		++i;
+	if (i > 4 && ft_strcmp(path + i - 4, ".cub"))
+		return ;
+	exit_properly(data, 1, "Mauvaise extension de fichier('.cub').\n");
+}
+
 void	parsing(char *path, t_data *data)
 {
 	int		fd;
 	char	*line;
 	int		ret;
 
+	check_file_extension(data, path);
 	fd = open(path, O_RDONLY);
 	init_parse_map(data, path);
 	while ((ret = get_next_line(fd, &line)) > 0)
@@ -277,6 +290,5 @@ void	parsing(char *path, t_data *data)
 		exit_properly(data, 1, "l'argument n'est pas un fichier valable\n"); 
 	*line == 1 ? fill_parse_map(line, data) : 1;
 	ret == 0 ? free(line) : 0;
-
 	close(fd);
 }

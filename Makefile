@@ -54,7 +54,7 @@ $(MLX_LIB) :
 	@sh $(SCRIPT_P)/print_header.sh
 	@make -C $(MLX_PATH)
 	
-f :
+f : $(NAME)
 	@sh $(SCRIPT_P)/print_header2.sh
 	@make -C $(MLX_PATH)
 

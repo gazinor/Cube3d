@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 22:01:05 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 05:59:27 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void	ft_init(t_data *data)
 	data->option.status = 0;
 	data->w = 0;
 	data->h = 0;
+	data->screen = 0;
 	data->parse.nb_line = 0;
 	data->parse.sizeline = 0;
 	data->parse.check_map = FALSE;

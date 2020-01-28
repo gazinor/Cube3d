@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 00:29:10 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 04:09:55 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,11 @@ void	do_in_order(t_data *data)
 		free_portal(data->portal_lst);
 		data->portal_lst = NULL;
 	}
-
+	if (data->screen == 1)
+	{
+		screenshot(data);
+		data->screen = 0;
+	}
 	put_image_to_window(data);
 }
 
@@ -287,12 +291,29 @@ void    load_portal(t_data *data)
 		load_image(data, &data->portal[i], 1000, 1000);
 }
 
+t_bool	ft_strcmp(char *s1, char *s2)
+{
+	int		i;
+
+	i = -1;
+	while (s1[++i])
+		if (s1[i] != s2[i])
+			return (FALSE);
+	if (s2[i] != '\0')
+		return (FALSE);
+	return (TRUE);
+}
+
 int		main(int ac, char **av)
 {
 	t_data data;
 
-	if (ac != 2)
-		return (0);
+	if (ac != 3 && ac != 2)
+	{
+		write(2, "\e[31mErreur\n", 12);
+		write(2, "Mauvais nombre d'arguments.\n", 28);
+		exit(0);
+	}
 	crt_window(&data);
 	ft_init(&data);
 	parsing(av[1], &data);
@@ -304,6 +325,9 @@ int		main(int ac, char **av)
 	load_option(&data);
 	system("afplay sounds/bgm.mp3 &");
 	data.event.music = 1;
+	if (ac == 3)
+		ft_strcmp(av[2], "-save") == TRUE ? data.screen = 1 :
+			exit_properly(&data, 1, "Unknown argument. Try that again ?\n");
 	menu(&data);
 	return (0);
 }
