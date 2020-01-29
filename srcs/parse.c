@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 06:23:58 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 08:07:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,6 @@ void	check_all_cases(char *line, t_data *data)
 {
 	if (!line[0])
 		return ;
-	printf("%s\n", line);
 	if (!(line[0] == 'R' && line[1] == ' ') &&
 		!(line[0] == 'N' && line[1] == 'O' && line[2] == ' ') &&
 		!(line[0] == 'E' && line[1] == 'A' && line[2] == ' ') &&

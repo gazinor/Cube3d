@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 00:13:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 08:12:15 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,7 @@ typedef	struct	s_data
 	int			h;
     int			portal_index;
 	t_bool		screen;
+	t_bool		launch;
 }				t_data;
 
 void			*crt_img(t_data *data);

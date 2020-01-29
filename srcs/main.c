@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 07:40:31 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 08:17:06 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ft_itoa((int)data->perso.pos.y));
 	free(str);
 	str = tmp;
-	tmp = ft_strjoin(str, "\n\" | nc e1r10p9 13000");
+	tmp = ft_strjoin(str, "\" | nc e1r10p9 13000");
 	free(str);
 	str = tmp;
 	return (str);
@@ -426,6 +426,7 @@ int		ft_isdigit(char c)
 
 void	ft_test(t_data *data, char buf[4097])
 {
+
 	int	i = 0;
 	while (!ft_isdigit(buf[i]))
 		++i;
@@ -434,7 +435,8 @@ void	ft_test(t_data *data, char buf[4097])
 		++i;
 	++i;
 	int y = atoi(buf + i);
-	data->map[x][y] = '1';
+	if (data->launch == TRUE)
+		data->bonus.map[x][y] = '1';
 }
 
 void    *t_loop(void *arg)
@@ -444,6 +446,7 @@ void    *t_loop(void *arg)
 	int     ret;
 
 	t_data *data = (t_data *)arg;
+	data->launch = FALSE;
 	while ((ret = read(fd, buf, 4096)) > 0)
 	{
 		buf[ret] = 0;
