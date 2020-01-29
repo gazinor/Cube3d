@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 04:09:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 05:34:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,15 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	i = 0;
 	if (data->event.music == 1)
 		system("killall afplay");
-	if (error == TRUE)
+	if (error_msg)
 	{
-		write(2, "\e[31mErreur\n", 12);
 		while (error_msg[i])
 			++i;
 		write(2, error_msg, i);
+	}
+	if (error == TRUE)
+	{
+		write(2, "\e[31mErreur\n", 12);
 		clean_images(data);
 		exit(1);
 	}
@@ -182,7 +185,7 @@ void	do_in_order(t_data *data)
 	if (data->screen == 1)
 	{
 		screenshot(data);
-		data->screen = 0;
+		exit_properly(data, 0, "Screenshot effectue.\n");
 	}
 	put_image_to_window(data);
 }
@@ -304,9 +307,32 @@ t_bool	ft_strcmp(char *s1, char *s2)
 	return (TRUE);
 }
 
+#include <pthread.h>
+#include <string.h>
+
+void    *t_loop(void *arg)
+{
+    int     fd = open("/dev/fd/0", O_RDONLY);
+    char    buf[4097];
+    int     ret;
+
+	t_data *data = (t_data *)arg;
+    while ((ret = read(fd, buf, 4096)) > 0)
+    {
+        buf[ret] = 0;
+        if (!strncmp(buf, "pute", 4))
+		{
+			data->event.door ^= 1;
+            write(1, "Mega pute\n", 10);
+		}
+    }
+    return (NULL);
+}
+
 int		main(int ac, char **av)
 {
 	t_data data;
+	pthread_t	thread;
 
 	if (ac != 3 && ac != 2)
 	{
@@ -314,6 +340,7 @@ int		main(int ac, char **av)
 		write(2, "Mauvais nombre d'arguments.\n", 28);
 		exit(0);
 	}
+	pthread_create(&thread, NULL, t_loop, &data);
 	crt_window(&data);
 	ft_init(&data);
 	parsing(av[1], &data);
@@ -323,11 +350,20 @@ int		main(int ac, char **av)
 	load_portal(&data);
 	load_menu(&data);
 	load_option(&data);
+	if (ac == 3)
+	{
+		if (ft_strcmp(av[2], "-save") == TRUE ||
+			ft_strcmp(av[2], "--save") == TRUE)
+		{
+			data.screen = 1;
+			init_normale(&data);
+			loop(&data);
+		}
+		else
+			exit_properly(&data, 1, "Unknown argument.\n");
+	}
 	system("afplay sounds/bgm.mp3 &");
 	data.event.music = 1;
-	if (ac == 3)
-		ft_strcmp(av[2], "-save") == TRUE ? data.screen = 1 :
-			exit_properly(&data, 1, "Unknown argument. Try that again ?\n");
 	menu(&data);
 	return (0);
 }

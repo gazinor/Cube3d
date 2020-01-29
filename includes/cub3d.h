@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 05:43:38 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:13:32 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,5 +309,6 @@ void			*create_portal(t_data *data, t_portal **portal_lst);
 t_bool			check_portal(t_data *data, double new_x, double new_y);
 t_pos			set_dir_portal(char c);
 t_bool			ft_strcmp(char *s1, char *s2);
+void			init_normale(t_data *data);
 
 #endif

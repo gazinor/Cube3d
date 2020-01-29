@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/28 05:47:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/28 06:23:58 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ void	check_tex(char *line, t_data *data)
 	}
 }
 
+void	check_pixel(t_data *data, int r, int g, int b)
+{
+	if (r > 255 || g > 255 || b > 255)
+		exit_properly(data, 1,
+			"Mauvais composants de pixel. Doit etre contenu entre 0 et 255.\n");
+}
+
 void	check_floor_n_sky(char *line, t_data *data)
 {
 	int		i;
@@ -86,6 +93,7 @@ void	check_floor_n_sky(char *line, t_data *data)
 		i += ft_atoi_parse(line + i, &r, data);
 		i += ft_atoi_parse(line + i, &g, data);
 		i += ft_atoi_parse(line + i, &b, data);
+		check_pixel(data, r, g, b);
 		data->parse.f_color = (r << 16) + (g << 8) + b;
 		data->parse.check_f = TRUE;
 	}
@@ -95,6 +103,7 @@ void	check_floor_n_sky(char *line, t_data *data)
 		i += ft_atoi_parse(line + i, &r, data);
 		i += ft_atoi_parse(line + i, &g, data);
 		i += ft_atoi_parse(line + i, &b, data);
+		check_pixel(data, r, g, b);
 		data->parse.c_color = (r << 16) + (g << 8) + b;
 		data->parse.check_c = TRUE;
 	}
