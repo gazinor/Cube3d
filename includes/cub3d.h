@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 11:55:31 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 00:17:38 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # include <math.h>
 # include <signal.h>
 # include <fcntl.h>
+#include <pthread.h>
 
 extern char     *g_portal[NB_PORTAL_IMG];
 
@@ -216,55 +217,56 @@ typedef struct  s_portal
 
 typedef	struct	s_data
 {
-	t_perso		perso;
-	t_img		img;
-	t_mlx		mlx;
-	t_event		event;
-	t_ray		ray;
-	t_img		ciel;
-	t_img		ciel_etoile;
-	t_img		sol;
-	t_img		ntext;
-	t_img		stext;
-	t_img		etext;
-	t_img		wtext;
-	t_img		odoor;
-	t_img		cdoor;
-	t_img		remote;
-	t_img		i_menu;
-	t_img		play_s_contour;
-	t_img		play_uns_contour;
-	t_img		option_s_contour;
-	t_img		option_uns_contour;
-	t_img		quit_s_contour;
-	t_img		quit_uns_contour;
-	t_img		on_button;
-	t_img		off_button;
-	t_img		mode_bonus;
-	t_img		retour_s;
-	t_img		retour_uns;
-	t_img		sprite;
-	t_img		portal[NB_PORTAL_IMG];
-	t_portal	*portal_lst;
-	t_mod		mod;
-	t_menu		menu;
-	t_option	option;
-	t_parse		parse;
-	t_calc		calc;
-	pid_t		music;
-	char		**map;
-	t_pos		map_mid;
-	t_sprite	*door;
-	t_sprite	*obj;
-	t_sprite	*player;
-	int			numSprites;
-	double		ZBuffer[WIDTH];
-	t_bonus		bonus;
-	int			w;
-	int			h;
-    int			portal_index;
-	t_bool		screen;
-	t_bool		launch;
+	t_perso			perso;
+	t_img			img;
+	t_mlx			mlx;
+	t_event			event;
+	t_ray			ray;
+	t_img			ciel;
+	t_img			ciel_etoile;
+	t_img			sol;
+	t_img			ntext;
+	t_img			stext;
+	t_img			etext;
+	t_img			wtext;
+	t_img			odoor;
+	t_img			cdoor;
+	t_img			remote;
+	t_img			i_menu;
+	t_img			play_s_contour;
+	t_img			play_uns_contour;
+	t_img			option_s_contour;
+	t_img			option_uns_contour;
+	t_img			quit_s_contour;
+	t_img			quit_uns_contour;
+	t_img			on_button;
+	t_img			off_button;
+	t_img			mode_bonus;
+	t_img			retour_s;
+	t_img			retour_uns;
+	t_img			sprite;
+	t_img			portal[NB_PORTAL_IMG];
+	t_portal		*portal_lst;
+	t_mod			mod;
+	t_menu			menu;
+	t_option		option;
+	t_parse			parse;
+	t_calc			calc;
+	pid_t			music;
+	char			**map;
+	t_pos			map_mid;
+	t_sprite		*door;
+	t_sprite		*obj;
+	t_sprite		*player;
+	int				numSprites;
+	double			ZBuffer[WIDTH];
+	t_bonus			bonus;
+	int				w;
+	int				h;
+    int				portal_index;
+	t_bool			screen;
+	t_bool			launch;
+	pthread_mutex_t	mutex_player;
 }				t_data;
 
 void			*crt_img(t_data *data);

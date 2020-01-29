@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 12:05:19 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 00:24:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,12 +281,14 @@ void	do_in_order(t_data *data)
 		free_obj(data->obj);
 		data->obj = NULL;
 	}	
+	pthread_mutex_lock(&data->mutex_player);
 	if (data->player)
 	{
 		print_obj(data, data->player);
 		free_obj(data->player);
 		data->player = NULL;
 	}	
+	pthread_mutex_unlock(&data->mutex_player);
 	if (check_portal(data, data->perso.pos.x, data->perso.pos.y) == TRUE)
 	{
 		data->perso.dir = set_dir_portal(data->map[(int)data->perso.pos.x][(int)data->perso.pos.y]);
@@ -471,11 +473,13 @@ void	ft_test(t_data *data, char buf[4097])
 	y_ = atoi(buf + i);
 	old = data->map[x][y];
 //	data->map[x][y] = '2';
+	pthread_mutex_lock(&data->mutex_player);
 	create_obj(data, &data->player, 0);
-	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
-	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
+	data->player->sac.ray.mapx = x + x_ / 100.;
+	data->player->sac.ray.mapy = y + y_ / 100.;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.)) *
 (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.)) * (data->perso.pos.x - (y + y_ / 100.)));
+	pthread_mutex_unlock(&data->mutex_player);
 }
 
 void    *t_loop(void *arg)
@@ -512,6 +516,7 @@ int		main(int ac, char **av)
 		write(2, "Mauvais nombre d'arguments.\n", 28);
 		exit(0);
 	}
+	pthread_mutex_init(&data.mutex_player, NULL);
 	pthread_create(&thread, NULL, t_loop, &data);
 	crt_window(&data);
 	ft_init(&data);
