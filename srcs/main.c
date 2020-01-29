@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:27:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 08:37:36 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,8 @@ void	ft_test(t_data *data, char buf[4097])
 	int			i;
 
 	i = 0;
+	if (data->launch == TRUE)
+		data->map[x][y] = '0';
 	while (!ft_isdigit(buf[i]))
 		++i;
 	x = atoi(buf + i);
@@ -439,7 +441,7 @@ void	ft_test(t_data *data, char buf[4097])
 	++i;
 	y = atoi(buf + i);
 	if (data->launch == TRUE)
-		data->map[x][y] = '1';
+		data->map[x][y] = '2';
 }
 
 void    *t_loop(void *arg)
