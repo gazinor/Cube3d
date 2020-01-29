@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:12:15 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 10:44:31 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ typedef	struct	s_data
 	t_pos		map_mid;
 	t_sprite	*door;
 	t_sprite	*obj;
+	t_sprite	*player;
 	int			numSprites;
 	double		ZBuffer[WIDTH];
 	t_bonus		bonus;

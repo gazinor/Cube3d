@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/29 08:14:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 10:55:30 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	ft_init(t_data *data)
 	ft_init_map(data);
 	data->door = NULL;
 	data->obj = NULL;
+	data->player = NULL;
 	data->portal_lst = NULL;
 	data->option.status = 0;
 	data->w = 0;

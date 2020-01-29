@@ -5,8 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/29 11:02:11 by glaurent          #+#    #+#             */
+/*   Updated: 2020/01/29 11:03:26 by glaurent         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:37:36 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:01:51 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +192,19 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ";");
 	free(str);
 	str = tmp;
+	tmp = ft_strjoin(str, ft_itoa((int)((data->perso.pos.x - (int)data->perso.pos.x) * 100)));
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ";");
+	free(str);
+	str = tmp;
 	tmp = ft_strjoin(str, ft_itoa((int)data->perso.pos.y));
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ";");
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ft_itoa((int)((data->perso.pos.y - (int)data->perso.pos.y) * 100)));
 	free(str);
 	str = tmp;
 	tmp = ft_strjoin(str, "\" | nc e1r10p9 13000");
@@ -196,6 +220,7 @@ int		key_on(int key, t_data *data)
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
+		system("echo pute | nc e1r10p9 13000");
 		data->event.door ^= 1;
 	}
 	else if (key == TAB && data->option.status == 1)
@@ -267,6 +292,12 @@ void	do_in_order(t_data *data)
 		print_obj(data, data->obj);
 		free_obj(data->obj);
 		data->obj = NULL;
+	}	
+	if (data->player)
+	{
+		print_obj(data, data->player);
+		free_obj(data->player);
+		data->player = NULL;
 	}	
 	if (check_portal(data, data->perso.pos.x, data->perso.pos.y) == TRUE)
 	{
@@ -427,21 +458,36 @@ int		ft_isdigit(char c)
 void	ft_test(t_data *data, char buf[4097])
 {
 	static int	x = 0;
+	static int	x_ = 0;
 	static int	y = 0;
+	static int	y_ = 0;
+	static char	old = 0;
 	int			i;
 
 	i = 0;
-	if (data->launch == TRUE)
-		data->map[x][y] = '0';
+	data->map[x][y] = old;
 	while (!ft_isdigit(buf[i]))
 		++i;
 	x = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
+	x_ = atoi(buf + i);
+	while (ft_isdigit(buf[i]))
+		++i;
+	++i;
 	y = atoi(buf + i);
-	if (data->launch == TRUE)
-		data->map[x][y] = '2';
+	while (ft_isdigit(buf[i]))
+		++i;
+	++i;
+	y_ = atoi(buf + i);
+	old = data->map[x][y];
+//	data->map[x][y] = '2';
+	create_obj(data, &data->player, 0);
+	data->player->sac.ray.mapx = (int)x;
+	data->player->sac.ray.mapy = (int)y;
+	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - x) *
+(data->perso.pos.x - x) + (data->perso.pos.x - y) * (data->perso.pos.x - y));
 }
 
 void    *t_loop(void *arg)
@@ -455,12 +501,14 @@ void    *t_loop(void *arg)
 	while ((ret = read(fd, buf, 4096)) > 0)
 	{
 		buf[ret] = 0;
-//		if (!strncmp(buf, "pute", 4))
-//		{
-//			data->event.door ^= 1;
-//			write(1, "Mega pute\n", 10);
-//		}
-		ft_test(data, buf);
+		if (!strncmp(buf, "pute", 4))
+		{
+			data->event.door ^= 1;
+			write(1, "Mega pute\n", 10);
+		}
+		else
+			if (data->launch == TRUE)
+				ft_test(data, buf);
 	}
 	return (NULL);
 }
