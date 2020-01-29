@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 17:19:46 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/20 21:52:19 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 06:59:59 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		len_s2;
 	int		i;
 
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1 || !s2)
+		return (!s1 ? ft_strdup(s2) : ft_strdup(s1));
 	len_s1 = 0;
 	while (*(s1 + len_s1))
 		++len_s1;

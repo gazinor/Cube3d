@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 05:34:28 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 07:40:31 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,81 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
+
+static int		ft_strlen(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (*(str + i))
+		++i;
+	return (i);
+}
+
+int		ft_size(int n)
+{
+	int		size;
+
+	size = 0;
+	if (n == 0)
+		return (1);
+	else if (n < 0)
+		size++;
+	while (n != 0)
+	{
+		n /= 10;
+		size++;
+	}
+	return (size);
+}
+
+static	char	*ft_recur(char *str, int n, int i)
+{
+	if (n < 0)
+	{
+		n = n * -1;
+		str[ft_size(n)] = '-';
+	}
+	if (n >= 10)
+	{
+		ft_recur(str, n / 10, i + 1);
+		ft_recur(str, n % 10, i);
+	}
+	else
+		str[i] = n + 48;
+	return (str);
+}
+
+static	void	ft_strrev(char *str)
+{
+	int	len;
+	int	i;
+	int	tmp;
+
+	i = 0;
+	len = ft_strlen(str);
+	while (i < len / 2)
+	{
+		tmp = str[i];
+		str[i] = str[len - 1 - i];
+		str[len - 1 - i] = tmp;
+		i++;
+	}
+}
+
+char			*ft_itoa(int n)
+{
+	char	*str;
+
+	if (!(str = malloc(sizeof(char) * (ft_size(n) + 1))))
+		return (NULL);
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	str = ft_recur(str, n, 0);
+	str[ft_size(n)] = '\0';
+	ft_strrev(str);
+	return (str);
+}
 
 void	free_img(t_data *data, void *ptr)
 {
@@ -90,6 +165,28 @@ void	intern_key(int key, t_data *data)
 		data->event.respawn ^= 1;
 	else if (key == SCREENSHOT)
 		data->event.screenshot ^= 1;
+} 
+
+
+char	*serialized(t_data *data)
+{
+	char	*str = NULL;
+	char	*tmp;
+
+	str = ft_strdup("echo \"");	
+	tmp = ft_strjoin(str, ft_itoa((int)data->perso.pos.x));
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ";");
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ft_itoa((int)data->perso.pos.y));
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, "\n\" | nc e1r10p9 13000");
+	free(str);
+	str = tmp;
+	return (str);
 }
 
 int		key_on(int key, t_data *data)
@@ -98,7 +195,9 @@ int		key_on(int key, t_data *data)
 		return (0);
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
+	{
 		data->event.door ^= 1;
+	}
 	else if (key == TAB && data->option.status == 1)
 		data->mod.nbr[data->mod.i % 3] ^= 1;
 	else
@@ -152,6 +251,8 @@ void	check_mod(t_data *data)
 
 void	do_in_order(t_data *data)
 { 
+	char 	*ret = NULL;
+
 	check_mod(data);
 	crt_img(data);
 	if (data->option.status == 1)
@@ -187,6 +288,14 @@ void	do_in_order(t_data *data)
 		screenshot(data);
 		exit_properly(data, 0, "Screenshot effectue.\n");
 	}
+	ret = serialized(data);
+	if (ret)
+	{
+		system(ret);
+		free(ret);
+		ret = NULL;
+	}
+
 	put_image_to_window(data);
 }
 
@@ -310,23 +419,42 @@ t_bool	ft_strcmp(char *s1, char *s2)
 #include <pthread.h>
 #include <string.h>
 
+int		ft_isdigit(char c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+void	ft_test(t_data *data, char buf[4097])
+{
+	int	i = 0;
+	while (!ft_isdigit(buf[i]))
+		++i;
+	int x = atoi(buf + i);
+	while (ft_isdigit(buf[i]))
+		++i;
+	++i;
+	int y = atoi(buf + i);
+	data->map[x][y] = '1';
+}
+
 void    *t_loop(void *arg)
 {
-    int     fd = open("/dev/fd/0", O_RDONLY);
-    char    buf[4097];
-    int     ret;
+	int     fd = open("/dev/fd/0", O_RDONLY | O_NONBLOCK);
+	char    buf[4097];
+	int     ret;
 
 	t_data *data = (t_data *)arg;
-    while ((ret = read(fd, buf, 4096)) > 0)
-    {
-        buf[ret] = 0;
-        if (!strncmp(buf, "pute", 4))
-		{
-			data->event.door ^= 1;
-            write(1, "Mega pute\n", 10);
-		}
-    }
-    return (NULL);
+	while ((ret = read(fd, buf, 4096)) > 0)
+	{
+		buf[ret] = 0;
+//		if (!strncmp(buf, "pute", 4))
+//		{
+//			data->event.door ^= 1;
+//			write(1, "Mega pute\n", 10);
+//		}
+		ft_test(data, buf);
+	}
+	return (NULL);
 }
 
 int		main(int ac, char **av)
@@ -353,7 +481,7 @@ int		main(int ac, char **av)
 	if (ac == 3)
 	{
 		if (ft_strcmp(av[2], "-save") == TRUE ||
-			ft_strcmp(av[2], "--save") == TRUE)
+				ft_strcmp(av[2], "--save") == TRUE)
 		{
 			data.screen = 1;
 			init_normale(&data);
