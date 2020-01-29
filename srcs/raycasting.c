@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 23:56:39 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:59:21 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ t_bool	check_portal(t_data *data, double new_x, double new_y)
 void	check_wall_type(t_data *data, int x)
 {
 
-	if (data->map[data->ray.mapx][data->ray.mapy] == '1' ||
-			data->map[data->ray.mapx][data->ray.mapy] == '3')
+	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '1' ||
+			data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '3')
 		data->ray.hit = 1;
 	wall_dist(data);
 	data->ZBuffer[x] = data->ray.walldist;
-	if (data->map[data->ray.mapx][data->ray.mapy] == '4')
+	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '4')
 	{
 		if (!data->event.door)
 			data->ray.hit = 1;
 		create_door(data, &data->door, x);
 	}
-	else if (data->map[data->ray.mapx][data->ray.mapy] == '2')
+	else if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '2')
 		create_obj(data, &data->obj, x);
 	else if (check_portal(data, data->ray.mapx, data->ray.mapy) == TRUE)
 		create_portal(data, &data->portal_lst);
@@ -67,7 +67,7 @@ void	raycasting(t_data *data, int x)
 			data->ray.mapy += data->ray.stepy;
 			data->ray.side = 1;
 		}
-		if (data->map[data->ray.mapx][data->ray.mapy] > '0')
+		if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] > '0')
 			check_wall_type(data, x);
 	}
 }

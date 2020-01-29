@@ -5,20 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/29 11:02:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 11:06:32 by glaurent         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 11:01:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:57:27 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,8 +472,8 @@ void	ft_test(t_data *data, char buf[4097])
 	old = data->map[x][y];
 //	data->map[x][y] = '2';
 	create_obj(data, &data->player, 0);
-	data->player->sac.ray.mapx = x;
-	data->player->sac.ray.mapy = y;
+	data->player->sac.ray.mapx = x + x_ - 0.5;
+	data->player->sac.ray.mapy = y + y_ - 0.5;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.)) *
 (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.)) * (data->perso.pos.x - (y + y_ / 100.)));
 }

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 10:44:31 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:55:31 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,8 @@ typedef	struct	s_mod
 
 typedef	struct	s_ray
 {
-	int			mapx;
-	int			mapy;
+	double			mapx;
+	double			mapy;
 	double		sidedistx;
 	double		sidedisty;
 	double		deltax;
