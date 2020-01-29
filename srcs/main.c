@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:17:06 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/29 08:27:51 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,17 +426,20 @@ int		ft_isdigit(char c)
 
 void	ft_test(t_data *data, char buf[4097])
 {
+	static int	x = 0;
+	static int	y = 0;
+	int			i;
 
-	int	i = 0;
+	i = 0;
 	while (!ft_isdigit(buf[i]))
 		++i;
-	int x = atoi(buf + i);
+	x = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
-	int y = atoi(buf + i);
+	y = atoi(buf + i);
 	if (data->launch == TRUE)
-		data->bonus.map[x][y] = '1';
+		data->map[x][y] = '1';
 }
 
 void    *t_loop(void *arg)
