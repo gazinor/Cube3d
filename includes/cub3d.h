@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/30 00:17:38 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 04:04:55 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,5 +314,6 @@ t_bool			check_portal(t_data *data, double new_x, double new_y);
 t_pos			set_dir_portal(char c);
 t_bool			ft_strcmp(char *s1, char *s2);
 void			init_normale(t_data *data);
+int				transparance(int p1, int p2);
 
 #endif
