@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/30 04:12:03 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 21:47:19 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,8 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ft_itoa((int)((data->perso.pos.y - (int)data->perso.pos.y) * 100)));
 	free(str);
 	str = tmp;
-	tmp = ft_strjoin(str, "\" | nc e1r10p9 13000");
+//	tmp = ft_strjoin(str, "\" | nc e1r10p9 13000");
+	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
 	return (str);
@@ -208,8 +209,10 @@ int		key_on(int key, t_data *data)
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
-		system("echo pute | nc e1r10p9 13000");
+//		system("echo \'open door\' | nc e1r10p9 13000");
+		system("echo \"open door\" | nc localhost 13000");
 		data->event.door ^= 1;
+		data->event.remote ^= 1;
 	}
 	else if (key == TAB && data->option.status == 1)
 		data->mod.nbr[data->mod.i % 3] ^= 1;
@@ -234,7 +237,7 @@ int		key_off(int key, t_data *data)
 void	put_image_to_window(t_data *data)
 {
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
-	if (data->event.door == 1)
+	if (data->event.remote == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
 				data->mlx.win, data->remote.ptr, WIDTH / 2, HEIGHT / 2);
 }
@@ -451,11 +454,9 @@ void	ft_test(t_data *data, char buf[4097])
 	static int	x_ = 0;
 	static int	y = 0;
 	static int	y_ = 0;
-	static char	old = 0;
 	int			i;
 
 	i = 0;
-	data->map[x][y] = old;
 	while (!ft_isdigit(buf[i]))
 		++i;
 	x = atoi(buf + i);
@@ -471,12 +472,10 @@ void	ft_test(t_data *data, char buf[4097])
 		++i;
 	++i;
 	y_ = atoi(buf + i);
-	old = data->map[x][y];
-//	data->map[x][y] = '2';
 	pthread_mutex_lock(&data->mutex_player);
 	create_obj(data, &data->player, 0);
-	data->player->sac.ray.mapx = x + x_ / 100.;
-	data->player->sac.ray.mapy = y + y_ / 100.;
+	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
+	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.)) *
 (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.)) * (data->perso.pos.x - (y + y_ / 100.)));
 	pthread_mutex_unlock(&data->mutex_player);
@@ -493,11 +492,8 @@ void    *t_loop(void *arg)
 	while ((ret = read(fd, buf, 4096)) > 0)
 	{
 		buf[ret] = 0;
-		if (!strncmp(buf, "pute", 4))
-		{
+		if (!strncmp(buf, "open door", 9))
 			data->event.door ^= 1;
-			write(1, "Mega pute\n", 10);
-		}
 		else
 			if (data->launch == TRUE)
 				ft_test(data, buf);

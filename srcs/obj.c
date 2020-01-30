@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 11:54:54 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 21:11:56 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 		if(drawEndX >= WIDTH)
 			drawEndX = WIDTH - 1;
 		stripe = drawStartX - 1;
-		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1));
+//		double luminosity = (obj->sac.ray.walldist * 600 / HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1));
 		while (++stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
@@ -128,8 +128,10 @@ void	print_obj(t_data *data, t_sprite *obj)
 				{
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
-					int color = ground_dark(data->sprite.buffer[data->sprite.width *
-							texY + texX], luminosity);
+					if (obj->sac.ray.walldist < 1)
+						continue ;
+					int color = /*ground_dark(*/data->sprite.buffer[data->sprite.width *
+							texY + texX]/*, luminosity)*/;
 					if((color & 0x00FFFFFF) != 0)
 					{
 						data->img.buffer[stripe + (y *

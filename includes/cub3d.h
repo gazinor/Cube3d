@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/30 04:04:55 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 21:48:23 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef	struct	s_event
 	t_bool		l_arrow;
 	t_bool		r_arrow;
 	t_bool		door;
+	t_bool		remote;
 	t_bool		run;
 	t_bool		respawn;
 	t_bool		menu;

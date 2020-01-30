@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/29 10:55:30 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/30 21:49:01 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	ft_init(t_data *data)
 	data->event.l_arrow = 0;
 	data->event.r_arrow = 0;
 	data->event.door = 0;
+	data->event.remote = 0;
 	data->event.run = 0;
 	data->event.respawn = 0;
 	data->event.screenshot = 0;

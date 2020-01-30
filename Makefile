@@ -49,15 +49,19 @@ SCRIPT_P =	./scripts
 
 ################################################################################
 
-all : $(MLX_LIB) $(NAME)
+all : header1 $(MLX_LIB) $(NAME)
+
+f : header2 $(MLX_LIB) $(NAME)
 
 $(MLX_LIB) :
+	@make -C $(MLX_PATH)
+
+header1 :
 	@sh $(SCRIPT_P)/print_header.sh
-	@make -C $(MLX_PATH)
-	
-f : $(NAME)
+
+header2 :
 	@sh $(SCRIPT_P)/print_header2.sh
-	@make -C $(MLX_PATH)
+
 
 $(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $@ $(GFLAGS) 
