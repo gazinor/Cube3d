@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/28 03:37:14 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 10:44:50 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ void	crt_sky(t_data *data, int column)
 				data->img.buffer[column + (i * (data->img.width))] =
 					data->ciel_etoile.buffer[(int)((data->calc.offset + i) *
 							data->ciel_etoile.width)];
+		else if (data->perso.pos.x < 16)
+			while (++i < data->ray.start)
+				data->img.buffer[column + (i * (data->img.width))] =
+ground_dark(data->sol.buffer[(int)(column + (i * data->sol.width))],
+i * (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum);
 		else
 			while (++i < data->ray.start)
 				data->img.buffer[column + (i * (data->img.width))] =

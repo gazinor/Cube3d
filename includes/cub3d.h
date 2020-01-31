@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/30 21:48:23 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 10:00:42 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@
 # include <math.h>
 # include <signal.h>
 # include <fcntl.h>
-#include <pthread.h>
+# include <pthread.h>
+# include <string.h>
 
 extern char     *g_portal[NB_PORTAL_IMG];
 

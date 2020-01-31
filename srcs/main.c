@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 06:55:48 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 10:00:05 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,9 +439,6 @@ t_bool	ft_strcmp(char *s1, char *s2)
 		return (FALSE);
 	return (TRUE);
 }
-
-#include <pthread.h>
-#include <string.h>
 
 int		ft_isdigit(char c)
 {
