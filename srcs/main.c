@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 10:00:05 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:02:09 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,8 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ft_itoa((int)((data->perso.pos.y - (int)data->perso.pos.y) * 100)));
 	free(str);
 	str = tmp;
-//	tmp = ft_strjoin(str, "\" | nc e1r10p9 13000");
-	tmp = ft_strjoin(str, "\" | nc localhost 13000");
+	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
+//	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
 	return (str);
@@ -209,8 +209,8 @@ int		key_on(int key, t_data *data)
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
-//		system("echo \'open door\' | nc e1r10p9 13000");
-		system("echo \"open door\" | nc localhost 13000");
+		system("echo \"open door\" | nc e1r12p12 13000");
+//		system("echo \"open door\" | nc localhost 13000");
 		data->event.door ^= 1;
 		data->event.remote ^= 1;
 	}
@@ -234,8 +234,34 @@ int		key_off(int key, t_data *data)
 	return (0);
 }
 
+long	dark(long color, double alpha)
+{
+	unsigned char	t;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+
+	if (alpha < 0)
+		return (color);
+	if (alpha > 1)
+		return (color);
+	t = ((color >> 24) & 0xff) * alpha;
+	r = ((color >> 16) & 0xff) * alpha;
+	g = ((color >> 8) & 0xff) * alpha;
+	b = (color & 0xff) * alpha;
+	return ((t << 24) + (r << 16) + (g << 8) + b);
+}
+
 void	put_image_to_window(t_data *data)
 {
+	int		i;
+	i = -1;
+	data->old_time = data->time.tv_usec + data->time.tv_sec * 1000000;
+	gettimeofday(&data->time, NULL);
+	data->anim += (data->time.tv_usec + data->time.tv_sec * 1000000) - data->old_time;
+	while (++i < HEIGHT * WIDTH)
+		data->img.buffer[i] = dark(data->img.buffer[i],
+		data->anim / 1500000.0);
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
 	if (data->event.remote == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
@@ -299,6 +325,7 @@ void	do_in_order(t_data *data)
 		data->perso.pos.y += (data->perso.dir.y * 3);
 		data->perso.planx = 0.66 * data->perso.dir.y;
 		data->perso.plany = -0.66 * data->perso.dir.x;
+		data->anim = 0;
 	}
 	if (data->portal_lst)
 	{
@@ -511,8 +538,8 @@ int		main(int ac, char **av)
 	}
 	pthread_mutex_init(&data.mutex_player, NULL);
 	pthread_create(&thread, NULL, t_loop, &data);
-	crt_window(&data);
 	ft_init(&data);
+	crt_window(&data);
 	parsing(av[1], &data);
 	load_background(&data);
 	load_dir_textures(&data);

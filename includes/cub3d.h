@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 10:00:42 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:11:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # include <fcntl.h>
 # include <pthread.h>
 # include <string.h>
+# include <sys/time.h>
 
 extern char     *g_portal[NB_PORTAL_IMG];
 
@@ -266,8 +267,11 @@ typedef	struct	s_data
 	int				w;
 	int				h;
     int				portal_index;
+	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
+	struct timeval	time;
+	unsigned long	old_time;
 	pthread_mutex_t	mutex_player;
 }				t_data;
 
@@ -290,7 +294,6 @@ t_img			resize_image(t_data *data, t_img *src, int width, int height);
 void			*create_door(t_data *data, t_sprite **obj, int column);
 void			free_obj(t_sprite *obj);
 void			free_portal(t_portal *obj);
-long			dark(int color, double walldist, t_data *data);
 void			print_door(t_data *data, t_sprite *obj);
 long			trans(int color, t_data *data, int i, int limit);
 void			menu(t_data *data);
