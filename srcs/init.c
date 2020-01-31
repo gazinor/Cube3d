@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/30 21:49:01 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/01/31 06:54:43 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ void	ft_init(t_data *data)
 	data->parse.check_f = FALSE;
 	data->parse.check_r = FALSE;
 	data->parse.check_s = FALSE;
+	data->portal_index = 0;
 	init_filenames(data);
 	init_img(data);
 }
