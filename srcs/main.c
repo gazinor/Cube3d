@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/02 20:31:39 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 22:29:24 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,10 @@ void	intern_key(int key, t_data *data)
 		data->event.respawn ^= 1;
 	else if (key == SCREENSHOT)
 		data->event.screenshot ^= 1;
-//	else if (key == SLASH && data->player.sac.walldist < 1)
-//		data->event.slash ^= 1;
+	else if (key == SLASH && data->player && (data->player->sac.ray.mapx -
+	   data->perso.pos.x) * data->perso.dir.x < 1 &&
+	   (data->player->sac.ray.mapy - data->perso.pos.y) * data->perso.dir.y < 1)
+		data->event.slash ^= 1;
 } 
 
 
@@ -225,10 +227,11 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, data->event.slash == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
-	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
-//	tmp = ft_strjoin(str, "\" | nc localhost 13000");
+//	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
+	tmp = ft_strjoin(str, "\" | nc localhost 12345");
 	free(str);
 	str = tmp;
+	data->event.slash = FALSE;
 	return (str);
 }
 
@@ -239,8 +242,8 @@ int		key_on(int key, t_data *data)
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
-		system("echo \"open door\" | nc e1r12p12 13000");
-//		system("echo \"open door\" | nc localhost 13000");
+//		system("echo \"open door\" | nc e1r12p12 13000");
+		system("echo \"open door\" | nc localhost 12345");
 		data->event.door ^= 1;
 		data->event.remote ^= 1;
 	}

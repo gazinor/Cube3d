@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/02 20:25:23 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 22:29:25 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define SCREENSHOT 105
 # define MENU 35
 # define NB_PORTAL_IMG 83
+# define SLASH 126
 
 # include "mlx.h"
 # include <stdlib.h>
