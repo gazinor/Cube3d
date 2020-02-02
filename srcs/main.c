@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 16:02:09 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 19:18:57 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,29 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	exit(0);
 }
 
+void	print_life(t_data *data)
+{
+	int		x;
+	int		y;
+	int		debut_x;
+	int		debut_y;
+
+	debut_x = WIDTH * 5 / 8;
+	debut_y = HEIGHT / 16;
+	x = -1;
+	while(++x < WIDTH)
+	{
+		y = -1;
+		while(++y < HEIGHT)
+			if (x > debut_x + 7  && x < debut_x + WIDTH * 2 / 8 - 7 &&
+				y > debut_y + 7 && y < debut_y + HEIGHT / 32 - 7)
+				data->img.buffer[x + (y * data->img.width)] = 0xFF0000;
+			else if (x > debut_x  && x < debut_x + WIDTH * 2 / 8 &&
+				y > debut_y && y < debut_y + HEIGHT / 32)
+				data->img.buffer[x + (y * data->img.width)] = 0x0;
+	}
+}
+
 void	intern_key(int key, t_data *data)
 {
 	if (key == ESC)
@@ -259,6 +282,7 @@ void	put_image_to_window(t_data *data)
 	data->old_time = data->time.tv_usec + data->time.tv_sec * 1000000;
 	gettimeofday(&data->time, NULL);
 	data->anim += (data->time.tv_usec + data->time.tv_sec * 1000000) - data->old_time;
+	data->option.status == 1 ? print_life(data) : 1;
 	while (++i < HEIGHT * WIDTH)
 		data->img.buffer[i] = dark(data->img.buffer[i],
 		data->anim / 1500000.0);
