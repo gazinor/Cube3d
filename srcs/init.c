@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/31 15:54:46 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 20:31:53 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	ft_init(t_data *data)
 	data->event.respawn = 0;
 	data->event.screenshot = 0;
 	data->event.option = 0;
+	data->event.slash = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;
@@ -151,6 +152,12 @@ void	ft_init(t_data *data)
 	data->portal_index = 0;
 	data->time.tv_usec = 0;
 	data->time.tv_sec = 0;
+	data->life.debut_x = WIDTH * 5 / 8;
+	data->life.debut_y = HEIGHT / 16;
+	data->life.fin_y = HEIGHT / 32;
+	data->life.max_life = WIDTH / 4;
+	data->life.hurt = 0;
+	data->life.hit = 10 * data->life.max_life / 100.;
 	init_filenames(data);
 	init_img(data);
 }

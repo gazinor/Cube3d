@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 15:11:28 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 20:25:23 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef	struct	s_event
 	t_bool		screenshot;
 	t_bool		option;
 	t_bool		music;
+	t_bool		slash;
 }				t_event;
 
 typedef struct	s_menu
@@ -218,6 +219,17 @@ typedef struct  s_portal
     struct s_portal *next;
 }               t_portal;
 
+typedef struct	s_life
+{
+	int			debut_x;
+	int			debut_y;
+	int			fin_y;
+	int			max_life;
+	int			hurt;
+	int			life;
+	int			hit;
+}				t_life;
+
 typedef	struct	s_data
 {
 	t_perso			perso;
@@ -272,6 +284,7 @@ typedef	struct	s_data
 	t_bool			launch;
 	struct timeval	time;
 	unsigned long	old_time;
+	t_life			life;
 	pthread_mutex_t	mutex_player;
 }				t_data;
 

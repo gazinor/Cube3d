@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/02 19:18:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/02 20:31:39 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,21 +147,20 @@ void	print_life(t_data *data)
 {
 	int		x;
 	int		y;
-	int		debut_x;
-	int		debut_y;
 
-	debut_x = WIDTH * 5 / 8;
-	debut_y = HEIGHT / 16;
 	x = -1;
+//	if (data->life.max_life < data->life.hurt)
+//		you_died(data);
 	while(++x < WIDTH)
 	{
 		y = -1;
 		while(++y < HEIGHT)
-			if (x > debut_x + 7  && x < debut_x + WIDTH * 2 / 8 - 7 &&
-				y > debut_y + 7 && y < debut_y + HEIGHT / 32 - 7)
+			if (x > data->life.debut_x + 7  && x < data->life.debut_x +
+					data->life.max_life - data->life.hurt - 7 &&
+				y > data->life.debut_y + 7 && y < data->life.debut_y + data->life.fin_y - 7)
 				data->img.buffer[x + (y * data->img.width)] = 0xFF0000;
-			else if (x > debut_x  && x < debut_x + WIDTH * 2 / 8 &&
-				y > debut_y && y < debut_y + HEIGHT / 32)
+			else if (x > data->life.debut_x  && x < data->life.debut_x + data->life.max_life &&
+				y > data->life.debut_y && y < data->life.debut_y + data->life.fin_y)
 				data->img.buffer[x + (y * data->img.width)] = 0x0;
 	}
 }
@@ -188,6 +187,8 @@ void	intern_key(int key, t_data *data)
 		data->event.respawn ^= 1;
 	else if (key == SCREENSHOT)
 		data->event.screenshot ^= 1;
+//	else if (key == SLASH && data->player.sac.walldist < 1)
+//		data->event.slash ^= 1;
 } 
 
 
@@ -216,6 +217,12 @@ char	*serialized(t_data *data)
 	free(str);
 	str = tmp;
 	tmp = ft_strjoin(str, ft_itoa((int)((data->perso.pos.y - (int)data->perso.pos.y) * 100)));
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, ";");
+	free(str);
+	str = tmp;
+	tmp = ft_strjoin(str, data->event.slash == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
 	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
@@ -520,12 +527,17 @@ void	ft_test(t_data *data, char buf[4097])
 		++i;
 	++i;
 	y_ = atoi(buf + i);
+	while (ft_isdigit(buf[i]))
+		++i;
+	++i;
+	data->life.hurt += atoi(buf + i);
 	pthread_mutex_lock(&data->mutex_player);
 	create_obj(data, &data->player, 0);
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
 	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
-	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.)) *
-(data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.)) * (data->perso.pos.x - (y + y_ / 100.)));
+	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.))
+* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.))
+* (data->perso.pos.x - (y + y_ / 100.)));
 	pthread_mutex_unlock(&data->mutex_player);
 }
 
