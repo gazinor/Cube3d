@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/02 20:31:53 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/03 06:16:09 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ void	init_filenames(t_data *data)
 	i = -1;
 	while (++i < NB_PORTAL_IMG)
 		data->portal[i].filename = g_portal[i];
+	i = -1;
+	while (++i < NB_SWORD_IMG)
+		data->sword[i].filename = g_sword[i];
 }
 
 void	init_img(t_data *data)
@@ -95,6 +98,9 @@ void	init_img(t_data *data)
 	i = -1;
 	while (++i < NB_PORTAL_IMG)
 		data->portal[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_SWORD_IMG)
+		data->sword[i].ptr = NULL;
 }
 
 void	ft_init(t_data *data)
@@ -120,7 +126,7 @@ void	ft_init(t_data *data)
 	data->event.respawn = 0;
 	data->event.screenshot = 0;
 	data->event.option = 0;
-	data->event.slash = 0;
+	data->event.hit = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;
@@ -150,6 +156,7 @@ void	ft_init(t_data *data)
 	data->parse.check_r = FALSE;
 	data->parse.check_s = FALSE;
 	data->portal_index = 0;
+	data->sword_index = NB_SWORD_IMG;
 	data->time.tv_usec = 0;
 	data->time.tv_sec = 0;
 	data->life.debut_x = WIDTH * 5 / 8;
@@ -161,6 +168,47 @@ void	ft_init(t_data *data)
 	init_filenames(data);
 	init_img(data);
 }
+
+char	*g_sword[NB_SWORD_IMG] =
+{
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-0.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-1.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-2.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-3.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-4.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-5.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-6.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-7.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-8.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-9.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-10.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-11.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-12.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-13.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-14.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-15.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-16.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-17.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-18.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-17.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-16.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-15.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-14.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-13.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-12.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-11.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-10.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-9.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-8.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-7.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-6.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-5.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-4.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-3.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-2.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-1.xpm",
+	"./textures/sword/dba576cebbcd4badbff52554a162572a-0.xpm"
+};
 
 char    *g_portal[NB_PORTAL_IMG] =
 {
@@ -246,5 +294,5 @@ char    *g_portal[NB_PORTAL_IMG] =
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-79.xpm",
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-80.xpm",
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-81.xpm",
-	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-82.xpm",
+	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-82.xpm"
 };

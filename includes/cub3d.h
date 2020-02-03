@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/02 22:29:25 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/03 06:15:54 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define SCREENSHOT 105
 # define MENU 35
 # define NB_PORTAL_IMG 83
+# define NB_SWORD_IMG 37
 # define SLASH 126
 
 # include "mlx.h"
@@ -48,6 +49,7 @@
 # include <sys/time.h>
 
 extern char     *g_portal[NB_PORTAL_IMG];
+extern char     *g_sword[NB_SWORD_IMG];
 
 typedef enum	e_bool
 {
@@ -114,7 +116,7 @@ typedef	struct	s_event
 	t_bool		screenshot;
 	t_bool		option;
 	t_bool		music;
-	t_bool		slash;
+	t_bool		hit;
 }				t_event;
 
 typedef struct	s_menu
@@ -262,6 +264,7 @@ typedef	struct	s_data
 	t_img			retour_uns;
 	t_img			sprite;
 	t_img			portal[NB_PORTAL_IMG];
+	t_img			sword[NB_SWORD_IMG];
 	t_portal		*portal_lst;
 	t_mod			mod;
 	t_menu			menu;
@@ -280,6 +283,7 @@ typedef	struct	s_data
 	int				w;
 	int				h;
     int				portal_index;
+    int				sword_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
@@ -327,7 +331,7 @@ char			*ft_strdup(const char *s1);
 char			*ft_substr(const char *s, unsigned int start, size_t len);
 void			parsing(char *parse, t_data *data);
 double			my_abs(double value);
-void			print_portal(t_data *data, t_portal *portal);
+void			print_portal(t_data *data, t_portal *portal, int index);
 void			*create_portal(t_data *data, t_portal **portal_lst);
 t_bool			check_portal(t_data *data, double new_x, double new_y);
 t_pos			set_dir_portal(char c);

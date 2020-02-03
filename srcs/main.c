@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/02 22:29:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/03 06:12:49 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,14 @@ void	intern_key(int key, t_data *data)
 		data->event.respawn ^= 1;
 	else if (key == SCREENSHOT)
 		data->event.screenshot ^= 1;
-	else if (key == SLASH && data->player && (data->player->sac.ray.mapx -
-	   data->perso.pos.x) * data->perso.dir.x < 1 &&
-	   (data->player->sac.ray.mapy - data->perso.pos.y) * data->perso.dir.y < 1)
-		data->event.slash ^= 1;
+	else if (key == SLASH)
+	{
+		data->sword_index = 0;
+		if (data->player && (data->player->sac.ray.mapx - data->perso.pos.x) *
+	data->perso.dir.x < 1 && (data->player->sac.ray.mapy - data->perso.pos.y) *
+								data->perso.dir.y < 1)
+		data->event.hit ^= 1;
+	}
 } 
 
 
@@ -224,14 +228,14 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ";");
 	free(str);
 	str = tmp;
-	tmp = ft_strjoin(str, data->event.slash == TRUE ? ft_itoa((int)data->life.hit) : 0);
+	tmp = ft_strjoin(str, data->event.hit == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
 //	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
-	tmp = ft_strjoin(str, "\" | nc localhost 12345");
+	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
-	data->event.slash = FALSE;
+	data->event.hit = FALSE;
 	return (str);
 }
 
@@ -243,7 +247,7 @@ int		key_on(int key, t_data *data)
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
 //		system("echo \"open door\" | nc e1r12p12 13000");
-		system("echo \"open door\" | nc localhost 12345");
+		system("echo \"open door\" | nc localhost 13000");
 		data->event.door ^= 1;
 		data->event.remote ^= 1;
 	}
@@ -285,6 +289,29 @@ long	dark(long color, double alpha)
 	return ((t << 24) + (r << 16) + (g << 8) + b);
 }
 
+void	print_sword(t_data *data, int index)
+{
+	int		x;
+	int		y;
+	int		color;
+
+	x = -1;
+	while (++x < WIDTH)
+	{
+		y = -1;
+		while (++y < HEIGHT)
+		{
+			if (x > WIDTH / 2)
+			{
+				color = data->sword[index].buffer[
+						x - WIDTH / 2 + (y * data->sword[index].width)];
+				if ((color & 0xDC6400) != 0)
+				data->img.buffer[x + (y * data->img.width)] = color;
+			}
+		}
+	}
+}
+
 void	put_image_to_window(t_data *data)
 {
 	int		i;
@@ -292,6 +319,11 @@ void	put_image_to_window(t_data *data)
 	data->old_time = data->time.tv_usec + data->time.tv_sec * 1000000;
 	gettimeofday(&data->time, NULL);
 	data->anim += (data->time.tv_usec + data->time.tv_sec * 1000000) - data->old_time;
+	if (data->sword_index < NB_SWORD_IMG)
+	{
+		print_sword(data, data->sword_index);
+		++data->sword_index;
+	}
 	data->option.status == 1 ? print_life(data) : 1;
 	while (++i < HEIGHT * WIDTH)
 		data->img.buffer[i] = dark(data->img.buffer[i],
@@ -364,7 +396,7 @@ void	do_in_order(t_data *data)
 	if (data->portal_lst)
 	{
 		data->portal_index = (data->portal_index + 1) % NB_PORTAL_IMG;
-		print_portal(data, data->portal_lst);
+		print_portal(data, data->portal_lst, data->portal_index);
 		free_portal(data->portal_lst);
 		data->portal_lst = NULL;
 	}
@@ -488,6 +520,15 @@ void    load_portal(t_data *data)
 		load_image(data, &data->portal[i], 1000, 1000);
 }
 
+void    load_sword(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_SWORD_IMG)
+		load_image(data, &data->sword[i], WIDTH / 2, HEIGHT);
+}
+
 t_bool	ft_strcmp(char *s1, char *s2)
 {
 	int		i;
@@ -584,6 +625,7 @@ int		main(int ac, char **av)
 	load_dir_textures(&data);
 	load_objs(&data);
 	load_portal(&data);
+	load_sword(&data);
 	load_menu(&data);
 	load_option(&data);
 	if (ac == 3)

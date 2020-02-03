@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/31 06:27:41 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/03 02:36:32 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 	}
 }
 
-void	print_portal(t_data *data, t_portal *portal)
+void	print_portal(t_data *data, t_portal *portal, int index)
 {
 	int	stripe;
 	int	y;
@@ -189,7 +189,7 @@ void	print_portal(t_data *data, t_portal *portal)
 				{
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
-					int color = ground_dark(data->portal[data->portal_index].buffer[data->sprite.width *
+					int color = ground_dark(data->portal[index].buffer[data->sprite.width *
 							texY + texX], luminosity);
 					if((color & 0x00FFFFFF) != 0)
 					{
