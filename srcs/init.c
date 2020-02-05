@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/03 06:16:09 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 00:11:22 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void	ft_init(t_data *data)
 	data->life.max_life = WIDTH / 4;
 	data->life.hurt = 0;
 	data->life.hit = 10 * data->life.max_life / 100.;
+	data->life.blood = 0;
 	init_filenames(data);
 	init_img(data);
 }

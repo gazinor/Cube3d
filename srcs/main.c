@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/03 06:12:49 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 02:53:32 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,20 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	exit(0);
 }
 
+void	color_screen(t_data *data, long color)
+{
+	int		x;
+	int		y;
+
+	x = -1;
+	while (++x < WIDTH)
+	{
+		y = -1;
+		while (++y < HEIGHT)
+			data->img.buffer[x + (y * data->img.width)] = color;
+	}
+}
+
 void	print_life(t_data *data)
 {
 	int		x;
@@ -161,7 +175,7 @@ void	print_life(t_data *data)
 				data->img.buffer[x + (y * data->img.width)] = 0xFF0000;
 			else if (x > data->life.debut_x  && x < data->life.debut_x + data->life.max_life &&
 				y > data->life.debut_y && y < data->life.debut_y + data->life.fin_y)
-				data->img.buffer[x + (y * data->img.width)] = 0x0;
+				data->img.buffer[x + (y * data->img.width)] = 0x330000;
 	}
 }
 
@@ -193,7 +207,7 @@ void	intern_key(int key, t_data *data)
 		if (data->player && (data->player->sac.ray.mapx - data->perso.pos.x) *
 	data->perso.dir.x < 1 && (data->player->sac.ray.mapy - data->perso.pos.y) *
 								data->perso.dir.y < 1)
-		data->event.hit ^= 1;
+			data->event.hit ^= 1;
 	}
 } 
 
@@ -315,19 +329,31 @@ void	print_sword(t_data *data, int index)
 void	put_image_to_window(t_data *data)
 {
 	int		i;
+
 	i = -1;
-	data->old_time = data->time.tv_usec + data->time.tv_sec * 1000000;
-	gettimeofday(&data->time, NULL);
-	data->anim += (data->time.tv_usec + data->time.tv_sec * 1000000) - data->old_time;
-	if (data->sword_index < NB_SWORD_IMG)
+	if (data->life.blood > 0)
 	{
-		print_sword(data, data->sword_index);
-		++data->sword_index;
+		if (data->life.blood % 2 == 0)
+			color_screen(data, 0xFF0000);
+		else
+			color_screen(data, 0xFFFFFF);
+		--data->life.blood;
 	}
-	data->option.status == 1 ? print_life(data) : 1;
-	while (++i < HEIGHT * WIDTH)
+	else
+	{
+		data->old_time = data->time.tv_usec + data->time.tv_sec * 1000000;
+		gettimeofday(&data->time, NULL);
+		data->anim += (data->time.tv_usec + data->time.tv_sec * 1000000) - data->old_time;
+		if (data->option.status == 1 && data->sword_index < NB_SWORD_IMG)
+		{
+			print_sword(data, (int)data->sword_index);
+			data->sword_index += 2.4765;
+		}
+		data->option.status == 1 ? print_life(data) : 1;
+		while (++i < HEIGHT * WIDTH)
 		data->img.buffer[i] = dark(data->img.buffer[i],
-		data->anim / 1500000.0);
+				data->anim / 1500000.0);
+	}
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
 	if (data->event.remote == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
@@ -574,7 +600,12 @@ void	ft_test(t_data *data, char buf[4097])
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
-	data->life.hurt += atoi(buf + i);
+	i = atoi(buf + i);
+	if (i > 0)
+	{
+		data->life.hurt += i;
+		data->life.blood = 5;
+	}
 	pthread_mutex_lock(&data->mutex_player);
 	create_obj(data, &data->player, 0);
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;

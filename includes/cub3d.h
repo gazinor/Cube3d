@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/03 06:15:54 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 00:11:44 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ typedef struct	s_life
 	int			hurt;
 	int			life;
 	int			hit;
+	int			blood;
 }				t_life;
 
 typedef	struct	s_data
@@ -283,7 +284,7 @@ typedef	struct	s_data
 	int				w;
 	int				h;
     int				portal_index;
-    int				sword_index;
+    double			sword_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
