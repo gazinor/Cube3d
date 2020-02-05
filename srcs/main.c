@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 03:48:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 11:03:44 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,14 +157,73 @@ void	color_screen(t_data *data, long color)
 	}
 }
 
+long	dark(long color, double alpha)
+{
+	unsigned char	t;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+
+	if (alpha < 0)
+		return (color);
+	if (alpha > 1)
+		return (color);
+	t = ((color >> 24) & 0xff) * alpha;
+	r = ((color >> 16) & 0xff) * alpha;
+	g = ((color >> 8) & 0xff) * alpha;
+	b = (color & 0xff) * alpha;
+	return ((t << 24) + (r << 16) + (g << 8) + b);
+}
+
+t_bool	tolerance(long color, long tolerance)
+{
+	unsigned char	t;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	
+	t = (color >> 24);
+	r = (color >> 16);
+	g = (color >> 8);
+	b = color;
+	if (t < tolerance && r < tolerance && g < tolerance && b < tolerance)
+		return (TRUE);
+	return (FALSE);
+
+}
+
+void	you_died(t_data *data)
+{
+	int		i;
+	int		color;
+
+	i = -1;
+	printf("%lu\n", data->anim);
+	while (++i < HEIGHT * WIDTH)
+	{
+		if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
+		{
+			if (tolerance((color = data->you_died[(int)data->you_died_index].buffer[i -
+			(HEIGHT / 4 * WIDTH)]), 0x88) == TRUE)
+				data->img.buffer[i] = dark(data->img.buffer[i],
+					(5000000.0 - data->anim) / 5000000.0);
+			else if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
+				data->img.buffer[i] = dark(color, (data->anim % 2) == 0 ||
+			data->anim > 3000000.0 ? (data->anim / 2500000.0) :
+			(5000000.0 - data->anim) / 5000000.0);
+		}
+		else
+			data->img.buffer[i] = dark(data->img.buffer[i],
+				(5000000.0 - data->anim) / 5000000.0);
+	}
+}
+
 void	print_life(t_data *data)
 {
 	int		x;
 	int		y;
 
 	x = -1;
-//	if (data->life.max_life < data->life.hurt)
-//		you_died(data);
 	while(++x < WIDTH)
 	{
 		y = -1;
@@ -285,23 +344,6 @@ int		key_off(int key, t_data *data)
 	return (0);
 }
 
-long	dark(long color, double alpha)
-{
-	unsigned char	t;
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
-
-	if (alpha < 0)
-		return (color);
-	if (alpha > 1)
-		return (color);
-	t = ((color >> 24) & 0xff) * alpha;
-	r = ((color >> 16) & 0xff) * alpha;
-	g = ((color >> 8) & 0xff) * alpha;
-	b = (color & 0xff) * alpha;
-	return ((t << 24) + (r << 16) + (g << 8) + b);
-}
 
 void	print_sword(t_data *data, int index)
 {
@@ -314,15 +356,13 @@ void	print_sword(t_data *data, int index)
 	{
 		y = -1;
 		while (++y < HEIGHT)
-		{
 			if (x > WIDTH / 2)
 			{
 				color = data->sword[index].buffer[
 						x - WIDTH / 2 + (y * data->sword[index].width)];
 				if ((color & 0xDC6400) != 0)
-				data->img.buffer[x + (y * data->img.width)] = color;
+					data->img.buffer[x + (y * data->img.width)] = color;
 			}
-		}
 	}
 }
 
@@ -350,11 +390,19 @@ void	put_image_to_window(t_data *data)
 			data->sword_index += 2.4765;
 		}
 		data->option.status == 1 ? print_life(data) : 1;
-		while (++i < HEIGHT * WIDTH)
-		data->img.buffer[i] = dark(data->img.buffer[i],
-				data->anim / 1500000.0);
+		if (data->life.alive == FALSE && data->you_died_index < NB_YOU_DIED_IMG)
+		{
+			you_died(data);	
+			if (++data->you_died_index == NB_YOU_DIED_IMG)
+				menu(data);
+		}
+		else if (data->anim < 1500000.0)
+			while (++i < HEIGHT * WIDTH)
+				data->img.buffer[i] = dark(data->img.buffer[i],
+					data->anim / 1500000.0);
 	}
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
+//	data->life.hurt += 6;
 	if (data->event.remote == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
 				data->mlx.win, data->remote.ptr, WIDTH / 2, HEIGHT / 2);
@@ -421,7 +469,7 @@ void	do_in_order(t_data *data)
 	}
 	if (data->portal_lst)
 	{
-		data->portal_index = (data->portal_index + 1) % NB_PORTAL_IMG;
+		data->portal_index = (int)(data->portal_index + 1) % NB_PORTAL_IMG;
 		print_portal(data, data->portal_lst, data->portal_index);
 		free_portal(data->portal_lst);
 		data->portal_lst = NULL;
@@ -438,7 +486,12 @@ void	do_in_order(t_data *data)
 		free(ret);
 		ret = NULL;
 	}
-
+	if (data->life.max_life <= data->life.hurt && data->life.alive == TRUE)
+	{
+		printf("AH BAH NIQUE BIEN TA MERE\n");
+		data->anim = 0;
+		data->life.alive = FALSE;
+	}
 	put_image_to_window(data);
 }
 
@@ -525,6 +578,7 @@ void	load_objs(t_data *data)
 	load_image(data, &data->odoor, 500, 1000);
 	load_image(data, &data->remote, WIDTH / 2, HEIGHT / 2);
 	load_image(data, &data->sprite, 1000, 1000);
+	load_image(data, &data->spikes, 1000, 1000);
 }
 
 void	loop(t_data *data)
@@ -553,6 +607,24 @@ void    load_sword(t_data *data)
 	i = -1;
 	while (++i < NB_SWORD_IMG)
 		load_image(data, &data->sword[i], WIDTH / 2, HEIGHT);
+}
+
+void    load_you_died(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_YOU_DIED_IMG)
+		load_image(data, &data->you_died[i], WIDTH, HEIGHT / 2);
+}
+
+void    load_player2(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_PLAYER2_IMG)
+		load_image(data, &data->player2[i], 1000, 1000);
 }
 
 t_bool	ft_strcmp(char *s1, char *s2)
@@ -607,7 +679,8 @@ void	ft_test(t_data *data, char buf[4097])
 		data->life.blood = 5;
 	}
 	pthread_mutex_lock(&data->mutex_player);
-	create_obj(data, &data->player, 0);
+	create_obj(data, &data->player, 0, data->player2[(int)data->player2_index]);
+	data->player2_index = (int)(data->player2_index + 1) % NB_PLAYER2_IMG;
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
 	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.))
@@ -657,6 +730,8 @@ int		main(int ac, char **av)
 	load_objs(&data);
 	load_portal(&data);
 	load_sword(&data);
+	load_you_died(&data);
+	load_player2(&data);
 	load_menu(&data);
 	load_option(&data);
 	if (ac == 3)

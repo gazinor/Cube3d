@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 00:11:44 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 10:18:08 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define MENU 35
 # define NB_PORTAL_IMG 83
 # define NB_SWORD_IMG 37
+# define NB_YOU_DIED_IMG 75
+# define NB_PLAYER2_IMG 4
 # define SLASH 126
 
 # include "mlx.h"
@@ -50,6 +52,8 @@
 
 extern char     *g_portal[NB_PORTAL_IMG];
 extern char     *g_sword[NB_SWORD_IMG];
+extern char     *g_you_died[NB_YOU_DIED_IMG];
+extern char     *g_player2[NB_PLAYER2_IMG];
 
 typedef enum	e_bool
 {
@@ -166,6 +170,7 @@ typedef struct	s_sac
 {
 	t_ray 		ray;
 	int			column;
+	t_img		img;
 }				t_sac;
 
 typedef	struct	s_sprite
@@ -232,6 +237,7 @@ typedef struct	s_life
 	int			life;
 	int			hit;
 	int			blood;
+	t_bool		alive;
 }				t_life;
 
 typedef	struct	s_data
@@ -264,8 +270,11 @@ typedef	struct	s_data
 	t_img			retour_s;
 	t_img			retour_uns;
 	t_img			sprite;
+	t_img			spikes;
 	t_img			portal[NB_PORTAL_IMG];
 	t_img			sword[NB_SWORD_IMG];
+	t_img			you_died[NB_YOU_DIED_IMG];
+	t_img			player2[NB_PLAYER2_IMG];
 	t_portal		*portal_lst;
 	t_mod			mod;
 	t_menu			menu;
@@ -283,8 +292,10 @@ typedef	struct	s_data
 	t_bonus			bonus;
 	int				w;
 	int				h;
-    int				portal_index;
+    double			portal_index;
     double			sword_index;
+    double			you_died_index;
+    double			player2_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
@@ -320,7 +331,8 @@ void			load_menu(t_data *data);
 int				exit_properly(t_data *data, t_bool error, char *error_msg);
 void			loop(t_data *data);
 void			print_obj(t_data *data, t_sprite *obj);
-void			*create_obj(t_data *data, t_sprite **obj, int column);
+void			*create_obj(t_data *data, t_sprite **obj,
+				int column, t_img img);
 void			screenshot(t_data *data);
 long			ground_dark(long color, double dist);
 void			load_image(t_data *data, t_img *img, int width, int height);
@@ -339,5 +351,6 @@ t_pos			set_dir_portal(char c);
 t_bool			ft_strcmp(char *s1, char *s2);
 void			init_normale(t_data *data);
 int				transparance(int p1, int p2);
+void			ft_init_player(t_data *data);
 
 #endif

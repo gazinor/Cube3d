@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 03:54:14 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 10:35:39 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	print_obj(t_data *data, t_sprite *obj)
 		while (++stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-					* data->sprite.width / spriteWidth) / 256;
+					* obj->sac.img.width / spriteWidth) / 256;
 			if (transformY > 0 && stripe > 0 && stripe < WIDTH
 					&& transformY < data->ZBuffer[stripe])
 			{
@@ -127,16 +127,19 @@ void	print_obj(t_data *data, t_sprite *obj)
 				while (++y < drawEndY)
 				{
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
-					int texY = ((d * data->sprite.height) / spriteHeight) / 256;
-					int color = ground_dark(data->sprite.buffer[data->sprite.width *
-							texY + texX], luminosity);
-					if((color & 0x00FFFFFF) != 0)
+					int texY = ((d * obj->sac.img.height) / spriteHeight) / 256;
+					if (spriteWidth * texY + texX > 0)
 					{
-						data->img.buffer[stripe + (y *
-								(data->img.width))] = color;
-						if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
-							data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
-									(data->img.width))] = ground_dark(color, 5);
+						int color = ground_dark(obj->sac.img.buffer[obj->sac.img.width *
+								texY + texX], luminosity);
+						if((color & 0x00FFFFFF) != 0)
+						{
+							data->img.buffer[stripe + (y *
+									(data->img.width))] = color;
+							if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
+								data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
+										(data->img.width))] = ground_dark(color, 5);
+						}
 					}
 				}
 			}
@@ -266,7 +269,7 @@ void    *create_portal(t_data *data, t_portal **portal_lst)
 	return (portal_lst);
 }
 
-void	*create_obj(t_data *data, t_sprite **obj, int column)
+void	*create_obj(t_data *data, t_sprite **obj, int column, t_img img)
 {
 	while (*obj)
 	{
@@ -280,6 +283,7 @@ void	*create_obj(t_data *data, t_sprite **obj, int column)
 	++data->numSprites;
 	(*obj)->sac.ray = data->ray;
 	(*obj)->sac.column = column;
+	(*obj)->sac.img = img;
 	(*obj)->next = NULL;
 	return (obj);
 }

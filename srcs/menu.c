@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 21:08:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:13:27 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 08:07:37 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ int		key_on_menu(int key, t_data *data)
 
 void	menu(t_data *data)
 {
+	ft_init_player(data);
 	data->menu.button[0] = 1;
 	data->menu.button[1] = 0;
 	data->menu.button[2] = 0;
