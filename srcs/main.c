@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 02:53:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 03:48:57 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, data->event.hit == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
-//	tmp = ft_strjoin(str, "\" | nc e1r12p12 13000");
+//	tmp = ft_strjoin(str, "\" | nc e1r2p19 13000");
 	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
@@ -260,7 +260,7 @@ int		key_on(int key, t_data *data)
 	if (key == DOOR && data->map[(int)data->perso.pos.x]
 			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
 	{
-//		system("echo \"open door\" | nc e1r12p12 13000");
+//		system("echo \"open door\" | nc e1r2p19 13000");
 		system("echo \"open door\" | nc localhost 13000");
 		data->event.door ^= 1;
 		data->event.remote ^= 1;
