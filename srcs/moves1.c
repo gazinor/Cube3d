@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:17:45 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/27 23:41:36 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 21:11:33 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	move_forward(t_data *data)
 	new_y = (data->perso.pos.y + (data->perso.dir.y * data->perso.speed));
 	if (data->map[(int)new_x][(int)data->perso.pos.y] == '0' ||
 		(data->map[(int)new_x][(int)data->perso.pos.y] == '4' &&
-			data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE)
+data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE
+|| data->map[(int)new_x][(int)data->perso.pos.y] == 'x')
 		data->perso.pos.x = new_x;
 	if (data->map[(int)data->perso.pos.x][(int)new_y] == '0' ||
 		(data->map[(int)data->perso.pos.x][(int)new_y] == '4' &&
-			data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE)
+data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE
+|| data->map[(int)data->perso.pos.x][(int)new_y] == 'x')
 		data->perso.pos.y = new_y;
 }
 
@@ -38,11 +40,13 @@ void	move_backward(t_data *data)
 	new_y = (data->perso.pos.y - (data->perso.dir.y * data->perso.speed));
 	if (data->map[(int)new_x][(int)data->perso.pos.y] == '0' ||
 		(data->map[(int)new_x][(int)data->perso.pos.y] == '4' &&
-			data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE)
+data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE
+|| data->map[(int)new_x][(int)data->perso.pos.y] == 'x')
 		data->perso.pos.x = new_x;
 	if (data->map[(int)data->perso.pos.x][(int)new_y] == '0' ||
 		(data->map[(int)data->perso.pos.x][(int)new_y] == '4' &&
-			data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE)
+data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE
+|| data->map[(int)data->perso.pos.x][(int)new_y] == 'x')
 		data->perso.pos.y = new_y;
 }
 
@@ -55,11 +59,13 @@ void	move_right(t_data *data)
 	new_y = (data->perso.pos.y - (data->perso.dir.x * data->perso.speed));
 	if (data->map[(int)new_x][(int)data->perso.pos.y] == '0' ||
 		(data->map[(int)new_x][(int)data->perso.pos.y] == '4' &&
-			data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE)
+data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE
+|| data->map[(int)new_x][(int)data->perso.pos.y] == 'x')
 		data->perso.pos.x = new_x;
 	if (data->map[(int)data->perso.pos.x][(int)new_y] == '0' ||
 		(data->map[(int)data->perso.pos.x][(int)new_y] == '4' &&
-			data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE)
+data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE
+|| data->map[(int)data->perso.pos.x][(int)new_y] == 'x')
 		data->perso.pos.y = new_y;
 }
 
@@ -72,10 +78,12 @@ void	move_left(t_data *data)
 	new_y = (data->perso.pos.y + (data->perso.dir.x * data->perso.speed));
 	if (data->map[(int)new_x][(int)data->perso.pos.y] == '0' ||
 		(data->map[(int)new_x][(int)data->perso.pos.y] == '4' &&
-			data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE)
+data->event.door == 1) || check_portal(data, new_x, data->perso.pos.y) == TRUE
+|| data->map[(int)new_x][(int)data->perso.pos.y] == 'x')
 		data->perso.pos.x = new_x;
 	if (data->map[(int)data->perso.pos.x][(int)new_y] == '0' ||
 		(data->map[(int)data->perso.pos.x][(int)new_y] == '4' &&
-			data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE)
+data->event.door == 1) || check_portal(data, data->perso.pos.x, new_y) == TRUE
+|| data->map[(int)data->perso.pos.x][(int)new_y] == 'x')
 		data->perso.pos.y = new_y;
 }

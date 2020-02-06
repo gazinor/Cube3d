@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/05 10:47:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/05 23:26:08 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ void	init_filenames(t_data *data)
 	i = -1;
 	while (++i < NB_PLAYER2_IMG)
 		data->player2[i].filename = g_player2[i];
+	i = -1;
+	while (++i < NB_DOOR_IMG)
+		data->gif_door[i].filename = g_door[i];
 }
 
 void	init_img(t_data *data)
@@ -111,6 +114,12 @@ void	init_img(t_data *data)
 	i = -1;
 	while (++i < NB_PLAYER2_IMG)
 		data->player2[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_YOU_DIED_IMG)
+		data->you_died[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_DOOR_IMG)
+		data->gif_door[i].ptr = NULL;
 }
 
 void	ft_init_player(t_data *data)
@@ -147,6 +156,7 @@ void	ft_init_player(t_data *data)
 	data->sword_index = NB_SWORD_IMG;
 	data->you_died_index = 0;
 	data->player2_index = 0;
+	data->door_index = 0;
 	data->time.tv_usec = 0;
 	data->time.tv_sec = 0;
 }
@@ -187,6 +197,21 @@ void	ft_init(t_data *data)
 	init_filenames(data);
 	init_img(data);
 }
+
+char	*g_door[NB_DOOR_IMG] =
+{
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-0.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-1.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-2.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-3.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-4.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-5.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-6.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-7.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-8.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-9.xpm",
+	"./textures/door/c9b6b9fb33aa4f1bd9e3dd1110b369c2-10.xpm"
+};
 
 char	*g_player2[NB_PLAYER2_IMG] =
 {

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 10:18:08 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/06 03:33:14 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define NB_SWORD_IMG 37
 # define NB_YOU_DIED_IMG 75
 # define NB_PLAYER2_IMG 4
+# define NB_DOOR_IMG 11
 # define SLASH 126
 
 # include "mlx.h"
@@ -54,6 +55,7 @@ extern char     *g_portal[NB_PORTAL_IMG];
 extern char     *g_sword[NB_SWORD_IMG];
 extern char     *g_you_died[NB_YOU_DIED_IMG];
 extern char     *g_player2[NB_PLAYER2_IMG];
+extern char     *g_door[NB_DOOR_IMG];
 
 typedef enum	e_bool
 {
@@ -171,6 +173,7 @@ typedef struct	s_sac
 	t_ray 		ray;
 	int			column;
 	t_img		img;
+	int			down;
 }				t_sac;
 
 typedef	struct	s_sprite
@@ -275,6 +278,7 @@ typedef	struct	s_data
 	t_img			sword[NB_SWORD_IMG];
 	t_img			you_died[NB_YOU_DIED_IMG];
 	t_img			player2[NB_PLAYER2_IMG];
+	t_img			gif_door[NB_DOOR_IMG];
 	t_portal		*portal_lst;
 	t_mod			mod;
 	t_menu			menu;
@@ -296,6 +300,7 @@ typedef	struct	s_data
     double			sword_index;
     double			you_died_index;
     double			player2_index;
+    double			door_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
@@ -324,15 +329,14 @@ t_img			resize_image(t_data *data, t_img *src, int width, int height);
 void			*create_door(t_data *data, t_sprite **obj, int column);
 void			free_obj(t_sprite *obj);
 void			free_portal(t_portal *obj);
-void			print_door(t_data *data, t_sprite *obj);
+void			print_door(t_data *data, t_sprite *obj, t_img rend);
 long			trans(int color, t_data *data, int i, int limit);
 void			menu(t_data *data);
 void			load_menu(t_data *data);
 int				exit_properly(t_data *data, t_bool error, char *error_msg);
 void			loop(t_data *data);
 void			print_obj(t_data *data, t_sprite *obj);
-void			*create_obj(t_data *data, t_sprite **obj,
-				int column, t_img img);
+void			*create_obj(t_data *data, t_sprite **obj, t_img img, int down);
 void			screenshot(t_data *data);
 long			ground_dark(long color, double dist);
 void			load_image(t_data *data, t_img *img, int width, int height);

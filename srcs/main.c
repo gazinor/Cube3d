@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 11:03:44 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/06 03:46:38 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,23 +198,22 @@ void	you_died(t_data *data)
 	int		color;
 
 	i = -1;
-	printf("%lu\n", data->anim);
 	while (++i < HEIGHT * WIDTH)
 	{
 		if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
 		{
 			if (tolerance((color = data->you_died[(int)data->you_died_index].buffer[i -
-			(HEIGHT / 4 * WIDTH)]), 0x88) == TRUE)
+			(HEIGHT / 4 * WIDTH)]), 0x99) == TRUE)
 				data->img.buffer[i] = dark(data->img.buffer[i],
-					(5000000.0 - data->anim) / 5000000.0);
+					(6000000.0 - data->anim) / 6000000.0);
 			else if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
-				data->img.buffer[i] = dark(color, (data->anim % 2) == 0 ||
-			data->anim > 3000000.0 ? (data->anim / 2500000.0) :
-			(5000000.0 - data->anim) / 5000000.0);
+				data->img.buffer[i] = dark(color, (data->anim % 2) == 0 &&
+			data->anim < 2000000.0 ? (2000000.0 - data->anim / 2000000.0) :
+			(data->anim) / 6000000.0);
 		}
 		else
 			data->img.buffer[i] = dark(data->img.buffer[i],
-				(5000000.0 - data->anim) / 5000000.0);
+				(6000000.0 - data->anim) / 6000000.0);
 	}
 }
 
@@ -316,14 +315,6 @@ int		key_on(int key, t_data *data)
 {
 	if (data->event.menu == 1 || data->event.option == 1)
 		return (0);
-	if (key == DOOR && data->map[(int)data->perso.pos.x]
-			[(int)data->perso.pos.y] != '4' && data->option.status == 1)
-	{
-//		system("echo \"open door\" | nc e1r2p19 13000");
-		system("echo \"open door\" | nc localhost 13000");
-		data->event.door ^= 1;
-		data->event.remote ^= 1;
-	}
 	else if (key == TAB && data->option.status == 1)
 		data->mod.nbr[data->mod.i % 3] ^= 1;
 	else
@@ -374,9 +365,9 @@ void	put_image_to_window(t_data *data)
 	if (data->life.blood > 0)
 	{
 		if (data->life.blood % 2 == 0)
-			color_screen(data, 0xFF0000);
+			color_screen(data, 0xbb0a1e);
 		else
-			color_screen(data, 0xFFFFFF);
+			color_screen(data, 0xAAAAAA);
 		--data->life.blood;
 	}
 	else
@@ -440,7 +431,19 @@ void	do_in_order(t_data *data)
 	if (data->option.status == 1)
 		if (data->door)
 		{
-			print_door(data, data->door);
+			if (data->door->sac.ray.walldist > 1.8 && data->door_index < NB_DOOR_IMG - 1)
+				++data->door_index;
+			else if (data->door->sac.ray.walldist < 1.8 && data->door_index > 0)
+				--data->door_index;
+			if (data->event.door != 1 && data->door_index != NB_DOOR_IMG - 1)
+			{
+				system("echo \"open door\" | nc localhost 13000");
+				data->event.door = 1;
+			}
+			else if (data->door_index == NB_DOOR_IMG - 1 && data->event.door !=
+	0 && data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] != '4')
+				data->event.door = 0;
+			print_door(data, data->door, data->gif_door[(int)data->door_index]);
 			free_obj(data->door);
 			data->door = NULL;
 		}
@@ -458,6 +461,10 @@ void	do_in_order(t_data *data)
 		data->player = NULL;
 	}	
 	pthread_mutex_unlock(&data->mutex_player);
+	if (data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] == 'x')
+	{
+		data->life.hurt += 0.01 * data->life.max_life;
+	}
 	if (check_portal(data, data->perso.pos.x, data->perso.pos.y) == TRUE)
 	{
 		data->perso.dir = set_dir_portal(data->map[(int)data->perso.pos.x][(int)data->perso.pos.y]);
@@ -488,7 +495,6 @@ void	do_in_order(t_data *data)
 	}
 	if (data->life.max_life <= data->life.hurt && data->life.alive == TRUE)
 	{
-		printf("AH BAH NIQUE BIEN TA MERE\n");
 		data->anim = 0;
 		data->life.alive = FALSE;
 	}
@@ -627,6 +633,15 @@ void    load_player2(t_data *data)
 		load_image(data, &data->player2[i], 1000, 1000);
 }
 
+void    load_door(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_DOOR_IMG)
+		load_image(data, &data->gif_door[i], 1000, 1000);
+}
+
 t_bool	ft_strcmp(char *s1, char *s2)
 {
 	int		i;
@@ -679,7 +694,7 @@ void	ft_test(t_data *data, char buf[4097])
 		data->life.blood = 5;
 	}
 	pthread_mutex_lock(&data->mutex_player);
-	create_obj(data, &data->player, 0, data->player2[(int)data->player2_index]);
+	create_obj(data, &data->player, data->player2[(int)data->player2_index], 0);
 	data->player2_index = (int)(data->player2_index + 1) % NB_PLAYER2_IMG;
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
 	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
@@ -732,6 +747,7 @@ int		main(int ac, char **av)
 	load_sword(&data);
 	load_you_died(&data);
 	load_player2(&data);
+	load_door(&data);
 	load_menu(&data);
 	load_option(&data);
 	if (ac == 3)

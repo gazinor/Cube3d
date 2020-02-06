@@ -6,27 +6,25 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/05 10:35:39 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/06 03:41:50 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "cub3d.h"
 
-void	print_door(t_data *data, t_sprite *obj)
+void	print_door(t_data *data, t_sprite *obj, t_img rend)
 {
 	int		i;
 	int		j;
 	int		true_start;
 	int		true_end;
-	t_img	rend;
 	int		color;
 	double  calc1;
 	double  calc2;
 	double  ratio;
 	double  luminosity;
 
-	rend = data->event.door == FALSE ? data->cdoor : data->odoor;
 	while (obj)
 	{
 		i = (HEIGHT / 2) - ((HEIGHT / obj->sac.ray.walldist) / 2);
@@ -124,17 +122,17 @@ void	print_obj(t_data *data, t_sprite *obj)
 					&& transformY < data->ZBuffer[stripe])
 			{
 				y = drawStartY - 1;
-				while (++y < drawEndY)
+				while (++y + obj->sac.down < HEIGHT && y < drawEndY)
 				{
 					int d = y * 256 - HEIGHT * 128 + spriteHeight * 128;
 					int texY = ((d * obj->sac.img.height) / spriteHeight) / 256;
-					if (spriteWidth * texY + texX > 0)
+					if (spriteWidth * (texY) + texX > 0)
 					{
 						int color = ground_dark(obj->sac.img.buffer[obj->sac.img.width *
-								texY + texX], luminosity);
+								(texY) + texX], luminosity);
 						if((color & 0x00FFFFFF) != 0)
 						{
-							data->img.buffer[stripe + (y *
+							data->img.buffer[stripe + ((y + obj->sac.down) *
 									(data->img.width))] = color;
 							if (data->mod.nbr[MIRROR] == 1 && (drawEndY - y + drawEndY) < HEIGHT)
 								data->img.buffer[stripe + ((drawEndY - y + drawEndY) *
@@ -269,7 +267,7 @@ void    *create_portal(t_data *data, t_portal **portal_lst)
 	return (portal_lst);
 }
 
-void	*create_obj(t_data *data, t_sprite **obj, int column, t_img img)
+void	*create_obj(t_data *data, t_sprite **obj, t_img img, int down)
 {
 	while (*obj)
 	{
@@ -282,8 +280,8 @@ void	*create_obj(t_data *data, t_sprite **obj, int column, t_img img)
 		return (NULL);
 	++data->numSprites;
 	(*obj)->sac.ray = data->ray;
-	(*obj)->sac.column = column;
 	(*obj)->sac.img = img;
+	(*obj)->sac.down = down;
 	(*obj)->next = NULL;
 	return (obj);
 }
