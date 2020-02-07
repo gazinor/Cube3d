@@ -28,7 +28,8 @@ SRC_NAME =	main.c \
 			parse.c \
 			get_next_line.c \
 			get_next_line_utils.c \
-			test.c
+			test.c \
+			floorcasting.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
 

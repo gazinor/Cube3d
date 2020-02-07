@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/01/31 10:44:50 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/07 12:09:12 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,7 @@ void	crt_sky(t_data *data, int column)
 							data->ciel_etoile.width)];
 		else if (data->perso.pos.x < 16)
 			while (++i < data->ray.start)
-				data->img.buffer[column + (i * (data->img.width))] =
-ground_dark(data->sol.buffer[(int)(column + (i * data->sol.width))],
-i * (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum);
+				draw_skynground(data, column, FALSE, i);
 		else
 			while (++i < data->ray.start)
 				data->img.buffer[column + (i * (data->img.width))] =
@@ -107,9 +105,7 @@ data->ray.heightline) *	data->img.width], (HEIGHT - i) * data->calc.lum);
 		}
 		else
 			while (++i < HEIGHT)
-				data->img.buffer[column + (i * (data->img.width))] =
-ground_dark(data->sol.buffer[column + ((i - (HEIGHT / 2)) * data->sol.width)],
-						(HEIGHT - i) / (data->mod.nbr[DARK] == 1 ? 2 : 1) * data->calc.lum);
+				draw_skynground(data, column, TRUE, i);
 	else
 		while (++i < HEIGHT)
 			data->img.buffer[column + (i * (data->img.width))] =

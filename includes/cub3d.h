@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/06 03:33:14 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/07 10:40:26 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,8 @@ typedef	struct	s_mod
 
 typedef	struct	s_ray
 {
-	double			mapx;
-	double			mapy;
+	double		mapx;
+	double		mapy;
 	double		sidedistx;
 	double		sidedisty;
 	double		deltax;
@@ -166,6 +166,15 @@ typedef	struct	s_ray
 	double		diry;
 	double		camera;
 	int			heightline;
+	double		wallx;
+	double		f_xwall;
+	double		f_ywall;
+	double		cur_dist;
+	double		weight;
+	double		cur_floorx;
+	double		cur_floory;
+	int			f_texx;
+	int			f_texy;
 }				t_ray;
 
 typedef struct	s_sac
@@ -356,5 +365,7 @@ t_bool			ft_strcmp(char *s1, char *s2);
 void			init_normale(t_data *data);
 int				transparance(int p1, int p2);
 void			ft_init_player(t_data *data);
+void			floorcasting(t_data *data, int y);
+void			draw_skynground(t_data *data, int y, t_bool sol, int x);
 
 #endif
