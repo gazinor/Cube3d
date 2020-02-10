@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/05 19:31:18 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 10:56:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 double	my_abs(double value)
 {
-	value < 0 ? value *= -1 : value;
+	if (value == 0)
+		value = 0.1;
+	else if (value < 0)
+		value = -value;
 	return (value);
 }
 

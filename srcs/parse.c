@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/29 08:07:11 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 09:50:37 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,7 @@ void	fill_parse_map(char *line, t_data *data)
 		|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
 		{
 			data->parse.map[data->parse.i][j] = line[i];
-			if (line[i] == 'N' || line[i] == 'S' ||
-				line[i] == 'E' || line[i] == 'W')
+			if (line[i] != '1' && line[i] != '0' && line[i] != '2')
 			{
 				data->parse.pos.x = data->parse.i;
 				data->parse.pos.y = j;
@@ -296,6 +295,8 @@ void	parsing(char *path, t_data *data)
 	}
 	if (ret == -1)
 		exit_properly(data, 1, "l'argument n'est pas un fichier valable\n"); 
+	if ((int)data->parse.pos.x == 0)
+		exit_properly(data, 1, "Mauvaise position du joueur.\n");
 	*line == 1 ? fill_parse_map(line, data) : 1;
 	ret == 0 ? free(line) : 0;
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/07 12:09:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 10:15:45 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ void	crt_sky(t_data *data, int column)
 		M_1_PI * .5;
 	if (data->option.status == 1)
 	{
-		if (data->mod.nbr[DARK] == 1)
+		if (data->perso.pos.x < 16)
+			while (++i < data->ray.start)
+				draw_skynground(data, column, FALSE, i);
+		else if (data->mod.nbr[DARK] == 1)
 			while (++i < data->ray.start)
 				data->img.buffer[column + (i * (data->img.width))] =
 					data->ciel_etoile.buffer[(int)((data->calc.offset + i) *
 							data->ciel_etoile.width)];
-		else if (data->perso.pos.x < 16)
-			while (++i < data->ray.start)
-				draw_skynground(data, column, FALSE, i);
 		else
 			while (++i < data->ray.start)
 				data->img.buffer[column + (i * (data->img.width))] =
@@ -139,13 +139,13 @@ void	crt_column(t_data *data, int column)
 			data->img.buffer[column + (i * (data->img.width))] =
 	ground_dark(rend.buffer[(int)(data->calc.calcx + (int)((int)((i -
 data->ray.truestart) * data->calc.ratio) * rend.width))], data->ray.walldist *
-		20 * (data->mod.nbr[DARK] == 1 ? 1.4 : 1) * data->calc.lum);
+		27 * (data->mod.nbr[DARK] == 1 ? 2 : 1) * data->calc.lum);
 	else
 		while (++i < data->ray.end)
 			data->img.buffer[column + (i * (data->img.width))] =
 	ground_dark(rend.buffer[(int)(data->calc.calcy + (int)((int)((i -
 data->ray.truestart) * data->calc.ratio) * rend.width))], data->ray.walldist *
-		20 * (data->mod.nbr[DARK] == 1 ? 1.4 : 1) * data->calc.lum);
+		27 * (data->mod.nbr[DARK] == 1 ? 2 : 1) * data->calc.lum);
 	crt_ground(data, column);
 }
 

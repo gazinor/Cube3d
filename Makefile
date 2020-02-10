@@ -4,7 +4,7 @@ NAME     =	Cub3D
 CC       =	gcc
 
 #	Flags     #
-CFLAGS   =	-Wall -Wextra -Werror -O3 -g3 -fsanitize=address
+CFLAGS   =	-Wall -Wextra -Werror -O3 #-g3 -fsanitize=address
 GFLAGS   =	-lm -L$(MLX_PATH) -lmlx -I$(MLX_PATH) -framework OpenGL -framework Appkit
 
 # 	Headers   #
@@ -50,9 +50,9 @@ SCRIPT_P =	./scripts
 
 ################################################################################
 
-all : header1 $(MLX_LIB) $(NAME)
+all : header1 $(NAME) #$(MLX_LIB)
 
-f : header2 $(MLX_LIB) $(NAME)
+f : header2 $(NAME) #$(MLX_LIB)
 
 $(MLX_LIB) :
 	@make -C $(MLX_PATH)
@@ -76,7 +76,7 @@ $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 
 clean :
 	@make -C $(MLX_PATH) clean
-	@rm -rf $(OBJ_PATH) $(MLX_LIB) 
+	@rm -rf $(OBJ_PATH) #$(MLX_LIB) 
 
 fclean : clean
 	@rm -rf $(NAME)

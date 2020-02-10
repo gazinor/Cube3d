@@ -6,14 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/07 10:40:26 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 06:47:30 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1440
-# define HEIGHT 980
+# define WIDTH 1200
+# define HEIGHT 1000
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -169,7 +169,7 @@ typedef	struct	s_ray
 	double		wallx;
 	double		f_xwall;
 	double		f_ywall;
-	double		cur_dist;
+	double		cur_dist[HEIGHT];
 	double		weight;
 	double		cur_floorx;
 	double		cur_floory;
@@ -313,6 +313,7 @@ typedef	struct	s_data
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
+	double			download_percent;
 	struct timeval	time;
 	unsigned long	old_time;
 	t_life			life;

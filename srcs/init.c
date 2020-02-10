@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/05 23:26:08 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 06:48:13 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,8 @@ void	ft_init_player(t_data *data)
 
 void	ft_init(t_data *data)
 {
+	int		i;
+
 	ft_init_player(data);
 	data->perso.pos.x = 0;
 	data->perso.pos.y = 0;
@@ -194,6 +196,13 @@ void	ft_init(t_data *data)
 	data->parse.check_f = FALSE;
 	data->parse.check_r = FALSE;
 	data->parse.check_s = FALSE;
+	data->download_percent = 0;
+	i = -1;
+	while (++i < HEIGHT / 2)
+		data->ray.cur_dist[i] = HEIGHT / (HEIGHT - 2.0 * i);
+	--i;
+	while (++i < HEIGHT)
+		data->ray.cur_dist[i] = HEIGHT / (2.0 * i - HEIGHT);
 	init_filenames(data);
 	init_img(data);
 }

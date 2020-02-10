@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/06 03:46:38 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/10 11:52:48 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,22 +124,23 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	int	i;
 
 	i = 0;
+//	write(error == TRUE ? 2 : 1, "\n", 1);
 	if (data->event.music == 1)
 		system("killall afplay");
-	if (error_msg)
-	{
-		while (error_msg[i])
-			++i;
-		write(2, error_msg, i);
-	}
 	if (error == TRUE)
 	{
-		write(2, "\e[31mErreur\n", 12);
+		write(2, "\n\e[31mErreur\n", 13);
+		if (error_msg)
+		{
+			while (error_msg[i])
+				++i;
+			write(2, error_msg, i);
+		}
 		clean_images(data);
 		exit(1);
 	}
 	clean_images(data);
-	write(1, "\e[32mCub3D s'est correctement eteint.\n\e[0m", 43);
+	write(1, "\n\e[32mCub3D s'est correctement eteint.\n\e[0m", 44);
 	exit(0);
 }
 
@@ -181,7 +182,7 @@ t_bool	tolerance(long color, long tolerance)
 	unsigned char	r;
 	unsigned char	g;
 	unsigned char	b;
-	
+
 	t = (color >> 24);
 	r = (color >> 16);
 	g = (color >> 8);
@@ -203,17 +204,17 @@ void	you_died(t_data *data)
 		if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
 		{
 			if (tolerance((color = data->you_died[(int)data->you_died_index].buffer[i -
-			(HEIGHT / 4 * WIDTH)]), 0x99) == TRUE)
+							(HEIGHT / 4 * WIDTH)]), 0x99) == TRUE)
 				data->img.buffer[i] = dark(data->img.buffer[i],
-					(6000000.0 - data->anim) / 6000000.0);
+						(6000000.0 - data->anim) / 6000000.0);
 			else if (i > HEIGHT / 4 * WIDTH && i < HEIGHT * 3 / 4 * WIDTH)
 				data->img.buffer[i] = dark(color, (data->anim % 2) == 0 &&
-			data->anim < 2000000.0 ? (2000000.0 - data->anim / 2000000.0) :
-			(data->anim) / 6000000.0);
+						data->anim < 2000000.0 ? (2000000.0 - data->anim / 2000000.0) :
+						(data->anim) / 6000000.0);
 		}
 		else
 			data->img.buffer[i] = dark(data->img.buffer[i],
-				(6000000.0 - data->anim) / 6000000.0);
+					(6000000.0 - data->anim) / 6000000.0);
 	}
 }
 
@@ -229,10 +230,10 @@ void	print_life(t_data *data)
 		while(++y < HEIGHT)
 			if (x > data->life.debut_x + 7  && x < data->life.debut_x +
 					data->life.max_life - data->life.hurt - 7 &&
-				y > data->life.debut_y + 7 && y < data->life.debut_y + data->life.fin_y - 7)
+					y > data->life.debut_y + 7 && y < data->life.debut_y + data->life.fin_y - 7)
 				data->img.buffer[x + (y * data->img.width)] = 0xFF0000;
 			else if (x > data->life.debut_x  && x < data->life.debut_x + data->life.max_life &&
-				y > data->life.debut_y && y < data->life.debut_y + data->life.fin_y)
+					y > data->life.debut_y && y < data->life.debut_y + data->life.fin_y)
 				data->img.buffer[x + (y * data->img.width)] = 0x330000;
 	}
 }
@@ -263,8 +264,8 @@ void	intern_key(int key, t_data *data)
 	{
 		data->sword_index = 0;
 		if (data->player && (data->player->sac.ray.mapx - data->perso.pos.x) *
-	data->perso.dir.x < 1 && (data->player->sac.ray.mapy - data->perso.pos.y) *
-								data->perso.dir.y < 1)
+				data->perso.dir.x < 1 && (data->player->sac.ray.mapy - data->perso.pos.y) *
+				data->perso.dir.y < 1)
 			data->event.hit ^= 1;
 	}
 } 
@@ -303,7 +304,7 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, data->event.hit == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
-//	tmp = ft_strjoin(str, "\" | nc e1r2p19 13000");
+	//	tmp = ft_strjoin(str, "\" | nc e1r2p19 13000");
 	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
@@ -350,7 +351,7 @@ void	print_sword(t_data *data, int index)
 			if (x > WIDTH / 2)
 			{
 				color = data->sword[index].buffer[
-						x - WIDTH / 2 + (y * data->sword[index].width)];
+					x - WIDTH / 2 + (y * data->sword[index].width)];
 				if ((color & 0xDC6400) != 0)
 					data->img.buffer[x + (y * data->img.width)] = color;
 			}
@@ -390,10 +391,9 @@ void	put_image_to_window(t_data *data)
 		else if (data->anim < 1500000.0)
 			while (++i < HEIGHT * WIDTH)
 				data->img.buffer[i] = dark(data->img.buffer[i],
-					data->anim / 1500000.0);
+						data->anim / 1500000.0);
 	}
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
-//	data->life.hurt += 6;
 	if (data->event.remote == 1)
 		mlx_put_image_to_window(data->mlx.ptr,
 				data->mlx.win, data->remote.ptr, WIDTH / 2, HEIGHT / 2);
@@ -441,7 +441,7 @@ void	do_in_order(t_data *data)
 				data->event.door = 1;
 			}
 			else if (data->door_index == NB_DOOR_IMG - 1 && data->event.door !=
-	0 && data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] != '4')
+					0 && data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] != '4')
 				data->event.door = 0;
 			print_door(data, data->door, data->gif_door[(int)data->door_index]);
 			free_obj(data->door);
@@ -561,6 +561,7 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 	mlx_destroy_image(data->mlx.ptr, img->ptr);
 	*img = tmp;
 	img->check = TRUE;
+	data->download_percent += 0.33800;
 }
 
 void	load_background(t_data *data)
@@ -699,8 +700,8 @@ void	ft_test(t_data *data, char buf[4097])
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
 	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.))
-* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.))
-* (data->perso.pos.x - (y + y_ / 100.)));
+			* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.))
+			* (data->perso.pos.x - (y + y_ / 100.)));
 	pthread_mutex_unlock(&data->mutex_player);
 }
 
@@ -709,8 +710,9 @@ void    *t_loop(void *arg)
 	int     fd = open("/dev/fd/0", O_RDONLY | O_NONBLOCK);
 	char    buf[4097];
 	int     ret;
+	t_data	*data;
 
-	t_data *data = (t_data *)arg;
+	data = (t_data *)arg;
 	data->launch = FALSE;
 	while ((ret = read(fd, buf, 4096)) > 0)
 	{
@@ -724,10 +726,40 @@ void    *t_loop(void *arg)
 	return (NULL);
 }
 
+void	*draw_downloading(void *arg)
+{
+	int		i;
+	int		j;
+	t_data	*data;
+
+	data = (t_data *)arg;
+	write(1, "\n\n\n\n", 4);
+	i = 0;
+	while(i < 81)
+	{
+		j = -1;
+		write(1, ft_itoa(i * 1.25), 3);
+		write(1, "% ", 2);
+		write(1, "\e[48;5;52m", 11);
+		while (++j < i)
+			write(1, "\e[0;107m ", 10);
+		write(1, "\e[48;5;52m", 11);
+		while (++j < 81)
+			write(1, " ", 1);
+		write(1, "\e[0m", 5);
+		fflush(stdout);
+		usleep(30000);
+		write(1, "\r\n", 1);
+		i = (int)data->download_percent;
+	}
+	return (NULL);
+}
+
 int		main(int ac, char **av)
 {
 	t_data data;
 	pthread_t	thread;
+	pthread_t	download;
 
 	if (ac != 3 && ac != 2)
 	{
@@ -737,6 +769,7 @@ int		main(int ac, char **av)
 	}
 	pthread_mutex_init(&data.mutex_player, NULL);
 	pthread_create(&thread, NULL, t_loop, &data);
+	pthread_create(&download, NULL, draw_downloading, &data);
 	ft_init(&data);
 	crt_window(&data);
 	parsing(av[1], &data);
