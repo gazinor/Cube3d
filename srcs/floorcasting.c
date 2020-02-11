@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 00:26:32 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/10 11:50:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/11 23:43:08 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "cub3d.h"
@@ -22,7 +22,7 @@ void	draw_skynground(t_data *data, int x, t_bool sol, int y)
 		data->ray.f_texx = (int)(data->ray.cur_floorx * data->etext.width);
 		data->ray.f_texy = (int)(data->ray.cur_floory * data->etext.height);
 		data->img.buffer[x + (y * (data->img.width))] =
-			ground_dark(data->etext.buffer[(int)(data->etext.width * data->ray.f_texy + data->ray.f_texx)],
+		ground_dark(data->etext.buffer[abs((int)(data->etext.width * data->ray.f_texy + data->ray.f_texx))],
 					(HEIGHT - y) * (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum);
 	}
 	else
@@ -34,7 +34,7 @@ void	draw_skynground(t_data *data, int x, t_bool sol, int y)
 		data->ray.f_texx = (int)(data->ray.cur_floorx * data->sol.width);
 		data->ray.f_texy = (int)(data->ray.cur_floory * data->sol.height);
 		data->img.buffer[x + (y * (data->img.width))] =
-			ground_dark(data->sol.buffer[(int)(data->sol.width * data->ray.f_texy + data->ray.f_texx)],
+		ground_dark(data->sol.buffer[abs((int)(data->sol.width * data->ray.f_texy + data->ray.f_texx))],
 					y * (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum);
 	}
 }

@@ -1,8 +1,0 @@
-Implementer les textures des murs
-Implementer deux images dans la fenetre :
-		-Une qui printera le ciel puis le mur en fonction de start et end, 
-		qui commencera donc a l'index 0 et qui ira jusqu'a l'index end.
-		- Une qui printera le sol de l'index end a height.
-Resize image :
-		-hauteur = end - start,
-		-largeur = champ de vision / nombre de murs

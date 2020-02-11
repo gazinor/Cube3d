@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/10 11:52:48 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 00:08:57 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,7 +368,7 @@ void	put_image_to_window(t_data *data)
 		if (data->life.blood % 2 == 0)
 			color_screen(data, 0xbb0a1e);
 		else
-			color_screen(data, 0xAAAAAA);
+			color_screen(data, 0x777777);
 		--data->life.blood;
 	}
 	else
@@ -738,7 +738,7 @@ void	*draw_downloading(void *arg)
 	while(i < 81)
 	{
 		j = -1;
-		write(1, ft_itoa(i * 1.25), 3);
+		write(1, ft_itoa(i * 1.25), 1 + ((i * 1.25 < 100) ? 1 : 2));
 		write(1, "% ", 2);
 		write(1, "\e[48;5;52m", 11);
 		while (++j < i)
