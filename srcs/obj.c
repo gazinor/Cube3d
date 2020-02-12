@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/06 03:41:50 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 04:08:00 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	print_door(t_data *data, t_sprite *obj, t_img rend)
 					data->img.buffer[obj->sac.column + ((j - i + true_end) *
 							(data->img.width))] = ground_dark(color, 5);
 			}
+			else if (obj->sac.trap == 1)
+				data->img.buffer[obj->sac.column + (i * (data->img.width))] = 0x0;
 		}
 		obj = obj->next;
 	}
@@ -223,6 +225,10 @@ void	*create_door(t_data *data, t_sprite **obj, int column)
 		return (NULL);
 	(*obj)->sac.ray = data->ray;
 	(*obj)->sac.column = column;
+	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '5')
+		(*obj)->sac.trap = 1;
+	else
+		(*obj)->sac.trap = 0;
 	(*obj)->next = NULL;
 	return (obj);
 }

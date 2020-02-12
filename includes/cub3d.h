@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/10 06:47:30 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 08:41:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@
 # define TAB 48
 # define SCREENSHOT 105
 # define MENU 35
+# define SLASH 126
 # define NB_PORTAL_IMG 83
 # define NB_SWORD_IMG 37
 # define NB_YOU_DIED_IMG 75
 # define NB_PLAYER2_IMG 4
 # define NB_DOOR_IMG 11
-# define SLASH 126
+# define NB_SCREAMER_IMG 11
+# define NB_MONSTER_IMG 8
 
 # include "mlx.h"
 # include <stdlib.h>
@@ -56,6 +58,8 @@ extern char     *g_sword[NB_SWORD_IMG];
 extern char     *g_you_died[NB_YOU_DIED_IMG];
 extern char     *g_player2[NB_PLAYER2_IMG];
 extern char     *g_door[NB_DOOR_IMG];
+extern char     *g_screamer[NB_SCREAMER_IMG];
+extern char     *g_monster[NB_MONSTER_IMG];
 
 typedef enum	e_bool
 {
@@ -183,6 +187,7 @@ typedef struct	s_sac
 	int			column;
 	t_img		img;
 	int			down;
+	int			trap;
 }				t_sac;
 
 typedef	struct	s_sprite
@@ -270,6 +275,7 @@ typedef	struct	s_data
 	t_img			cdoor;
 	t_img			remote;
 	t_img			i_menu;
+	t_img			plafond;
 	t_img			play_s_contour;
 	t_img			play_uns_contour;
 	t_img			option_s_contour;
@@ -288,6 +294,8 @@ typedef	struct	s_data
 	t_img			you_died[NB_YOU_DIED_IMG];
 	t_img			player2[NB_PLAYER2_IMG];
 	t_img			gif_door[NB_DOOR_IMG];
+	t_img			screamer[NB_SCREAMER_IMG];
+	t_img			monster[NB_MONSTER_IMG];
 	t_portal		*portal_lst;
 	t_mod			mod;
 	t_menu			menu;
@@ -300,6 +308,7 @@ typedef	struct	s_data
 	t_sprite		*door;
 	t_sprite		*obj;
 	t_sprite		*player;
+	t_sprite		*monster_lst;
 	int				numSprites;
 	double			ZBuffer[WIDTH];
 	t_bonus			bonus;
@@ -310,6 +319,8 @@ typedef	struct	s_data
     double			you_died_index;
     double			player2_index;
     double			door_index;
+    double			screamer_index;
+    double			monster_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;

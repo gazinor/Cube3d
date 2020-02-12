@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/10 10:56:07 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 04:05:37 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	check_wall_type(t_data *data, int x)
 		data->ray.hit = 1;
 	wall_dist(data);
 	data->ZBuffer[x] = data->ray.walldist;
-	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '4')
+	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '4' ||
+		data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '5')
 	{
 		if (!data->event.door)
 			data->ray.hit = 1;

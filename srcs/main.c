@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/12 00:08:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 09:51:47 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,25 @@ void	print_sword(t_data *data, int index)
 	}
 }
 
+void	print_screamer(t_data *data, int index)
+{
+	int		x;
+	int		y;
+	int		color;
+
+	x = -1;
+	while (++x < WIDTH)
+	{
+		y = -1;
+		while (++y < HEIGHT)
+		{
+			color = data->screamer[index].buffer[
+			x + (y * data->screamer[index].width)];
+			data->img.buffer[x + (y * data->img.width)] = color;
+		}
+	}
+}
+
 void	put_image_to_window(t_data *data)
 {
 	int		i;
@@ -382,7 +401,23 @@ void	put_image_to_window(t_data *data)
 			data->sword_index += 2.4765;
 		}
 		data->option.status == 1 ? print_life(data) : 1;
-		if (data->life.alive == FALSE && data->you_died_index < NB_YOU_DIED_IMG)
+		if (data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] == '5' &&
+			data->screamer_index < NB_SCREAMER_IMG)
+		{
+			if ((int)data->screamer_index == 0)
+			{
+				if (data->anim % 2 == 1)
+					system("afplay sounds/ah_oui_daccord.mp3 &");
+				system("afplay sounds/screamer.mp3 &");
+			}
+			if ((int)data->screamer_index == 8 && data->anim % 2 == 0)
+				system("afplay sounds/tufousmagueuletoi.mp3 &");
+			print_screamer(data, (int)data->screamer_index);
+			if ((int)data->screamer_index == NB_SCREAMER_IMG - 1)
+				data->life.hurt = data->life.max_life;
+			data->screamer_index += 0.6;
+		}
+		else if (data->life.alive == FALSE && data->you_died_index < NB_YOU_DIED_IMG)
 		{
 			you_died(data);	
 			if (++data->you_died_index == NB_YOU_DIED_IMG)
@@ -394,9 +429,6 @@ void	put_image_to_window(t_data *data)
 						data->anim / 1500000.0);
 	}
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win, data->img.ptr, 0, 0);
-	if (data->event.remote == 1)
-		mlx_put_image_to_window(data->mlx.ptr,
-				data->mlx.win, data->remote.ptr, WIDTH / 2, HEIGHT / 2);
 }
 
 void	check_door(t_data *data)
@@ -435,7 +467,7 @@ void	do_in_order(t_data *data)
 				++data->door_index;
 			else if (data->door->sac.ray.walldist < 1.8 && data->door_index > 0)
 				--data->door_index;
-			if (data->event.door != 1 && data->door_index != NB_DOOR_IMG - 1)
+			if (data->door_index != NB_DOOR_IMG - 1)
 			{
 				system("echo \"open door\" | nc localhost 13000");
 				data->event.door = 1;
@@ -461,10 +493,14 @@ void	do_in_order(t_data *data)
 		data->player = NULL;
 	}	
 	pthread_mutex_unlock(&data->mutex_player);
-	if (data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] == 'x')
+	if (data->monster_lst)
 	{
-		data->life.hurt += 0.01 * data->life.max_life;
+		print_obj(data, data->monster_lst);
+//		free_obj(data->monster_lst);
+//		data->monster_lst = NULL;
 	}
+	if (data->map[(int)data->perso.pos.x][(int)data->perso.pos.y] == 'x')
+		data->life.hurt += 0.01 * data->life.max_life;
 	if (check_portal(data, data->perso.pos.x, data->perso.pos.y) == TRUE)
 	{
 		data->perso.dir = set_dir_portal(data->map[(int)data->perso.pos.x][(int)data->perso.pos.y]);
@@ -561,14 +597,15 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 	mlx_destroy_image(data->mlx.ptr, img->ptr);
 	*img = tmp;
 	img->check = TRUE;
-	data->download_percent += 0.33800;
+	data->download_percent += 0.31274;
 }
 
 void	load_background(t_data *data)
 {
 	load_image(data, &data->ciel, 9 * HEIGHT, HEIGHT / 2);
-	load_image(data, &data->sol, WIDTH, HEIGHT / 2);
+	load_image(data, &data->sol, 1000, 1000);
 	load_image(data, &data->ciel_etoile, 9 * HEIGHT, HEIGHT / 2);
+	load_image(data, &data->plafond, 1000, 1000);
 }
 
 void	load_dir_textures(t_data *data)
@@ -641,6 +678,24 @@ void    load_door(t_data *data)
 	i = -1;
 	while (++i < NB_DOOR_IMG)
 		load_image(data, &data->gif_door[i], 1000, 1000);
+}
+
+void    load_screamer(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_SCREAMER_IMG)
+		load_image(data, &data->screamer[i], WIDTH, HEIGHT);
+}
+
+void    load_monster(t_data *data)
+{
+	int     i;
+
+	i = -1;
+	while (++i < NB_MONSTER_IMG)
+		load_image(data, &data->monster[i], 1000, 1000);
 }
 
 t_bool	ft_strcmp(char *s1, char *s2)
@@ -718,7 +773,7 @@ void    *t_loop(void *arg)
 	{
 		buf[ret] = 0;
 		if (!strncmp(buf, "open door", 9))
-			data->event.door ^= 1;
+			data->door_index = 0;
 		else
 			if (data->launch == TRUE)
 				ft_test(data, buf);
@@ -738,9 +793,9 @@ void	*draw_downloading(void *arg)
 	while(i < 81)
 	{
 		j = -1;
+		write(1, "\e[1;4;38;5;123m", 15);
 		write(1, ft_itoa(i * 1.25), 1 + ((i * 1.25 < 100) ? 1 : 2));
-		write(1, "% ", 2);
-		write(1, "\e[48;5;52m", 11);
+		write(1, "%\e[0m \e[48;5;52m", 16);
 		while (++j < i)
 			write(1, "\e[0;107m ", 10);
 		write(1, "\e[48;5;52m", 11);
@@ -749,17 +804,51 @@ void	*draw_downloading(void *arg)
 		write(1, "\e[0m", 5);
 		fflush(stdout);
 		usleep(30000);
-		write(1, "\r\n", 1);
+		write(1, "\r", 1);
 		i = (int)data->download_percent;
 	}
 	return (NULL);
 }
 
+void	*use_monsters(void *arg)
+{
+	t_data		*data;
+	double		x;
+	double		y;
+
+	data = (t_data *)arg;
+	x = 2.5;
+	y = 2.5;
+	while (1)
+		if (data->launch == TRUE)
+		{
+			pthread_mutex_lock(&data->mutex_player);
+			printf("%f | %f\n", x, y);
+			if (!data->monster_lst)
+				create_obj(data, &data->monster_lst, data->monster[(int)data->monster_index % NB_MONSTER_IMG], 0);
+			data->monster_index += 0.1;
+			data->monster_lst->sac.img = data->monster[(int)data->monster_index % NB_MONSTER_IMG];
+			data->monster_lst->sac.ray.mapx = x;
+			data->monster_lst->sac.ray.mapy = y;
+			data->monster_lst->sac.ray.walldist = sqrt((data->perso.pos.x - x)
+				* (data->perso.pos.x - x) + (data->perso.pos.x - y)
+				* (data->perso.pos.x - y));
+			x = (data->perso.pos.x - data->monster_lst->sac.ray.mapx) /
+			(double)data->monster_lst->sac.ray.walldist;
+			y = (data->perso.pos.y - data->monster_lst->sac.ray.mapy) /
+			(double)data->monster_lst->sac.ray.walldist;
+			pthread_mutex_unlock(&data->mutex_player);
+			usleep(10000);
+		}
+	return (NULL);
+}
+
 int		main(int ac, char **av)
 {
-	t_data data;
+	t_data		data;
 	pthread_t	thread;
 	pthread_t	download;
+	pthread_t	monster;
 
 	if (ac != 3 && ac != 2)
 	{
@@ -768,8 +857,9 @@ int		main(int ac, char **av)
 		exit(0);
 	}
 	pthread_mutex_init(&data.mutex_player, NULL);
-	pthread_create(&thread, NULL, t_loop, &data);
 	pthread_create(&download, NULL, draw_downloading, &data);
+	pthread_create(&thread, NULL, t_loop, &data);
+	pthread_create(&monster, NULL, use_monsters, &data);
 	ft_init(&data);
 	crt_window(&data);
 	parsing(av[1], &data);
@@ -780,6 +870,8 @@ int		main(int ac, char **av)
 	load_sword(&data);
 	load_you_died(&data);
 	load_player2(&data);
+	load_screamer(&data);
+	load_monster(&data);
 	load_door(&data);
 	load_menu(&data);
 	load_option(&data);

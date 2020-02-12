@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/10 06:48:13 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/12 08:48:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	init_filenames(t_data *data)
 	data->retour_uns.filename = "./textures/retour_uns.xpm";
 	data->mode_bonus.filename = "./textures/mode_bonus.xpm";
 	data->spikes.filename = "./textures/spikes.xpm";
+	data->plafond.filename = "./textures/plafond.xpm";
 	i = -1;
 	while (++i < NB_PORTAL_IMG)
 		data->portal[i].filename = g_portal[i];
@@ -76,6 +77,12 @@ void	init_filenames(t_data *data)
 	i = -1;
 	while (++i < NB_DOOR_IMG)
 		data->gif_door[i].filename = g_door[i];
+	i = -1;
+	while (++i < NB_SCREAMER_IMG)
+		data->screamer[i].filename = g_screamer[i];
+	i = -1;
+	while (++i < NB_MONSTER_IMG)
+		data->monster[i].filename = g_monster[i];
 }
 
 void	init_img(t_data *data)
@@ -120,6 +127,12 @@ void	init_img(t_data *data)
 	i = -1;
 	while (++i < NB_DOOR_IMG)
 		data->gif_door[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_SCREAMER_IMG)
+		data->screamer[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_MONSTER_IMG)
+		data->monster[i].ptr = NULL;
 }
 
 void	ft_init_player(t_data *data)
@@ -157,6 +170,7 @@ void	ft_init_player(t_data *data)
 	data->you_died_index = 0;
 	data->player2_index = 0;
 	data->door_index = 0;
+	data->screamer_index = 0;
 	data->time.tv_usec = 0;
 	data->time.tv_sec = 0;
 }
@@ -179,6 +193,7 @@ void	ft_init(t_data *data)
 	data->door = NULL;
 	data->obj = NULL;
 	data->player = NULL;
+	data->monster_lst = NULL;
 	data->portal_lst = NULL;
 	data->option.status = 0;
 	data->w = 0;
@@ -197,6 +212,10 @@ void	ft_init(t_data *data)
 	data->parse.check_r = FALSE;
 	data->parse.check_s = FALSE;
 	data->download_percent = 0;
+	data->menu.i = 0;
+	data->menu.button[0] = 1;
+	data->menu.button[1] = 0;
+	data->menu.button[2] = 0;
 	i = -1;
 	while (++i < HEIGHT / 2)
 		data->ray.cur_dist[i] = HEIGHT / (HEIGHT - 2.0 * i);
@@ -206,6 +225,33 @@ void	ft_init(t_data *data)
 	init_filenames(data);
 	init_img(data);
 }
+
+char	*g_monster[NB_MONSTER_IMG] =
+{
+	"./textures/monster/monster1.xpm",
+	"./textures/monster/monster2.xpm",
+	"./textures/monster/monster3.xpm",
+	"./textures/monster/monster4.xpm",
+	"./textures/monster/monster5.xpm",
+	"./textures/monster/monster6.xpm",
+	"./textures/monster/monster7.xpm",
+	"./textures/monster/monster8.xpm",
+};
+
+char	*g_screamer[NB_SCREAMER_IMG] =
+{
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-0.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-1.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-2.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-3.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-4.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-5.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-6.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-7.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-8.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-9.xpm",
+	"./textures/screamer.xpm/34e1391c4f4f481fef9bcc26a895c566-10.xpm"
+};
 
 char	*g_door[NB_DOOR_IMG] =
 {
