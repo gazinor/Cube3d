@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/11 23:16:21 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/19 03:12:11 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ long	ground_dark(long color, double dist)
 void	crt_sky(t_data *data, int column)
 {
 	int		i;
+	double	ratio;
 
+	ratio = (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum;
 	i = -1;
 	data->calc.offset = (atan2(data->ray.dirx, data->ray.diry) + M_PI) *
 		M_1_PI * .5;
@@ -68,7 +70,7 @@ void	crt_sky(t_data *data, int column)
 	{
 		if (data->perso.pos.x < 16)
 			while (++i < data->ray.start)
-				draw_skynground(data, column, FALSE, i);
+				draw_sky(data, column, i, i * ratio);
 		else if (data->mod.nbr[DARK] == 1)
 			while (++i < data->ray.start)
 				data->img.buffer[column + (i * (data->img.width))] =
@@ -88,7 +90,9 @@ void	crt_sky(t_data *data, int column)
 void	crt_ground(t_data *data, int column)
 {
 	int		i;
+	double	ratio;
 
+	ratio = (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum;
 	i = data->ray.end - 1;
 	if (data->option.status == 1)
 		if (data->mod.nbr[MIRROR] == 1)
@@ -105,7 +109,7 @@ data->ray.heightline) *	data->img.width], (HEIGHT - i) * data->calc.lum);
 		}
 		else
 			while (++i < HEIGHT)
-				draw_skynground(data, column, TRUE, i);
+				draw_ground(data, column, i, (HEIGHT - i) * ratio);
 	else
 		while (++i < HEIGHT)
 			data->img.buffer[column + (i * (data->img.width))] =

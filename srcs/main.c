@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/12 09:51:47 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/19 06:17:24 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -755,8 +755,8 @@ void	ft_test(t_data *data, char buf[4097])
 	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
 	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
 	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.))
-			* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.x - (y + y_ / 100.))
-			* (data->perso.pos.x - (y + y_ / 100.)));
+			* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.y - (y + y_ / 100.))
+			* (data->perso.pos.y - (y + y_ / 100.)));
 	pthread_mutex_unlock(&data->mutex_player);
 }
 
@@ -820,26 +820,27 @@ void	*use_monsters(void *arg)
 	x = 2.5;
 	y = 2.5;
 	while (1)
+	{
 		if (data->launch == TRUE)
 		{
 			pthread_mutex_lock(&data->mutex_player);
-			printf("%f | %f\n", x, y);
 			if (!data->monster_lst)
 				create_obj(data, &data->monster_lst, data->monster[(int)data->monster_index % NB_MONSTER_IMG], 0);
-			data->monster_index += 0.1;
+			data->monster_index += 1;
 			data->monster_lst->sac.img = data->monster[(int)data->monster_index % NB_MONSTER_IMG];
 			data->monster_lst->sac.ray.mapx = x;
 			data->monster_lst->sac.ray.mapy = y;
-			data->monster_lst->sac.ray.walldist = sqrt((data->perso.pos.x - x)
-				* (data->perso.pos.x - x) + (data->perso.pos.x - y)
-				* (data->perso.pos.x - y));
-			x = (data->perso.pos.x - data->monster_lst->sac.ray.mapx) /
-			(double)data->monster_lst->sac.ray.walldist;
-			y = (data->perso.pos.y - data->monster_lst->sac.ray.mapy) /
-			(double)data->monster_lst->sac.ray.walldist;
+			data->monster_lst->sac.ray.walldist = sqrt((data->perso.pos.x - 0.5 - x)
+				* (data->perso.pos.x - 0.5 - x) + (data->perso.pos.y - 0.5 - y)
+				* (data->perso.pos.y - 0.5 - y));
+			x += (data->perso.pos.x - 0.5 - data->monster_lst->sac.ray.mapx) /
+	data->monster_lst->sac.ray.walldist * 0.105;
+			y += (data->perso.pos.y - 0.5 - data->monster_lst->sac.ray.mapy) /
+	data->monster_lst->sac.ray.walldist * 0.105;
 			pthread_mutex_unlock(&data->mutex_player);
-			usleep(10000);
 		}
+		usleep(100000);
+	}
 	return (NULL);
 }
 

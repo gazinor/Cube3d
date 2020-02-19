@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/12 04:08:00 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/19 06:09:16 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	sort_list(t_sprite **obj)
 	t_sprite *head;
 
 	head = *obj;
+	if (!*obj)
+		return ;
 	while (*obj && (*obj)->next)
 	{
 		if ((*obj)->sac.ray.walldist < (*obj)->next->sac.ray.walldist)

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/12 08:41:11 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/19 05:48:37 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ typedef struct	s_sac
 	t_img		img;
 	int			down;
 	int			trap;
+	double		index;
+	int			id;
 }				t_sac;
 
 typedef	struct	s_sprite
@@ -378,6 +380,7 @@ void			init_normale(t_data *data);
 int				transparance(int p1, int p2);
 void			ft_init_player(t_data *data);
 void			floorcasting(t_data *data, int y);
-void			draw_skynground(t_data *data, int y, t_bool sol, int x);
+void			draw_ground(t_data *data, int y, int x, double ratio);
+void			draw_sky(t_data *data, int y, int x, double ratio);
 
 #endif
