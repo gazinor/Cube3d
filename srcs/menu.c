@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 21:08:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/12 08:48:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/23 20:19:24 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,10 @@ int		key_on_menu(int key, t_data *data)
 		if (data->menu.i == 0)
 		{
 			data->event.menu = 0;
-			data->launch = TRUE;
+			if (data->option.status == 1)
+				data->launch = TRUE;
+			else
+				data->launch = FALSE;
 			data->option.status == 1 ? init_bonus(data) : init_normale(data);
 			mlx_clear_window(data->mlx.ptr, data->mlx.win);
 			loop(data);

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/19 06:17:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/23 20:31:44 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,11 @@ void	intern_key(int key, t_data *data)
 		if (data->player && (data->player->sac.ray.mapx - data->perso.pos.x) *
 				data->perso.dir.x < 1 && (data->player->sac.ray.mapy - data->perso.pos.y) *
 				data->perso.dir.y < 1)
-			data->event.hit ^= 1;
+			data->event.hit[0] ^= 1;
+		if (data->monster_lst && (data->monster_lst->sac.ray.mapx - data->perso.pos.x) *
+				data->perso.dir.x < 1 && (data->monster_lst->sac.ray.mapy - data->perso.pos.y) *
+				data->perso.dir.y < 1)
+			data->event.hit[1] ^= 1;
 	}
 } 
 
@@ -301,14 +305,14 @@ char	*serialized(t_data *data)
 	tmp = ft_strjoin(str, ";");
 	free(str);
 	str = tmp;
-	tmp = ft_strjoin(str, data->event.hit == TRUE ? ft_itoa((int)data->life.hit) : 0);
+	tmp = ft_strjoin(str, data->event.hit[0] == TRUE ? ft_itoa((int)data->life.hit) : 0);
 	free(str);
 	str = tmp;
 	//	tmp = ft_strjoin(str, "\" | nc e1r2p19 13000");
 	tmp = ft_strjoin(str, "\" | nc localhost 13000");
 	free(str);
 	str = tmp;
-	data->event.hit = FALSE;
+	data->event.hit[0] = FALSE;
 	return (str);
 }
 
@@ -815,10 +819,12 @@ void	*use_monsters(void *arg)
 	t_data		*data;
 	double		x;
 	double		y;
+	int			life;
 
 	data = (t_data *)arg;
 	x = 2.5;
 	y = 2.5;
+	life = 3;
 	while (1)
 	{
 		if (data->launch == TRUE)
@@ -838,6 +844,17 @@ void	*use_monsters(void *arg)
 			y += (data->perso.pos.y - 0.5 - data->monster_lst->sac.ray.mapy) /
 	data->monster_lst->sac.ray.walldist * 0.105;
 			pthread_mutex_unlock(&data->mutex_player);
+		}
+		if (data->event.hit[1] == TRUE)
+		{
+			--life;
+			data->event.hit[1] = FALSE;
+		}
+		if (life <= 0)
+		{
+			free(data->monster_lst);
+			data->monster_lst = NULL;
+			break ;
 		}
 		usleep(100000);
 	}

@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/12 08:48:28 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/23 20:23:46 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@ void	ft_init_player(t_data *data)
 	data->event.respawn = 0;
 	data->event.screenshot = 0;
 	data->event.option = 0;
-	data->event.hit = 0;
+	data->event.hit[0] = 0;
+	data->event.hit[1] = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/19 05:48:37 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/23 20:24:05 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef	struct	s_event
 	t_bool		screenshot;
 	t_bool		option;
 	t_bool		music;
-	t_bool		hit;
+	t_bool		hit[2];
 }				t_event;
 
 typedef struct	s_menu
