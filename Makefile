@@ -4,7 +4,7 @@ NAME     =	Cub3D
 CC       =	gcc
 
 #	Flags     #
-CFLAGS   =	-Wall -Wextra -Werror -O3 #-g3 -fsanitize=address
+CFLAGS   =	-Wall -Wextra -Werror -O3 -g3 -fsanitize=address
 GFLAGS   =	-lm -L$(MLX_PATH) -lmlx -I$(MLX_PATH) -framework OpenGL -framework Appkit
 
 # 	Headers   #
@@ -73,6 +73,11 @@ $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@$(CC) $(CFLAGS) -MMD -I$(HEADER_P) -o $@ -c $<
 	@printf "\e[1;30m$(CC): \e[1;37m./%-51s\e[1;0m" "$<"
 	@printf "\e[32mcheck\e[1;0m\n"
+
+save : fclean
+	git add .
+	git commit -m "$m"
+	git push
 
 clean :
 	@make -C $(MLX_PATH) clean

@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/23 20:23:46 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/03 08:23:56 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ void	init_filenames(t_data *data)
 	i = -1;
 	while (++i < NB_MONSTER_IMG)
 		data->monster[i].filename = g_monster[i];
+	i = -1;
+	while (++i < NB_TP)
+		data->tp[i].filename = g_tp[i];
 }
 
 void	init_img(t_data *data)
@@ -133,6 +136,9 @@ void	init_img(t_data *data)
 	i = -1;
 	while (++i < NB_MONSTER_IMG)
 		data->monster[i].ptr = NULL;
+	i = -1;
+	while (++i < NB_TP)
+		data->tp[i].ptr = NULL;
 }
 
 void	ft_init_player(t_data *data)
@@ -153,6 +159,7 @@ void	ft_init_player(t_data *data)
 	data->event.option = 0;
 	data->event.hit[0] = 0;
 	data->event.hit[1] = 0;
+	data->event.hit[2] = 0;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;
@@ -172,6 +179,7 @@ void	ft_init_player(t_data *data)
 	data->player2_index = 0;
 	data->door_index = 0;
 	data->screamer_index = 0;
+	data->tp_index = 0;
 	data->time.tv_usec = 0;
 	data->time.tv_sec = 0;
 }
@@ -196,11 +204,14 @@ void	ft_init(t_data *data)
 	data->player = NULL;
 	data->monster_lst = NULL;
 	data->portal_lst = NULL;
+	data->tp_lst = NULL;
 	data->option.status = 0;
 	data->w = 0;
 	data->h = 0;
 	data->parse.nb_line = 0;
 	data->parse.sizeline = 0;
+	data->parse.pos.x = 0;
+	data->parse.pos.y = 0;
 	data->option.status = 0;
 	data->w = 0;
 	data->h = 0;
@@ -226,6 +237,66 @@ void	ft_init(t_data *data)
 	init_filenames(data);
 	init_img(data);
 }
+
+char	*g_tp[NB_TP] =
+{
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-0.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-1.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-2.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-3.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-4.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-5.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-6.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-7.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-8.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-9.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-10.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-11.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-12.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-13.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-14.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-15.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-16.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-17.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-18.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-19.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-20.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-21.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-22.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-23.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-24.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-25.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-26.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-27.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-28.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-29.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-30.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-31.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-32.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-33.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-34.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-35.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-36.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-37.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-38.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-39.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-40.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-41.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-42.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-43.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-44.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-45.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-46.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-47.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-48.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-49.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-50.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-51.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-52.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-53.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-54.xpm",
+	"./textures/tp_monstre/0500867d19444257cba959bbf6f9a652-55.xpm"
+};
 
 char	*g_monster[NB_MONSTER_IMG] =
 {

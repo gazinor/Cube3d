@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/23 20:24:05 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/02/24 04:45:48 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define NB_DOOR_IMG 11
 # define NB_SCREAMER_IMG 11
 # define NB_MONSTER_IMG 8
+# define NB_TP 56
 
 # include "mlx.h"
 # include <stdlib.h>
@@ -60,6 +61,7 @@ extern char     *g_player2[NB_PLAYER2_IMG];
 extern char     *g_door[NB_DOOR_IMG];
 extern char     *g_screamer[NB_SCREAMER_IMG];
 extern char     *g_monster[NB_MONSTER_IMG];
+extern char     *g_tp[NB_TP];
 
 typedef enum	e_bool
 {
@@ -126,7 +128,7 @@ typedef	struct	s_event
 	t_bool		screenshot;
 	t_bool		option;
 	t_bool		music;
-	t_bool		hit[2];
+	t_bool		hit[3];
 }				t_event;
 
 typedef struct	s_menu
@@ -298,6 +300,7 @@ typedef	struct	s_data
 	t_img			gif_door[NB_DOOR_IMG];
 	t_img			screamer[NB_SCREAMER_IMG];
 	t_img			monster[NB_MONSTER_IMG];
+	t_img			tp[NB_TP];
 	t_portal		*portal_lst;
 	t_mod			mod;
 	t_menu			menu;
@@ -311,6 +314,7 @@ typedef	struct	s_data
 	t_sprite		*obj;
 	t_sprite		*player;
 	t_sprite		*monster_lst;
+	t_sprite		*tp_lst;
 	int				numSprites;
 	double			ZBuffer[WIDTH];
 	t_bonus			bonus;
@@ -323,6 +327,7 @@ typedef	struct	s_data
     double			door_index;
     double			screamer_index;
     double			monster_index;
+    double			tp_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;

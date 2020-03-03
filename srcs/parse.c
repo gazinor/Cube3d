@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 18:15:16 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/10 09:50:37 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/03 09:10:32 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,32 @@ void	check_pixel(t_data *data, int r, int g, int b)
 			"Mauvais composants de pixel. Doit etre contenu entre 0 et 255.\n");
 }
 
-void	check_floor_n_sky(char *line, t_data *data)
+void	check_sky(char *line, t_data *data)
+{
+	int		i;
+	int		r;
+	int		g;
+	int		b;
+
+	i = 1;
+	if (line[0] == 'C' && line[1] == ' ')
+	{
+		data->parse.check_c == TRUE ? exit_properly(data, 1, "2x C arg.\n") : 1;
+		i += ft_atoi_parse(line + i, &r, data);
+		i += ft_atoi_parse(line + i, &g, data);
+		i += ft_atoi_parse(line + i, &b, data);
+		--i;
+		while (line[++i])
+			if (line[i] != ' ' || line[i] != '\t')
+				exit_properly(data, 1, "Pas plus de trois composantes pour les\
+couleurs de pixel\n");
+		check_pixel(data, r, g, b);
+		data->parse.c_color = (r << 16) + (g << 8) + b;
+		data->parse.check_c = TRUE;
+	}
+}
+
+void	check_floor(char *line, t_data *data)
 {
 	int		i;
 	int		r;
@@ -93,20 +118,17 @@ void	check_floor_n_sky(char *line, t_data *data)
 		i += ft_atoi_parse(line + i, &r, data);
 		i += ft_atoi_parse(line + i, &g, data);
 		i += ft_atoi_parse(line + i, &b, data);
+		--i;
+		while (line[++i])
+			if (line[i] != ' ' || line[i] != '\t')
+				exit_properly(data, 1, "Pas plus de trois composantes pour les\
+couleurs de pixel\n");
 		check_pixel(data, r, g, b);
 		data->parse.f_color = (r << 16) + (g << 8) + b;
 		data->parse.check_f = TRUE;
 	}
-	else if (line[0] == 'C' && line[1] == ' ')
-	{
-		data->parse.check_c == TRUE ? exit_properly(data, 1, "2x C arg.\n") : 1;
-		i += ft_atoi_parse(line + i, &r, data);
-		i += ft_atoi_parse(line + i, &g, data);
-		i += ft_atoi_parse(line + i, &b, data);
-		check_pixel(data, r, g, b);
-		data->parse.c_color = (r << 16) + (g << 8) + b;
-		data->parse.check_c = TRUE;
-	}
+	else
+		check_sky(line, data);
 }
 
 void	check_parse_map(t_data *data)
@@ -132,17 +154,18 @@ int		ft_strlen_map(t_data *data, char *str)
 	count = 0;
 	while (str[++i])
 	{
-		if (data->parse.i == data->parse.nb_line - 1 &&
-				str[i] != '1' && str[i] != ' ')
+		if (data->parse.i == data->parse.nb_line - 1 && ((str[i] != '1' &&
+		str[i] != ' ') || (str[i] == ' ' && str[i + 1] && str[i + 1] == ' ')))
 			exit_properly(data, 1, "Only '1' on last line.\n");
 		if (str[i] == '1' || str[i] == '0' || str[i] == '2' || str[i] == 'N' ||
-			str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
+			str[i] == 'S' || str[i] == 'E' || str[i] == 'W' || str[i] == ' ')
 		{
+			if ((str[i] == ' ' && str[i + 1] != ' ') ||
+				(str[i] == ' ' && str[i + 1] == ' ' && ++count && ++i))
+				continue ;
 			token = i;
 			count++;
 		}
-		else if (str[i] == ' ')
-			continue ;
 		else
 			exit_properly(data, 1, 
 			"Mauvais caractere dans la map (seulement : 0,1,2,N,S,W,E).\n");
@@ -171,11 +194,23 @@ void	fill_parse_map(char *line, t_data *data)
 		exit_properly(data, 1, "La map doit etre rectangle.\n");
 	while (line[++i])
 		if (line[i] == '1' || line[i] == '0' || line[i] == '2' || line[i] == 'N'
-		|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+		|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W' || line[i] == ' ')
 		{
-			data->parse.map[data->parse.i][j] = line[i];
-			if (line[i] != '1' && line[i] != '0' && line[i] != '2')
+			if (line[i] != ' ' && line[i + 1] && line [i + 1] != ' ')
+				exit_properly(data, 1, "Les elements de la map doivent etre\
+ separes d'un espace au moins.\n");
+			if (line[i] == ' ')
 			{
+				if (line[i] == ' ' && line[i + 1] == ' ' && ++i)
+					data->parse.map[data->parse.i][j++] = '0';
+				continue ;
+			}
+			else
+				data->parse.map[data->parse.i][j] = line[i];
+			if (line[i] == 'N' || line[i] == 'E' || line[i] == 'W' || line [i] == 'S')
+			{
+				if (data->parse.pos.x > 0)
+					exit_properly(data, 1, "Perso a plusieurs positions.\n");
 				data->parse.pos.x = data->parse.i;
 				data->parse.pos.y = j;
 				set_parse_dir(data, line[i]);
@@ -183,8 +218,7 @@ void	fill_parse_map(char *line, t_data *data)
 			}
 			++j;
 		}
-	data->parse.map[data->parse.i][j] = '\0';
-	++data->parse.i;
+	data->parse.map[data->parse.i++][j] = '\0';
 }
 
 void	malloc_map(t_data *data)
@@ -212,18 +246,17 @@ void	init_parse_map(t_data *data, char *path)
 	fd = open(path, O_RDONLY);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		if (*line == '1')
-		{
-			i = -1;
+		i = -1;
+		if (*line == '1' && ++data->parse.nb_line)
 			if (data->parse.sizeline == 0)
 				while (line[++i])
 				{
-					if (line[i] != '1' && line [i] != ' ')
+					if ((line[i] != '1' && line[i] != ' ') ||
+						(line[i] == ' ' && line[i + 1] && line[i + 1] == ' '))
 						exit_properly(data, 1, "Only '1' on first line.\n");
-					line[i] == '1' ? ++data->parse.sizeline : 1;
+					if (line[i] == '1' || (line[i] == 32 && line[i + 1] == 32))
+						++data->parse.sizeline;
 				}
-			++data->parse.nb_line;
-		}	
 		free(line);
 	}
 	ret == 0 ? free(line) : 1;
@@ -257,7 +290,8 @@ void	check_res(char *line, t_data *data)
 		ft_atoi_parse(line + (ft_atoi_parse(line + 1, &data->w,
 		data)) + 1, &data->h, data);
 		if (data->w > 2560 || data->h > 1440 || data->w < 0 || data->h < 0)
-			exit_properly(data, 1, "Resolutions sup. a la taille de l'ecran\n");
+			exit_properly(data, 1,
+			"Resolutions sup. a la taille de l'ecran (0-2560 / 0-1440)\n");
 	}
 }
 
@@ -286,11 +320,11 @@ void	parsing(char *path, t_data *data)
 	{
 		check_all_cases(line, data);
 		check_tex(line, data);
-		check_floor_n_sky(line, data);
+		check_floor(line, data);
 		check_res(line, data);
 		line[0] == '1' ? fill_parse_map(line, data) : 1;
 		if (data->parse.check_map == 1 && line[0] != '1')
-			exit_properly(data, 1, "Pas de \\n dans la map, merci.\n");
+			exit_properly(data, 1, "Presence de saut de ligne dans la map.\n");
 		free(line);
 	}
 	if (ret == -1)
