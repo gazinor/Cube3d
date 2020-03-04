@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/24 05:56:10 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/03 23:44:13 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
-
-static int		ft_strlen(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (*(str + i))
-		++i;
-	return (i);
-}
 
 int		ft_size(int n)
 {

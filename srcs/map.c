@@ -6,18 +6,18 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:12:13 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/24 00:37:54 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 05:59:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	*G_BUFFER[100] =
+char	*g_buffer[100] =
 {
 	"1111111111111111111111111111111111111111",
-	"100000000000x000000000000000501000000001",
-	"10000000000000000W0000000000110000000001",
-	"100000000000x000000000000000333000000001",
+	"100000000000x000000000040000501000000001",
+	"10000000000000000E0000000000110000000001",
+	"100000000000x000000000000500333000000001",
 	"1111111111111111111141111111110000000001",
 	"1000001000000000001101111111110000000001",
 	"10000A1O00000000001000001111111111111111",
@@ -63,16 +63,16 @@ void	*ft_init_map(t_data *data)
 	int	j;
 
 	i = 0;
-	while (G_BUFFER[i])
+	while (g_buffer[i])
 		i++;
 	if (!(data->bonus.map = malloc(sizeof(char *) * (i + 1))))
 		return (NULL);
 	data->map_mid.x = i / 2.;
 	i = 0;
-	while (G_BUFFER[i])
+	while (g_buffer[i])
 	{
 		j = 0;
-		while (G_BUFFER[i][j])
+		while (g_buffer[i][j])
 			j++;
 		if (!(data->bonus.map[i] = malloc(sizeof(char) * (j + 1))))
 			return (NULL);
@@ -89,17 +89,17 @@ void	ft_fill_map(t_data *data)
 	int	i;
 	int	j;
 
-	i = 0;
-	while (G_BUFFER[i])
+	i = -1;
+	while (g_buffer[++i])
 	{
 		j = 0;
-		while (G_BUFFER[i][j])
+		while (g_buffer[i][j])
 		{
-			data->bonus.map[i][j] = G_BUFFER[i][j];
-			if (G_BUFFER[i][j] == 'N' || G_BUFFER[i][j] == 'S' ||
-					G_BUFFER[i][j] == 'E' || G_BUFFER[i][j] == 'W')
+			data->bonus.map[i][j] = g_buffer[i][j];
+			if (g_buffer[i][j] == 'N' || g_buffer[i][j] == 'S' ||
+					g_buffer[i][j] == 'E' || g_buffer[i][j] == 'W')
 			{
-				set_dir(data, G_BUFFER[i][j]);
+				set_dir(data, g_buffer[i][j]);
 				data->bonus.map[i][j] = '0';
 				data->bonus.pos.x = (double)i + 0.5;
 				data->bonus.pos.y = (double)j + 0.5;
@@ -109,7 +109,6 @@ void	ft_fill_map(t_data *data)
 			j++;
 		}
 		data->bonus.map[i][j] = '\0';
-		i++;
 	}
 	data->bonus.map[i] = 0;
 }

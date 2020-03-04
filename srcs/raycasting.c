@@ -6,20 +6,11 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 21:07:22 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/12 04:05:37 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 05:09:55 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-double	my_abs(double value)
-{
-	if (value == 0)
-		value = 0.1;
-	else if (value < 0)
-		value = -value;
-	return (value);
-}
 
 t_bool	check_portal(t_data *data, double new_x, double new_y)
 {
@@ -35,12 +26,11 @@ t_bool	check_portal(t_data *data, double new_x, double new_y)
 
 void	check_wall_type(t_data *data, int x)
 {
-
 	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '1' ||
 			data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '3')
 		data->ray.hit = 1;
 	wall_dist(data);
-	data->ZBuffer[x] = data->ray.walldist;
+	data->zbuffer[x] = data->ray.walldist;
 	if (data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '4' ||
 		data->map[(int)data->ray.mapx][(int)data->ray.mapy] == '5')
 	{

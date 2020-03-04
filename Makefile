@@ -16,19 +16,27 @@ HEADER   =	$(addprefix $(HEADER_P)/,$(HEADER_N))
 SRC_PATH =	./srcs
 SRC_NAME =	main.c \
 			display.c \
+			display2.c \
 			init.c \
+			init2.c \
 			map.c \
 			moves1.c \
 			moves2.c \
 			raycasting.c \
 			obj.c \
+			obj2.c \
+			portal.c \
 			screenshot.c \
 			menu.c \
+			menu2.c \
 			option.c \
 			parse.c \
+			parse2.c \
+			parse3.c \
+			parse4.c \
 			get_next_line.c \
 			get_next_line_utils.c \
-			test.c \
+			transparence.c \
 			floorcasting.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))

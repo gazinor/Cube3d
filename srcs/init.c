@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/03/03 08:23:56 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 01:23:22 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,118 +33,8 @@ void	init_ray(t_data *data, int x)
 	data->numSprites = 0;
 }
 
-void	init_filenames(t_data *data)
+void	ft_init_events(t_data *data)
 {
-	int		i;
-
-	data->ciel.filename = "./textures/ciel.xpm";
-	data->sol.filename = "./textures/sol.xpm";
-	data->ciel_etoile.filename = "./textures/ciel_etoile.xpm";
-	data->ntext.filename = "./textures/ntext.xpm";
-	data->stext.filename = "./textures/stext.xpm";
-	data->etext.filename = "./textures/etext.xpm";
-	data->wtext.filename = "./textures/wtext.xpm";
-	data->cdoor.filename = "./textures/cdoor.xpm";
-	data->odoor.filename = "./textures/odoor.xpm";
-	data->remote.filename = "./textures/remote.xpm";
-	data->sprite.filename = "./textures/sprite.xpm";
-	data->i_menu.filename = "./textures/menu.xpm";
-	data->play_s_contour.filename = "./textures/play_s_contour.xpm";
-	data->play_uns_contour.filename = "./textures/play_uns_contour.xpm";
-	data->option_s_contour.filename = "./textures/option_s_contour.xpm";
-	data->option_uns_contour.filename = "./textures/option_uns_contour.xpm";
-	data->quit_s_contour.filename = "./textures/quit_s_contour.xpm";
-	data->quit_uns_contour.filename = "./textures/quit_uns_contour.xpm";
-	data->on_button.filename = "./textures/on_button.xpm";
-	data->off_button.filename = "./textures/off_button.xpm";
-	data->retour_s.filename = "./textures/retour_s.xpm";
-	data->retour_uns.filename = "./textures/retour_uns.xpm";
-	data->mode_bonus.filename = "./textures/mode_bonus.xpm";
-	data->spikes.filename = "./textures/spikes.xpm";
-	data->plafond.filename = "./textures/plafond.xpm";
-	i = -1;
-	while (++i < NB_PORTAL_IMG)
-		data->portal[i].filename = g_portal[i];
-	i = -1;
-	while (++i < NB_SWORD_IMG)
-		data->sword[i].filename = g_sword[i];
-	i = -1;
-	while (++i < NB_YOU_DIED_IMG)
-		data->you_died[i].filename = g_you_died[i];
-	i = -1;
-	while (++i < NB_PLAYER2_IMG)
-		data->player2[i].filename = g_player2[i];
-	i = -1;
-	while (++i < NB_DOOR_IMG)
-		data->gif_door[i].filename = g_door[i];
-	i = -1;
-	while (++i < NB_SCREAMER_IMG)
-		data->screamer[i].filename = g_screamer[i];
-	i = -1;
-	while (++i < NB_MONSTER_IMG)
-		data->monster[i].filename = g_monster[i];
-	i = -1;
-	while (++i < NB_TP)
-		data->tp[i].filename = g_tp[i];
-}
-
-void	init_img(t_data *data)
-{
-	int		i;
-
-	data->ciel.ptr = NULL;
-	data->ciel_etoile.ptr = NULL;
-	data->sol.ptr = NULL;
-	data->ntext.ptr = NULL;
-	data->stext.ptr = NULL;
-	data->etext.ptr = NULL;
-	data->wtext.ptr = NULL;
-	data->odoor.ptr = NULL;
-	data->cdoor.ptr = NULL;
-	data->remote.ptr = NULL;
-	data->i_menu.ptr = NULL;
-	data->play_s_contour.ptr = NULL;
-	data->play_uns_contour.ptr = NULL;
-	data->option_s_contour.ptr = NULL;
-	data->option_uns_contour.ptr = NULL;
-	data->quit_s_contour.ptr = NULL;
-	data->quit_uns_contour.ptr = NULL;
-	data->on_button.ptr = NULL;
-	data->off_button.ptr = NULL;
-	data->mode_bonus.ptr = NULL;
-	data->retour_s.ptr = NULL;
-	data->retour_uns.ptr = NULL;
-	data->sprite.ptr = NULL;
-	i = -1;
-	while (++i < NB_PORTAL_IMG)
-		data->portal[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_SWORD_IMG)
-		data->sword[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_PLAYER2_IMG)
-		data->player2[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_YOU_DIED_IMG)
-		data->you_died[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_DOOR_IMG)
-		data->gif_door[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_SCREAMER_IMG)
-		data->screamer[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_MONSTER_IMG)
-		data->monster[i].ptr = NULL;
-	i = -1;
-	while (++i < NB_TP)
-		data->tp[i].ptr = NULL;
-}
-
-void	ft_init_player(t_data *data)
-{
-	data->perso.speed = 0.066;
-	data->perso.rot = 6. / 180;
 	data->event.forward = 0;
 	data->event.backward = 0;
 	data->event.left = 0;
@@ -160,6 +50,13 @@ void	ft_init_player(t_data *data)
 	data->event.hit[0] = 0;
 	data->event.hit[1] = 0;
 	data->event.hit[2] = 0;
+}
+
+void	ft_init_player(t_data *data)
+{
+	ft_init_events(data);
+	data->perso.speed = 0.066;
+	data->perso.rot = 6. / 180;
 	data->mod.light = 5.;
 	data->mod.i = 0;
 	data->mod.nbr[NORMAL] = TRUE;
@@ -184,6 +81,35 @@ void	ft_init_player(t_data *data)
 	data->time.tv_sec = 0;
 }
 
+void	ft_init2(t_data *data)
+{
+	data->door = NULL;
+	data->obj = NULL;
+	data->player = NULL;
+	data->monster_lst = NULL;
+	data->portal_lst = NULL;
+	data->tp_lst = NULL;
+	data->option.status = 0;
+	data->parse.nb_line = 0;
+	data->parse.sizeline = 0;
+	data->parse.pos.x = 0;
+	data->parse.pos.y = 0;
+	data->option.status = 0;
+	data->w = 0;
+	data->h = 0;
+	data->screen = 0;
+	data->parse.check_map = FALSE;
+	data->parse.check_c = FALSE;
+	data->parse.check_f = FALSE;
+	data->parse.check_r = FALSE;
+	data->parse.check_s = FALSE;
+	data->download_percent = 0;
+	data->menu.i = 0;
+	data->menu.button[0] = 1;
+	data->menu.button[1] = 0;
+	data->menu.button[2] = 0;
+}
+
 void	ft_init(t_data *data)
 {
 	int		i;
@@ -199,35 +125,9 @@ void	ft_init(t_data *data)
 	data->map_mid.x = 0;
 	data->map_mid.y = 0;
 	ft_init_map(data);
-	data->door = NULL;
-	data->obj = NULL;
-	data->player = NULL;
-	data->monster_lst = NULL;
-	data->portal_lst = NULL;
-	data->tp_lst = NULL;
-	data->option.status = 0;
-	data->w = 0;
-	data->h = 0;
-	data->parse.nb_line = 0;
-	data->parse.sizeline = 0;
-	data->parse.pos.x = 0;
-	data->parse.pos.y = 0;
-	data->option.status = 0;
-	data->w = 0;
-	data->h = 0;
-	data->screen = 0;
-	data->parse.nb_line = 0;
-	data->parse.sizeline = 0;
-	data->parse.check_map = FALSE;
-	data->parse.check_c = FALSE;
-	data->parse.check_f = FALSE;
-	data->parse.check_r = FALSE;
-	data->parse.check_s = FALSE;
-	data->download_percent = 0;
-	data->menu.i = 0;
-	data->menu.button[0] = 1;
-	data->menu.button[1] = 0;
-	data->menu.button[2] = 0;
+	ft_init2(data);
+	init_gif_ptr(data, -1);
+	init_gif_filename(data, -1);
 	i = -1;
 	while (++i < HEIGHT / 2)
 		data->ray.cur_dist[i] = HEIGHT / (HEIGHT - 2.0 * i);
@@ -348,7 +248,7 @@ char	*g_player2[NB_PLAYER2_IMG] =
 	"./textures/player2.xpm/4533f2ff63b148a385f983582df1c743-3.xpm"
 };
 
-char	*g_you_died[NB_YOU_DIED_IMG] = 
+char	*g_you_died[NB_YOU_DIED_IMG] =
 {
 	"./textures/you_died/8a64bacaa3d84e1cfde973528ca6f778-0.xpm",
 	"./textures/you_died/8a64bacaa3d84e1cfde973528ca6f778-1.xpm",
@@ -468,7 +368,7 @@ char	*g_sword[NB_SWORD_IMG] =
 	"./textures/sword/dba576cebbcd4badbff52554a162572a-0.xpm"
 };
 
-char    *g_portal[NB_PORTAL_IMG] =
+char	*g_portal[NB_PORTAL_IMG] =
 {
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-0.xpm",
 	"./textures/portal.xpm/3be0da9b37e249c8bcf4fc4f6edc0979-1.xpm",

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/02/24 04:45:48 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 06:46:42 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,42 @@ typedef struct	s_sac
 	int			id;
 }				t_sac;
 
+typedef struct	s_norme_door
+{
+	int			i;
+	int			j;
+	int			true_start;
+	int			t_e;
+	int			color;
+	double		calc1;
+	double		calc2;
+	double		ratio;
+	double		luminosity;	
+}				t_norme_door;
+
+typedef struct	s_norme_obj
+{
+	int			stripe;
+	int			y;
+	double		spritex;
+	double		spritey;
+	double		invdet;
+	double		transformx;
+	double		transformy;
+	int			spritescreenx;
+	int			spriteheight;
+	int			drawstarty;
+	int			drawendy;
+	int			spritewidth;
+	int			drawstartx;
+	int			drawendx;
+	double		luminosity;
+	int			texx;
+	int			d;
+	int			texy;
+	int			color;
+}				t_norme_obj;
+
 typedef	struct	s_sprite
 {
 	t_sac		sac;
@@ -245,7 +281,7 @@ typedef struct	s_bonus
 typedef struct  s_portal
 {
 	t_ray			ray;
-    struct s_portal *next;
+	struct s_portal *next;
 }               t_portal;
 
 typedef struct	s_life
@@ -316,18 +352,18 @@ typedef	struct	s_data
 	t_sprite		*monster_lst;
 	t_sprite		*tp_lst;
 	int				numSprites;
-	double			ZBuffer[WIDTH];
+	double			zbuffer[WIDTH];
 	t_bonus			bonus;
 	int				w;
 	int				h;
-    double			portal_index;
-    double			sword_index;
-    double			you_died_index;
-    double			player2_index;
-    double			door_index;
-    double			screamer_index;
-    double			monster_index;
-    double			tp_index;
+	double			portal_index;
+	double			sword_index;
+	double			you_died_index;
+	double			player2_index;
+	double			door_index;
+	double			screamer_index;
+	double			monster_index;
+	double			tp_index;
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
@@ -387,5 +423,40 @@ void			ft_init_player(t_data *data);
 void			floorcasting(t_data *data, int y);
 void			draw_ground(t_data *data, int y, int x, double ratio);
 void			draw_sky(t_data *data, int y, int x, double ratio);
-
+void			init_bonus(t_data *data);
+void			init_normale(t_data *data);
+int				ft_strlen(char *str);
+void			load_menu(t_data *data);
+void			put_img_to_win_coord(t_data *data, void *ptr, int x, int y);
+char			**ft_tabdup(char **str);
+void			init_calc(t_data *data, t_img texture);
+long			ground_dark(long color, double dist);
+t_img			get_texture(t_data *data);
+void			init_gif_ptr(t_data *data, int i);
+void			init_gif_filename(t_data *data, int i);
+void			init_filenames(t_data *data);
+void			init_img(t_data *data);
+int				ft_atoi_parse(char *str, int *res, t_data *data);
+void			check_pixel(t_data *data, int r, int g, int b);
+t_img			*get_img(char *line, t_data *data);
+void			check_sky(char *line, t_data *data);
+void			check_floor(char *line, t_data *data);
+void			check_file_extension(t_data *data, char *path);
+void			init_parse_map(t_data *data, char *path);
+void			check_all_cases(char *line, t_data *data);
+void			malloc_map(t_data *data);
+void			check_res(char *line, t_data *data);
+void			set_parse_dir(t_data *data, char c);
+int				ft_strlen_map(t_data *data, char *str, int token);
+void			check_parse_map(t_data *data);
+void			check_tex(char *line, t_data *data);
+void			fill_parse_map(char *line, t_data *data);
+int				in_parse_map(char *line, t_data *data, int i, int j);
+void			parsing(char *path, t_data *data);
+double			my_abs(double value);
+t_norme_door	set_door_vars(t_data *data, t_sprite *obj, t_img rend);
+void			print_door(t_data *data, t_sprite *obj, t_img rend);
+void			*create_door(t_data *data, t_sprite **obj, int column);
+void			sort_list(t_sprite **obj);
+void			free_portal(t_portal *obj);
 #endif

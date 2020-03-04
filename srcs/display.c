@@ -6,7 +6,7 @@
 /*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/02/24 02:03:17 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 00:12:22 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,48 +25,15 @@ void	*crt_img(t_data *data)
 	return (data->img.buffer);
 }
 
-t_img	get_texture(t_data *data)
-{
-	if (data->ray.side == 1)
-	{
-		if (data->ray.stepy == -1)
-			return (data->option.status == 1 ?
-				data->ntext : data->parse.ntext);
-		if (data->ray.stepy == 1)
-			return (data->option.status == 1 ?
-				data->stext : data->parse.stext);
-	}
-	if (data->ray.stepx == -1)
-		return (data->option.status == 1 ? data->etext : data->parse.etext);
-	return (data->option.status == 1 ? data->wtext : data->parse.wtext);
-}
-
-long	ground_dark(long color, double dist)
-{
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-
-	dist = (7. / 100.) * dist > 0.9 ? 0.9 : (7. / 100.) * dist;
-	if ((r = color) > 0)
-		r = r - r * dist;
-	if ((g = (color >> 8)) > 0)
-		g = g - g * dist;
-	if ((b = (color >> 16)) > 0)
-		b = b - b * dist;
-	return(r + (g << 8) + (b << 16));	
-}
-
 void	crt_sky(t_data *data, int column)
 {
 	int		i;
 	double	ratio;
 
 	ratio = (data->mod.nbr[DARK] == 1 ? 0.5 : 1) * data->calc.lum;
-	i = -1;
 	data->calc.offset = (atan2(data->ray.dirx, data->ray.diry) + M_PI) *
 		M_1_PI * .5;
-	if (data->option.status == 1)
+	if ((i = -1) && data->option.status == 1)
 	{
 		if (data->perso.pos.x < 16)
 			while (++i < data->ray.start)
@@ -105,7 +72,7 @@ ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
 			while (++i < HEIGHT)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + (data->ray.end - (i - data->ray.end) -
-data->ray.heightline) *	data->img.width], (HEIGHT - i) * data->calc.lum);
+data->ray.heightline) * data->img.width], (HEIGHT - i) * data->calc.lum);
 		}
 		else
 			while (++i < HEIGHT)
@@ -116,23 +83,10 @@ data->ray.heightline) *	data->img.width], (HEIGHT - i) * data->calc.lum);
 						data->parse.f_color;
 }
 
-void	init_calc(t_data *data, t_img texture)
-{
-	data->calc.calcx = ((data->ray.walldist * data->ray.dirx + data->perso.pos.x
-			- (int)(data->ray.walldist * data->ray.dirx + data->perso.pos.x)) *
-															texture.height);
-	data->calc.calcy = ((data->ray.walldist * data->ray.diry + data->perso.pos.y
-			- (int)(data->ray.walldist * data->ray.diry + data->perso.pos.y)) *
-															texture.height);
-	data->calc.ratio = (texture.height / (double)data->ray.heightline);
-	data->img.width = data->img.size / 4;
-	data->calc.lum = (24. / HEIGHT * (data->mod.nbr[DARK] == 1 ? 3.8 : 1));
-}
-
 void	crt_column(t_data *data, int column)
 {
 	int		i;
-	t_img 	rend;
+	t_img	rend;
 
 	rend = get_texture(data);
 	init_calc(data, rend);
@@ -153,11 +107,11 @@ data->ray.truestart) * data->calc.ratio) * rend.width))], data->ray.walldist *
 	crt_ground(data, column);
 }
 
-t_img	resize_image(t_data *data, t_img *src, int width, int height) 
+t_img	resize_image(t_data *data, t_img *src, int width, int height)
 {
 	t_img	dst;
-	double	size_x; 
-	double	size_y; 
+	double	size_x;
+	double	size_y;
 	int		x;
 	int		y;
 
@@ -169,16 +123,11 @@ t_img	resize_image(t_data *data, t_img *src, int width, int height)
 	dst.buffer = (int*)mlx_get_data_addr(dst.ptr, &(dst.bpp), &(dst.size),
 			&(dst.endian));
 	y = -1;
-	while (++y < height)
-	{
-		x = -1;
+	while (++y < height && (x = -1))
 		while (++x < width)
-		{
 			dst.buffer[x + (y * dst.size / 4)] =
 				src->buffer[(int)(((int)(x * size_x) + ((int)(y * size_y) *
 								(src->size / 4))))];
-		}
-	}
 	dst.height = height;
 	dst.width = width;
 	dst.filename = src->filename;

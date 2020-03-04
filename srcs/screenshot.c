@@ -6,11 +6,20 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 05:34:57 by glaurent          #+#    #+#             */
-/*   Updated: 2020/01/30 04:14:49 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/04 03:46:05 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+double		my_abs(double value)
+{
+	if (value == 0)
+		value = 0.1;
+	else if (value < 0)
+		value = -value;
+	return (value);
+}
 
 static void	int_in_char(unsigned char *str, int value)
 {
@@ -71,7 +80,7 @@ void		screenshot(t_data *data)
 	pad_byte_row = (4 - (pxl_byte_row % 4)) % 4;
 	fd_size = 54 + (pxl_byte_row + pad_byte_row) * HEIGHT;
 	if ((fd = open("./screenshot/screenshot.bmp", O_WRONLY | O_CREAT |
-O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) < 0)
+	O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) < 0)
 		write(2, "error\n", 6);
 	if (write_header(fd, fd_size) < 0)
 		write(2, "error\n", 6);
