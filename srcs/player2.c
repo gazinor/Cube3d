@@ -6,53 +6,60 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 01:29:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 03:44:11 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 04:27:24 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	ft_player2(t_data *data, char buf[4097])
+int		get_digits(t_pos *nb, t_pos *floats, char buf[4097])
 {
-	static int	x = 0;
-	static int	x_ = 0;
-	static int	y = 0;
-	static int	y_ = 0;
 	int			i;
 
 	i = 0;
 	while (!ft_isdigit(buf[i]))
 		++i;
-	x = atoi(buf + i);
+	nb->x = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
-	x_ = atoi(buf + i);
+	floats->x = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
-	y = atoi(buf + i);
+	nb->y = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
-	y_ = atoi(buf + i);
+	floats->y = atoi(buf + i);
 	while (ft_isdigit(buf[i]))
 		++i;
 	++i;
+	return (i);
+}
+
+void	ft_player2(t_data *data, char buf[4097])
+{
+	static t_pos	nb;
+	static t_pos	floats;
+	int				i;
+
+	i = get_digits(&nb, &floats, buf);
 	i = atoi(buf + i);
 	if (i > 0)
 	{
 		data->life.hurt += i;
-		data->life.blood = 5;
+		data->life.blood = 3;
 	}
 	pthread_mutex_lock(&data->mutex_player);
 	create_obj(data, &data->player, data->player2[(int)data->player2_index], 0);
 	data->player2_index = (int)(data->player2_index + 1) % NB_PLAYER2_IMG;
-	data->player->sac.ray.mapx = x + x_ / 100. - 0.5;
-	data->player->sac.ray.mapy = y + y_ / 100. - 0.5;
-	data->player->sac.ray.walldist = sqrt((data->perso.pos.x - (x + x_ / 100.))
-	* (data->perso.pos.x - (x + x_ / 100.)) + (data->perso.pos.y -
-	(y + y_ / 100.)) * (data->perso.pos.y - (y + y_ / 100.)));
+	data->player->sac.ray.mapx = nb.x + floats.x / 100. - 0.5;
+	data->player->sac.ray.mapy = nb.y + floats.y / 100. - 0.5;
+	data->player->sac.ray.walldist = sqrt((data->perso.pos.x -
+				(nb.x + floats.x / 100.))
+	* (data->perso.pos.x - (nb.x + floats.x / 100.)) + (data->perso.pos.y -
+	(nb.y + floats.y / 100.)) * (data->perso.pos.y - (nb.y + floats.y / 100.)));
 	pthread_mutex_unlock(&data->mutex_player);
 }
 

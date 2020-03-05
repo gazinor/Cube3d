@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 03:27:51 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 03:33:26 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 05:07:16 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*draw_downloading(void *arg)
 	data = (t_data *)arg;
 	write(1, "\n\n\n\n", 4);
 	i = 0;
-	while(i < 81)
+	while (i < 81)
 	{
 		j = -1;
 		write(1, "\e[1;4;38;5;123m", 15);
@@ -41,6 +41,25 @@ void	*draw_downloading(void *arg)
 	return (NULL);
 }
 
+void	launch_tp(t_data *data, double *x, double *y)
+{
+	if (data->launch == TRUE)
+	{
+		pthread_mutex_lock(&data->mutex_player);
+		if (!data->tp_lst)
+			create_obj(data, &data->tp_lst, data->tp[
+					(int)data->tp_index % NB_TP], 0);
+		data->tp_index += 0.0000004;
+		data->tp_lst->sac.img = data->tp[(int)data->tp_index % NB_TP];
+		data->tp_lst->sac.ray.mapx = *x;
+		data->tp_lst->sac.ray.mapy = *y;
+		data->tp_lst->sac.ray.walldist = sqrt((data->perso.pos.x - 0.5 - *x)
+			* (data->perso.pos.x - 0.5 - *x) + (data->perso.pos.y - 0.5 - *y)
+			* (data->perso.pos.y - 0.5 - *y));
+		pthread_mutex_unlock(&data->mutex_player);
+	}
+}
+
 void	*do_tp(void *arg)
 {
 	t_data	*data;
@@ -54,93 +73,16 @@ void	*do_tp(void *arg)
 	life = 3;
 	while (1)
 	{
-		if (data->launch == TRUE)
-		{
-			pthread_mutex_lock(&data->mutex_player);
-			if (!data->tp_lst)
-				create_obj(data, &data->tp_lst, data->tp[(int)data->tp_index % NB_TP], 0);
-			data->tp_index += 0.0000004;
-			data->tp_lst->sac.img = data->tp[(int)data->tp_index % NB_TP];
-			data->tp_lst->sac.ray.mapx = x;
-			data->tp_lst->sac.ray.mapy = y;
-			data->tp_lst->sac.ray.walldist = sqrt((data->perso.pos.x - 0.5 - x)
-				* (data->perso.pos.x - 0.5 - x) + (data->perso.pos.y - 0.5 - y)
-				* (data->perso.pos.y - 0.5 - y));
-			pthread_mutex_unlock(&data->mutex_player);
-		}
-		if (data->event.hit[2] == TRUE)
-		{
-			--life;
+		launch_tp(data, &x, &y);
+		if (data->event.hit[2] == TRUE && --life != -1)
 			data->event.hit[2] = FALSE;
-		}
 		if (life <= 0)
 		{
 			free(data->tp_lst);
 			data->tp_lst = NULL;
 			data->tp_index = -1;
-			break;
-		}
-	}
-	return (NULL);
-}
-
-void	*use_monsters(void *arg)
-{
-	t_data		*data;
-	double		x;
-	double		y;
-	int			life;
-
-	data = (t_data *)arg;
-	while (1)
-	{
-		x = 2.;
-		y = 2.;
-		life = 3;
-		while (1)
-		{
-			if (data->launch == FALSE)
-			{
-				free_obj(data->monster_lst);
-				data->monster_lst = NULL;
-				break ;
-			}
-			pthread_mutex_lock(&data->mutex_player);
-			if (!data->monster_lst)
-				create_obj(data, &data->monster_lst, data->monster[(int)data->monster_index % NB_MONSTER_IMG], 0);
-			data->monster_index += 1;
-			data->monster_lst->sac.img = data->monster[(int)data->monster_index % NB_MONSTER_IMG];
-			data->monster_lst->sac.ray.mapx = x;
-			data->monster_lst->sac.ray.mapy = y;
-			data->monster_lst->sac.ray.walldist = sqrt((data->perso.pos.x - 0.5 - x)
-				* (data->perso.pos.x - 0.5 - x) + (data->perso.pos.y - 0.5 - y)
-				* (data->perso.pos.y - 0.5 - y));
-			x += (data->perso.pos.x - 0.5 - data->monster_lst->sac.ray.mapx) /
-	data->monster_lst->sac.ray.walldist * 0.105;
-			y += (data->perso.pos.y - 0.5 - data->monster_lst->sac.ray.mapy) /
-	data->monster_lst->sac.ray.walldist * 0.105;
-			pthread_mutex_unlock(&data->mutex_player);
-			if (data->event.hit[1] == TRUE)
-			{
-				--life;
-				data->event.hit[1] = FALSE;
-			}
-			if (life <= 0)
-			{
-				free(data->monster_lst);
-				data->monster_lst = NULL;
-				break ;
-			}
-			if (data->monster_lst->sac.ray.walldist < 0.5)
-			{
-				data->life.hurt += (0.08 * data->life.max_life);
-			data->life.blood += 1;
-			}
-			usleep(100000);
-		}
-		if (data->tp_index == -1)
 			break ;
-		usleep(10000000);
+		}
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaefourn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/04 22:15:49 by gaefourn          #+#    #+#             */
-/*   Updated: 2020/03/05 00:46:53 by glaurent         ###   ########.fr       */
+/*   Created: 2019/12/04 22:15:49 by glaurent          #+#    #+#             */
+/*   Updated: 2020/03/05 06:13:57 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	init_ray(t_data *data, int x)
 	data->ray.hit = 0;
 	data->ray.side = 0;
 	data->ray.walldist = 0;
-	data->numSprites = 0;
 }
 
 void	ft_init_events(t_data *data)

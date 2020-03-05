@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 01:23:50 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 01:26:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 04:21:04 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ void	check_door(t_data *data)
 					data->perso.speed))][(int)(data->perso.pos.y +
 					(data->perso.dir.y * data->perso.speed))] == '3')
 		data->map[(int)(data->perso.pos.x + (data->perso.dir.x *
-					data->perso.speed))][(int)(data->perso.pos.y + 
+					data->perso.speed))][(int)(data->perso.pos.y +
 					(data->perso.dir.y * data->perso.speed))] = '0';
 }
 
 void	check_mod(t_data *data)
-{ 
+{
 	if (data->option.status == 1)
 	{
 		if (data->mod.nbr[NORMAL] == 1 && data->mod.light != 5)

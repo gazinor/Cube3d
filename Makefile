@@ -20,6 +20,8 @@ SRC_NAME =	main.c \
 			display2.c \
 			init.c \
 			init2.c \
+			launch.c \
+			do_in_order.c \
 			map.c \
 			moves1.c \
 			moves2.c \
@@ -44,6 +46,7 @@ SRC_NAME =	main.c \
 			events.c \
 			utils.c \
 			player2.c \
+			monsters.c \
 			load_images.c \
 			load_gifs.c \
 			load_gifs2.c \

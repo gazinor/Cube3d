@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 01:32:09 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 06:12:06 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@
 # include <string.h>
 # include <sys/time.h>
 
-extern char     *g_portal[NB_PORTAL_IMG];
-extern char     *g_sword[NB_SWORD_IMG];
-extern char     *g_you_died[NB_YOU_DIED_IMG];
-extern char     *g_player2[NB_PLAYER2_IMG];
-extern char     *g_door[NB_DOOR_IMG];
-extern char     *g_screamer[NB_SCREAMER_IMG];
-extern char     *g_monster[NB_MONSTER_IMG];
-extern char     *g_tp[NB_TP];
+extern char		*g_portal[NB_PORTAL_IMG];
+extern char		*g_sword[NB_SWORD_IMG];
+extern char		*g_you_died[NB_YOU_DIED_IMG];
+extern char		*g_player2[NB_PLAYER2_IMG];
+extern char		*g_door[NB_DOOR_IMG];
+extern char		*g_screamer[NB_SCREAMER_IMG];
+extern char		*g_monster[NB_MONSTER_IMG];
+extern char		*g_tp[NB_TP];
 
 typedef enum	e_bool
 {
@@ -185,7 +185,7 @@ typedef	struct	s_ray
 
 typedef struct	s_sac
 {
-	t_ray 		ray;
+	t_ray		ray;
 	int			column;
 	t_img		img;
 	int			down;
@@ -204,7 +204,7 @@ typedef struct	s_norme_door
 	double		calc1;
 	double		calc2;
 	double		ratio;
-	double		luminosity;	
+	double		luminosity;
 }				t_norme_door;
 
 typedef struct	s_norme_obj
@@ -232,7 +232,7 @@ typedef struct	s_norme_obj
 
 typedef	struct	s_sprite
 {
-	t_sac		sac;
+	t_sac			sac;
 	struct s_sprite	*next;
 }				t_sprite;
 
@@ -278,11 +278,11 @@ typedef struct	s_bonus
 	double		plany;
 }				t_bonus;
 
-typedef struct  s_portal
+typedef struct	s_portal
 {
 	t_ray			ray;
 	struct s_portal *next;
-}               t_portal;
+}				t_portal;
 
 typedef struct	s_life
 {
@@ -293,7 +293,7 @@ typedef struct	s_life
 	int			hurt;
 	int			life;
 	int			hit;
-	int			blood;
+	double		blood;
 	t_bool		alive;
 }				t_life;
 
@@ -351,7 +351,6 @@ typedef	struct	s_data
 	t_sprite		*player;
 	t_sprite		*monster_lst;
 	t_sprite		*tp_lst;
-	int				numSprites;
 	double			zbuffer[WIDTH];
 	t_bonus			bonus;
 	int				w;
@@ -484,21 +483,27 @@ void			load_image(t_data *data, t_img *img, int width, int height);
 void			load_background(t_data *data);
 void			load_dir_textures(t_data *data);
 void			load_objs(t_data *data);
-void		    load_portal(t_data *data);
-void		    load_sword(t_data *data);
-void		    load_you_died(t_data *data);
-void		    load_player2(t_data *data);
-void		    load_door(t_data *data);
-void		    load_screamer(t_data *data);
-void		    load_monster(t_data *data);
-void		    load_tp(t_data *data);
+void			load_portal(t_data *data);
+void			load_sword(t_data *data);
+void			load_you_died(t_data *data);
+void			load_player2(t_data *data);
+void			load_door(t_data *data);
+void			load_screamer(t_data *data);
+void			load_monster(t_data *data);
+void			load_tp(t_data *data);
 void			ft_player2(t_data *data, char buf[4097]);
-void		    *t_loop(void *arg);
+void			*t_loop(void *arg);
 void			*draw_downloading(void *arg);
 void			*do_tp(void *arg);
 void			*use_monsters(void *arg);
 int				ft_isdigit(char c);
 char			*join_n_free(char *s1, char *s2);
 char			*serialized(t_data *data);
+void			launch_program(t_data *data, int ac, char **av);
+void			load_all(t_data *data);
+void			do_in_order(t_data *data);
+void			second_order(t_data *data);
+void			third_order(t_data *data, char *ret);
+void			door(t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 06:48:58 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 06:09:43 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void			*create_obj(t_data *data, t_sprite **obj, t_img img, int down)
 	}
 	if (!(*obj = malloc(sizeof(t_sprite))))
 		return (NULL);
-	++data->numSprites;
 	(*obj)->sac.ray = data->ray;
 	(*obj)->sac.img = img;
 	(*obj)->sac.down = down;

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:57:14 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 21:52:32 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 04:20:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,4 @@ t_bool	tolerance(long color, long tolerance)
 	if (t < tolerance && r < tolerance && g < tolerance && b < tolerance)
 		return (TRUE);
 	return (FALSE);
-
 }

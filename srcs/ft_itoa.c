@@ -6,13 +6,13 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 19:14:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 19:24:43 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 04:18:30 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	ft_size(int n)
+static int		ft_size(int n)
 {
 	int		size;
 

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 21:58:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 22:06:40 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 04:19:47 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int		exit_properly(t_data *data, t_bool error, char *error_msg)
 	int	i;
 
 	i = 0;
-//	write(error == TRUE ? 2 : 1, "\n", 1);
 	if (data->event.music == 1)
 		system("killall afplay");
 	if (error == TRUE)
