@@ -52,5 +52,5 @@ void	init_calc(t_data *data, t_img texture)
 			texture.height);
 	data->calc.ratio = (texture.height / (double)data->ray.heightline);
 	data->img.width = data->img.size / 4;
-	data->calc.lum = (24. / HEIGHT * (data->mod.nbr[DARK] == 1 ? 3.8 : 1));
+	data->calc.lum = (24. / data->h * (data->mod.nbr[DARK] == 1 ? 3.8 : 1));
 }

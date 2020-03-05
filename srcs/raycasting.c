@@ -106,13 +106,13 @@ void	wall_dist(t_data *data)
 	else
 		data->ray.walldist = my_abs((data->ray.mapy - data->perso.pos.y + (
 						1 - data->ray.stepy) / 2) / data->ray.diry);
-	data->ray.heightline = HEIGHT / data->ray.walldist;
-	data->ray.start = (int)(-(data->ray.heightline / 2) + HEIGHT / 2);
-	data->ray.end = (int)((data->ray.heightline / 2) + HEIGHT / 2);
-	data->ray.truestart = (int)(-(data->ray.heightline / 2) + HEIGHT / 2);
-	data->ray.trueend = (int)((data->ray.heightline / 2) + HEIGHT / 2);
+	data->ray.heightline = data->h / data->ray.walldist;
+	data->ray.start = (int)(-(data->ray.heightline / 2) + data->h / 2);
+	data->ray.end = (int)((data->ray.heightline / 2) + data->h / 2);
+	data->ray.truestart = (int)(-(data->ray.heightline / 2) + data->h / 2);
+	data->ray.trueend = (int)((data->ray.heightline / 2) + data->h / 2);
 	if (data->ray.start < 0)
 		data->ray.start = 0;
-	if (data->ray.end >= HEIGHT)
-		data->ray.end = HEIGHT - 1;
+	if (data->ray.end >= data->h)
+		data->ray.end = data->h - 1;
 }

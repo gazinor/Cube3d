@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:13:24 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 06:13:37 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 06:51:52 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	*crt_img(t_data *data)
 	int	x;
 
 	x = -1;
-	while (++x < WIDTH)
+	while (++x < data->w)
 	{
 		raycasting(data, x);
 		crt_column(data, x);
@@ -64,21 +64,21 @@ void	crt_ground(t_data *data, int column)
 	if (data->option.status == 1)
 		if (data->mod.nbr[MIRROR] == 1)
 		{
-			while (++i < HEIGHT && i < data->ray.end + data->ray.heightline)
+			while (++i < data->h && i < data->ray.end + data->ray.heightline)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + ((data->ray.end - (i - data->ray.end)) *
-					(data->img.width))], (HEIGHT - i) * data->calc.lum);
+					(data->img.width))], (data->h - i) * data->calc.lum);
 			--i;
-			while (++i < HEIGHT)
+			while (++i < data->h)
 				data->img.buffer[column + (i * (data->img.width))] =
 ground_dark(data->img.buffer[column + (data->ray.end - (i - data->ray.end) -
-data->ray.heightline) * data->img.width], (HEIGHT - i) * data->calc.lum);
+data->ray.heightline) * data->img.width], (data->h - i) * data->calc.lum);
 		}
 		else
-			while (++i < HEIGHT)
-				draw_ground(data, column, i, (HEIGHT - i) * ratio);
+			while (++i < data->h)
+				draw_ground(data, column, i, (data->h - i) * ratio);
 	else
-		while (++i < HEIGHT)
+		while (++i < data->h)
 			data->img.buffer[column + (i * (data->img.width))] =
 						data->parse.f_color;
 }

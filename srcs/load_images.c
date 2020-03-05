@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 01:04:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 05:12:41 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 07:20:13 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	load_image(t_data *data, t_img *img, int width, int height)
 
 void	load_background(t_data *data)
 {
-	load_image(data, &data->ciel, 9 * HEIGHT, HEIGHT / 2);
+	load_image(data, &data->ciel, 9 * data->h, data->h / 2);
 	load_image(data, &data->sol, 1000, 1000);
-	load_image(data, &data->ciel_etoile, 9 * HEIGHT, HEIGHT / 2);
+	load_image(data, &data->ciel_etoile, 9 * data->h, data->h / 2);
 	load_image(data, &data->plafond, 1000, 1000);
 }
 
@@ -47,7 +47,7 @@ void	load_objs(t_data *data)
 {
 	load_image(data, &data->cdoor, 500, 1000);
 	load_image(data, &data->odoor, 500, 1000);
-	load_image(data, &data->remote, WIDTH / 2, HEIGHT / 2);
+	load_image(data, &data->remote, data->w / 2, data->h / 2);
 	load_image(data, &data->sprite, 1000, 1000);
 	load_image(data, &data->spikes, 1000, 1000);
 }

@@ -24,26 +24,26 @@ t_norme_obj		set_obj_values(t_data *data, t_sprite *obj)
 	data->perso.dir.x * f.spritey);
 	f.transformy = f.invdet * (-data->perso.plany * f.spritex +
 			data->perso.planx * f.spritey);
-	f.spritescreenx = (int)(WIDTH / 2 * (1 + f.transformx / f.transformy));
-	f.spriteheight = my_abs((int)(HEIGHT / f.transformy));
-	f.drawstarty = -f.spriteheight / 2 + HEIGHT / 2;
+	f.spritescreenx = (int)(data->w / 2 * (1 + f.transformx / f.transformy));
+	f.spriteheight = my_abs((int)(data->h / f.transformy));
+	f.drawstarty = -f.spriteheight / 2 + data->h / 2;
 	f.drawstarty < 0 ? f.drawstarty = 0 : 0;
-	f.drawendy = f.spriteheight / 2 + HEIGHT / 2;
-	f.drawendy >= HEIGHT ? f.drawendy = HEIGHT - 1 : 0;
-	f.spritewidth = my_abs((int)(HEIGHT / (f.transformy)));
+	f.drawendy = f.spriteheight / 2 + data->h / 2;
+	f.drawendy >= data->h ? f.drawendy = data->h - 1 : 0;
+	f.spritewidth = my_abs((int)(data->h / (f.transformy)));
 	f.drawstartx = -f.spritewidth / 2 + f.spritescreenx;
 	f.drawstartx < 0 ? f.drawstartx = 0 : 0;
 	f.drawendx = f.spritewidth / 2 + f.spritescreenx;
-	f.drawendx >= WIDTH ? f.drawendx = WIDTH - 1 : 0;
+	f.drawendx >= data->w ? f.drawendx = data->w - 1 : 0;
 	f.stripe = f.drawstartx - 1;
 	f.luminosity = (obj->sac.ray.walldist * 600 /
-			HEIGHT * (data->mod.nbr[DARK] == 1 ? 4. : 1));
+			data->h * (data->mod.nbr[DARK] == 1 ? 4. : 1));
 	return (f);
 }
 
 void			intern_obj(t_data *data, t_norme_obj f, t_sprite *obj)
 {
-	f.d = f.y * 256 - HEIGHT * 128 + f.spriteheight * 128;
+	f.d = f.y * 256 - data->h * 128 + f.spriteheight * 128;
 	f.texy = f.d * data->sprite.height / f.spriteheight / 256;
 	if (f.spritewidth * f.texy + f.texx > 0)
 	{
@@ -54,7 +54,7 @@ void			intern_obj(t_data *data, t_norme_obj f, t_sprite *obj)
 			data->img.buffer[f.stripe + ((f.y + obj->sac.down) *
 					(data->img.width))] = f.color;
 			if (data->mod.nbr[MIRROR] == 1 && (f.drawendy - f.y
-						+ f.drawendy) < HEIGHT)
+						+ f.drawendy) < data->h)
 				data->img.buffer[f.stripe + ((f.drawendy - f.y + f.drawendy) *
 						(data->img.width))] = ground_dark(f.color, 5);
 		}
@@ -72,11 +72,11 @@ void			print_obj(t_data *data, t_sprite *obj)
 		{
 			f.texx = (int)(256 * (f.stripe - (-f.spritewidth / 2 +
 			f.spritescreenx)) * data->sprite.width / f.spritewidth) / 256;
-			if (f.transformy > 0 && f.stripe > 0 && f.stripe < WIDTH
+			if (f.transformy > 0 && f.stripe > 0 && f.stripe < data->w
 					&& f.transformy < data->zbuffer[f.stripe])
 			{
 				f.y = f.drawstarty - 1;
-				while (++f.y + obj->sac.down < HEIGHT && f.y < f.drawendy)
+				while (++f.y + obj->sac.down < data->h && f.y < f.drawendy)
 					intern_obj(data, f, obj);
 			}
 		}

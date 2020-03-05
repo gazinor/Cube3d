@@ -27,7 +27,7 @@ void	load_sword(t_data *data)
 
 	i = -1;
 	while (++i < NB_SWORD_IMG)
-		load_image(data, &data->sword[i], WIDTH / 2, HEIGHT);
+		load_image(data, &data->sword[i], data->w / 2, data->h);
 }
 
 void	load_you_died(t_data *data)
@@ -36,7 +36,7 @@ void	load_you_died(t_data *data)
 
 	i = -1;
 	while (++i < NB_YOU_DIED_IMG)
-		load_image(data, &data->you_died[i], WIDTH, HEIGHT / 2);
+		load_image(data, &data->you_died[i], data->w, data->h / 2);
 }
 
 void	load_player2(t_data *data)

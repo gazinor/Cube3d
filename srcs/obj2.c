@@ -16,12 +16,12 @@ t_norme_door	set_door_vars(t_data *data, t_sprite *obj, t_img rend)
 {
 	t_norme_door	f;
 
-	f.i = (HEIGHT / 2) - ((HEIGHT / obj->sac.ray.walldist) / 2);
+	f.i = (data->h / 2) - ((data->h / obj->sac.ray.walldist) / 2);
 	f.true_start = f.i;
 	f.i = f.i < 0 ? 0 : f.i - 1;
-	f.j = (HEIGHT / 2) + ((HEIGHT / obj->sac.ray.walldist) / 2);
+	f.j = (data->h / 2) + ((data->h / obj->sac.ray.walldist) / 2);
 	f.t_e = f.j;
-	f.j = f.j > HEIGHT ? HEIGHT : f.j;
+	f.j = f.j > data->h ? data->h : f.j;
 	f.calc1 = ((obj->sac.ray.walldist * obj->sac.ray.dirx + data->perso.pos.x
 				- (int)(obj->sac.ray.walldist * obj->sac.ray.dirx +
 					data->perso.pos.x)) * rend.height);
@@ -29,7 +29,7 @@ t_norme_door	set_door_vars(t_data *data, t_sprite *obj, t_img rend)
 				- (int)(obj->sac.ray.walldist * obj->sac.ray.diry +
 					data->perso.pos.y)) * rend.height);
 	f.ratio = (rend.height / (double)(f.t_e - f.true_start));
-	f.luminosity = obj->sac.ray.walldist * 600 / HEIGHT *
+	f.luminosity = obj->sac.ray.walldist * 600 / data->h *
 		(data->mod.nbr[DARK] == 1 ? 4. : 1);
 	return (f);
 }
@@ -50,7 +50,7 @@ void			print_door(t_data *data, t_sprite *obj, t_img rend)
 			{
 				data->img.buffer[obj->sac.column +
 					(f.i * (data->img.width))] = f.color;
-				if (data->mod.nbr[MIRROR] == 1 && (f.j - f.i + f.t_e) < HEIGHT)
+				if (data->mod.nbr[MIRROR] == 1 && (f.j - f.i + f.t_e) < data->h)
 					data->img.buffer[obj->sac.column + ((f.j - f.i + f.t_e) *
 							(data->img.width))] = ground_dark(f.color, 5);
 			}

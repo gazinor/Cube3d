@@ -52,13 +52,13 @@ int		ft_strlen(char *str)
 
 void	load_menu(t_data *data)
 {
-	load_image(data, &data->i_menu, WIDTH, HEIGHT);
-	load_image(data, &data->play_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->option_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->quit_s_contour, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->play_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->option_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->quit_uns_contour, WIDTH / 1.8, HEIGHT / 6.5);
+	load_image(data, &data->i_menu, data->w, data->h);
+	load_image(data, &data->play_s_contour, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->option_s_contour, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->quit_s_contour, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->play_uns_contour, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->option_uns_contour, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->quit_uns_contour, data->w / 1.8, data->h / 6.5);
 }
 
 void	put_img_to_win_coord(t_data *data, void *ptr, int x, int y)

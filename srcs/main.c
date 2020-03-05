@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 06:05:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 06:42:06 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	intern_put_img_to_win(t_data *data, int i)
 		data->screamer_index += 0.6;
 	}
 	else if (data->anim < 1500000.0)
-		while (++i < HEIGHT * WIDTH)
+		while (++i < data->h * data->w)
 			data->img.buffer[i] = dark(data->img.buffer[i],
 					data->anim / 1500000.0);
 }
@@ -136,7 +136,7 @@ int		main(int ac, char **av)
 		exit_properly(&data, 1, "Unknown argument.\n");
 	}
 	if (data.screen == 0)
-		data.mlx.win = mlx_new_window(data.mlx.ptr, WIDTH, HEIGHT, "Cub3d");
+		data.mlx.win = mlx_new_window(data.mlx.ptr, data.w, data.h, "Cub3d");
 	system("afplay sounds/bgm.mp3 &");
 	data.event.music = 1;
 	menu(&data);

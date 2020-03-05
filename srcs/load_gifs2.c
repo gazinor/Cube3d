@@ -18,7 +18,7 @@ void	load_screamer(t_data *data)
 
 	i = -1;
 	while (++i < NB_SCREAMER_IMG)
-		load_image(data, &data->screamer[i], WIDTH, HEIGHT);
+		load_image(data, &data->screamer[i], data->w, data->h);
 }
 
 void	load_monster(t_data *data)

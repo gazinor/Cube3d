@@ -6,14 +6,12 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 06:12:06 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 07:22:12 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# define WIDTH 1200
-# define HEIGHT 1000
 # define KEYUP 3
 # define KEYDOWN 2
 # define ESC 53
@@ -175,7 +173,7 @@ typedef	struct	s_ray
 	double		wallx;
 	double		f_xwall;
 	double		f_ywall;
-	double		cur_dist[HEIGHT];
+	double		cur_dist[1440];
 	double		weight;
 	double		cur_floorx;
 	double		cur_floory;
@@ -351,7 +349,7 @@ typedef	struct	s_data
 	t_sprite		*player;
 	t_sprite		*monster_lst;
 	t_sprite		*tp_lst;
-	double			zbuffer[WIDTH];
+	double			zbuffer[2560];
 	t_bonus			bonus;
 	int				w;
 	int				h;
@@ -380,6 +378,7 @@ void			raycast_value(t_data *data, int x);
 void			wall_dist(t_data *data);
 void			init_ray(t_data *data, int x);
 void			ft_init(t_data *data);
+void			ft_init2(t_data *data);
 void			*ft_init_map(t_data *data);
 void			ft_fill_map(t_data *data);
 void			move_forward(t_data *data);

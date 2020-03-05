@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 06:13:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 07:21:39 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_ray(t_data *data, int x)
 {
-	data->ray.camera = (2 * x / (double)WIDTH) - 1;
+	data->ray.camera = (2 * x / (double)data->w) - 1;
 	data->ray.dirx = data->perso.dir.x + data->perso.planx * data->ray.camera;
 	data->ray.diry = data->perso.dir.y + data->perso.plany * data->ray.camera;
 	data->ray.mapx = (int)data->perso.pos.x;
@@ -61,10 +61,10 @@ void	ft_init_player(t_data *data)
 	data->mod.nbr[NORMAL] = TRUE;
 	data->mod.nbr[DARK] = FALSE;
 	data->mod.nbr[MIRROR] = FALSE;
-	data->life.debut_x = WIDTH * 5 / 8;
-	data->life.debut_y = HEIGHT / 16;
-	data->life.fin_y = HEIGHT / 32;
-	data->life.max_life = WIDTH / 4;
+	data->life.debut_x = data->w * 5 / 8;
+	data->life.debut_y = data->h / 16;
+	data->life.fin_y = data->h / 32;
+	data->life.max_life = data->w / 4;
 	data->life.hurt = 0;
 	data->life.hit = 10 * data->life.max_life / 100.;
 	data->life.blood = 0;
@@ -124,17 +124,16 @@ void	ft_init(t_data *data)
 	data->map_mid.x = 0;
 	data->map_mid.y = 0;
 	ft_init_map(data);
-	ft_init2(data);
 	init_gif_ptr(data, -1);
 	init_gif_filename(data, -1);
-	i = -1;
-	while (++i < HEIGHT / 2)
-		data->ray.cur_dist[i] = HEIGHT / (HEIGHT - 2.0 * i);
-	--i;
-	while (++i < HEIGHT)
-		data->ray.cur_dist[i] = HEIGHT / (2.0 * i - HEIGHT);
 	init_filenames(data);
 	init_img(data);
+	i = -1;
+	while (++i < data->h / 2)
+		data->ray.cur_dist[i] = data->h / (data->h - 2.0 * i);
+	--i;
+	while (++i < data->h)
+		data->ray.cur_dist[i] = data->h / (2.0 * i - data->h);
 }
 
 char	*g_tp[NB_TP] =

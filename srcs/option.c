@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 08:26:00 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 01:52:14 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 07:25:41 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	load_option(t_data *data)
 {
-	load_image(data, &data->on_button, WIDTH / 5, HEIGHT / 12);
-	load_image(data, &data->off_button, WIDTH / 5, HEIGHT / 12);
-	load_image(data, &data->retour_s, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->retour_uns, WIDTH / 1.8, HEIGHT / 6.5);
-	load_image(data, &data->mode_bonus, WIDTH / 3., HEIGHT / 8);
+	load_image(data, &data->on_button, data->w / 5, data->h / 12);
+	load_image(data, &data->off_button, data->w / 5, data->h / 12);
+	load_image(data, &data->retour_s, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->retour_uns, data->w / 1.8, data->h / 6.5);
+	load_image(data, &data->mode_bonus, data->w / 3., data->h / 8);
 }
 
 int		option_key(t_data *data)
@@ -26,19 +26,19 @@ int		option_key(t_data *data)
 	mlx_put_image_to_window(data->mlx.ptr, data->mlx.win,
 		data->i_menu.ptr, 0, 0);
 	put_img_to_win_coord(data, data->mode_bonus.ptr,
-	WIDTH / 5, 6 * HEIGHT / 12 - (HEIGHT / 12.) - (data->on_button.height / 4));
+data->w / 5, 6 * data->h / 12 - (data->h / 12.) - (data->on_button.height / 4));
 	if (data->option.status == 1)
 		put_img_to_win_coord(data, data->on_button.ptr,
-	WIDTH / 2 + (WIDTH / 7), 6 * HEIGHT / 12 - (HEIGHT / 12.));
+	data->w / 2 + (data->w / 7), 6 * data->h / 12 - (data->h / 12.));
 	else
 		put_img_to_win_coord(data, data->off_button.ptr,
-	WIDTH / 2 + (WIDTH / 7), 6 * HEIGHT / 12 - (HEIGHT / 12.));
+	data->w / 2 + (data->w / 7), 6 * data->h / 12 - (data->h / 12.));
 	if (data->option.button[1] == 1)
 		put_img_to_win_coord(data, data->retour_s.ptr,
-	WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 5.);
+	data->w / 2 - (data->w / 3.6), data->h / 2 + data->h / 5.);
 	else
 		put_img_to_win_coord(data, data->retour_uns.ptr,
-	WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 5.);
+	data->w / 2 - (data->w / 3.6), data->h / 2 + data->h / 5.);
 	return (0);
 }
 

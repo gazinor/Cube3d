@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 02:42:55 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 02:53:52 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 06:31:55 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,13 @@ void	check_res(char *line, t_data *data)
 		data->parse.check_r = TRUE;
 		ft_atoi_parse(line + (ft_atoi_parse(line + 1, &data->w,
 		data)) + 1, &data->h, data);
-		if (data->w > 2560 || data->h > 1440 || data->w < 0 || data->h < 0)
+		if (data->w < 0 || data->h < 0)
 			exit_properly(data, 1,
 			"Resolutions sup. a la taille de l'ecran (0-2560 / 0-1440)\n");
+		if (data->w > 2560)
+			data->w = 2560;
+		if (data->h > 1440)
+			data->h = 1440;
 	}
 }
 

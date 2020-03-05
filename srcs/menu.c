@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 21:08:23 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/03 23:42:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 07:25:29 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ int		menu_key(t_data *data)
 			data->i_menu.ptr, 0, 0);
 	if (data->menu.button[0] == 1)
 		put_img_to_win_coord(data, data->play_s_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 12.));
+			data->w / 2 - (data->w / 3.6), 5 * data->h / 12 - (data->h / 12.));
 	else
 		put_img_to_win_coord(data, data->play_uns_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), 5 * HEIGHT / 12 - (HEIGHT / 12.));
+			data->w / 2 - (data->w / 3.6), 5 * data->h / 12 - (data->h / 12.));
 	if (data->menu.button[1] == 1)
 		put_img_to_win_coord(data, data->option_s_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 18.);
+			data->w / 2 - (data->w / 3.6), data->h / 2 + data->h / 18.);
 	else
 		put_img_to_win_coord(data, data->option_uns_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), HEIGHT / 2 + HEIGHT / 18.);
+			data->w / 2 - (data->w / 3.6), data->h / 2 + data->h / 18.);
 	if (data->menu.button[2] == 1)
 		put_img_to_win_coord(data, data->quit_s_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + HEIGHT / 18.);
+	data->w / 2 - (data->w / 3.6), data->h - (data->h / 3.5) + data->h / 18.);
 	else
 		put_img_to_win_coord(data, data->quit_uns_contour.ptr,
-			WIDTH / 2 - (WIDTH / 3.6), HEIGHT - (HEIGHT / 3.5) + HEIGHT / 18.);
+	data->w / 2 - (data->w / 3.6), data->h - (data->h / 3.5) + data->h / 18.);
 	return (0);
 }
 
