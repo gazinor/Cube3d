@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 06:46:42 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 01:32:09 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,4 +459,46 @@ void			print_door(t_data *data, t_sprite *obj, t_img rend);
 void			*create_door(t_data *data, t_sprite **obj, int column);
 void			sort_list(t_sprite **obj);
 void			free_portal(t_portal *obj);
+char			*ft_itoa(int n);
+void			color_screen(t_data *data, long color);
+void			you_died(t_data *data);
+void			print_life(t_data *data);
+void			print_sword(t_data *data, int index);
+void			print_screamer(t_data *data, int index);
+long			dark(long color, double alpha);
+t_bool			tolerance(long color, long tolerance);
+void			free_img(t_data *data, void *ptr);
+void			clean_images(t_data *data);
+int				exit_properly(t_data *data, t_bool error, char *error_msg);
+int				key_on(int key, t_data *data);
+int				key_off(int key, t_data *data);
+int				ft_move2(t_data *data);
+int				ft_move(t_data *data);
+void			intern_key(int key, t_data *data);
+void			put_image_to_window(t_data *data);
+void			check_door(t_data *data);
+void			check_mod(t_data *data);
+void			do_in_order(t_data *data);
+void			crt_window(t_data *data);
+void			load_image(t_data *data, t_img *img, int width, int height);
+void			load_background(t_data *data);
+void			load_dir_textures(t_data *data);
+void			load_objs(t_data *data);
+void		    load_portal(t_data *data);
+void		    load_sword(t_data *data);
+void		    load_you_died(t_data *data);
+void		    load_player2(t_data *data);
+void		    load_door(t_data *data);
+void		    load_screamer(t_data *data);
+void		    load_monster(t_data *data);
+void		    load_tp(t_data *data);
+void			ft_player2(t_data *data, char buf[4097]);
+void		    *t_loop(void *arg);
+void			*draw_downloading(void *arg);
+void			*do_tp(void *arg);
+void			*use_monsters(void *arg);
+int				ft_isdigit(char c);
+char			*join_n_free(char *s1, char *s2);
+char			*serialized(t_data *data);
+
 #endif

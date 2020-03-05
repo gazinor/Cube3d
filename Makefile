@@ -15,6 +15,7 @@ HEADER   =	$(addprefix $(HEADER_P)/,$(HEADER_N))
 #	Sources   #
 SRC_PATH =	./srcs
 SRC_NAME =	main.c \
+			threads.c \
 			display.c \
 			display2.c \
 			init.c \
@@ -34,10 +35,19 @@ SRC_NAME =	main.c \
 			parse2.c \
 			parse3.c \
 			parse4.c \
+			ft_itoa.c \
+			color_screen.c \
 			get_next_line.c \
 			get_next_line_utils.c \
 			transparence.c \
-			floorcasting.c
+			floorcasting.c \
+			events.c \
+			utils.c \
+			player2.c \
+			load_images.c \
+			load_gifs.c \
+			load_gifs2.c \
+			exit.c
 
 SRC      =	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
