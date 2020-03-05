@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/03 23:40:20 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/03 23:48:42 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 11:23:35 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 void	init_bonus(t_data *data)
 {
+	int		i;
+
+	i = -1;
 	if (data->map)
+	{
+		while (data->map[++i])
+			free(data->map[i]);
 		free(data->map);
+	}
 	data->map = ft_tabdup(data->bonus.map);
 	data->perso.pos.x = data->bonus.pos.x;
 	data->perso.pos.y = data->bonus.pos.y;
@@ -27,8 +34,15 @@ void	init_bonus(t_data *data)
 
 void	init_normale(t_data *data)
 {
+	int		i;
+
+	i = -1;
 	if (data->map)
+	{
+		while (data->map[++i])
+			free(data->map[i]);
 		free(data->map);
+	}
 	data->map = ft_tabdup(data->parse.map);
 	data->perso.pos.x = data->parse.pos.x;
 	data->perso.pos.y = data->parse.pos.y;

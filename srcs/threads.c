@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 03:27:51 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 05:07:16 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/05 10:24:46 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	*draw_downloading(void *arg)
 {
 	int		i;
 	int		j;
+	char	*str;
 	t_data	*data;
 
 	data = (t_data *)arg;
@@ -25,7 +26,7 @@ void	*draw_downloading(void *arg)
 	{
 		j = -1;
 		write(1, "\e[1;4;38;5;123m", 15);
-		write(1, ft_itoa(i * 1.25), 1 + ((i * 1.25 < 100) ? 1 : 2));
+		write(1, (str = ft_itoa(i * 1.25)), 1 + ((i * 1.25 < 100) ? 1 : 2));
 		write(1, "%\e[0m \e[48;5;52m", 16);
 		while (++j < i)
 			write(1, "\e[0;107m ", 10);
@@ -37,6 +38,7 @@ void	*draw_downloading(void *arg)
 		usleep(30000);
 		write(1, "\r", 1);
 		i = (int)data->download_percent;
+		free(str);
 	}
 	return (NULL);
 }
