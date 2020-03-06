@@ -6,12 +6,17 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 05:15:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 07:22:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/06 05:54:07 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
+/*
+void	init_a_litle(t_data *data)
+{
+	
+}
+*/
 void	launch_program(t_data *data, int ac, char **av)
 {
 	pthread_t	thread;
@@ -27,6 +32,7 @@ void	launch_program(t_data *data, int ac, char **av)
 	}
 	data->mlx.ptr = mlx_init();
 	ft_init2(data);
+//	init_a_litle(data);
 	parsing(av[1], data);
 	ft_init(data);
 	data->launch = FALSE;

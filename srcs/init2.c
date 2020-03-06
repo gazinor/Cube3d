@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 00:27:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 01:26:44 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/06 08:56:35 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,4 +120,5 @@ void	init_img(t_data *data)
 	data->retour_s.ptr = NULL;
 	data->retour_uns.ptr = NULL;
 	data->sprite.ptr = NULL;
+	data->spikes.ptr = NULL;
 }
