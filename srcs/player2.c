@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 01:29:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 04:27:24 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 00:37:13 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,25 @@ int		get_digits(t_pos *nb, t_pos *floats, char buf[4097])
 	int			i;
 
 	i = 0;
-	while (!ft_isdigit(buf[i]))
+	printf("buffer : |%s|\n", buf);
+	if (!buf || !*buf)
+		return (-1);
+	while (buf[i] && !ft_isdigit(buf[i]))
 		++i;
 	nb->x = atoi(buf + i);
-	while (ft_isdigit(buf[i]))
+	while (buf[i] && ft_isdigit(buf[i]))
 		++i;
 	++i;
 	floats->x = atoi(buf + i);
-	while (ft_isdigit(buf[i]))
+	while (buf[i] && ft_isdigit(buf[i]))
 		++i;
 	++i;
 	nb->y = atoi(buf + i);
-	while (ft_isdigit(buf[i]))
+	while (buf[i] && ft_isdigit(buf[i]))
 		++i;
 	++i;
 	floats->y = atoi(buf + i);
-	while (ft_isdigit(buf[i]))
+	while (buf[i] && ft_isdigit(buf[i]))
 		++i;
 	++i;
 	return (i);

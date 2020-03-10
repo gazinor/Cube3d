@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 22:15:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 07:21:39 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 03:21:28 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void	ft_init_events(t_data *data)
 	data->event.hit[0] = 0;
 	data->event.hit[1] = 0;
 	data->event.hit[2] = 0;
+	data->perso.pos.x = 0;
+	data->perso.pos.y = 0;
+	data->perso.dir.x = 0;
+	data->perso.dir.y = 0;
 }
 
 void	ft_init_player(t_data *data)
@@ -102,11 +106,11 @@ void	ft_init2(t_data *data)
 	data->parse.check_f = FALSE;
 	data->parse.check_r = FALSE;
 	data->parse.check_s = FALSE;
+	data->parse.ntext.check = FALSE;
+	data->parse.wtext.check = FALSE;
+	data->parse.etext.check = FALSE;
+	data->parse.stext.check = FALSE;
 	data->download_percent = 0;
-	data->menu.i = 0;
-	data->menu.button[0] = 1;
-	data->menu.button[1] = 0;
-	data->menu.button[2] = 0;
 }
 
 void	ft_init(t_data *data)
@@ -114,15 +118,16 @@ void	ft_init(t_data *data)
 	int		i;
 
 	ft_init_player(data);
-	data->perso.pos.x = 0;
-	data->perso.pos.y = 0;
-	data->perso.dir.x = 0;
-	data->perso.dir.y = 0;
+	data->menu.i = 0;
+	data->menu.button[0] = 1;
+	data->menu.button[1] = 0;
+	data->menu.button[2] = 0;
 	data->map = NULL;
 	data->perso.planx = 0;
 	data->perso.plany = 0;
 	data->map_mid.x = 0;
 	data->map_mid.y = 0;
+	data->signal = 1;
 	ft_init_map(data);
 	init_gif_ptr(data, -1);
 	init_gif_filename(data, -1);

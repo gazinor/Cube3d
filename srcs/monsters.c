@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 05:00:52 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 05:03:57 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/09 23:26:53 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	*use_monsters(void *arg)
 	int			life;
 
 	data = (t_data *)arg;
-	while (!(data->tp_index == -1))
+	while (data->tp_index != -1 && data->signal != -1)
 	{
 		x = 2.;
 		y = 2.;
 		life = 3;
-		while (1)
+		while (data->signal != -1)
 		{
 			if (!condition_monsters(data, &life, &x, &y))
 				break ;
@@ -77,7 +77,7 @@ void	*use_monsters(void *arg)
 			}
 			usleep(100000);
 		}
-		usleep(10000000);
+		data->signal != -1 ? usleep(3000000) : 0;
 	}
 	return (NULL);
 }

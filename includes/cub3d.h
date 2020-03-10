@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 03:33:11 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 07:22:12 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 04:42:25 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,10 @@ typedef struct	s_parse
 	t_bool		check_s;
 	t_bool		check_f;
 	t_bool		check_c;
+	t_bool		check_so;
+	t_bool		check_we;
+	t_bool		check_no;
+	t_bool		check_ea;
 	t_bool		check_map;
 }				t_parse;
 
@@ -364,11 +368,17 @@ typedef	struct	s_data
 	unsigned long	anim;
 	t_bool			screen;
 	t_bool			launch;
+	t_bool			begin;
 	double			download_percent;
 	struct timeval	time;
 	unsigned long	old_time;
 	t_life			life;
 	pthread_mutex_t	mutex_player;
+	pthread_t		t_thread;
+	pthread_t		t_download;
+	pthread_t		t_monster;
+	pthread_t		t_tp;
+	int				signal;
 }				t_data;
 
 void			*crt_img(t_data *data);
@@ -442,13 +452,13 @@ void			check_floor(char *line, t_data *data);
 void			check_file_extension(t_data *data, char *path);
 void			init_parse_map(t_data *data, char *path);
 void			check_all_cases(char *line, t_data *data);
-void			malloc_map(t_data *data);
+void			malloc_map(t_data *data, int debut, char *path);
 void			check_res(char *line, t_data *data);
 void			set_parse_dir(t_data *data, char c);
-int				ft_strlen_map(t_data *data, char *str, int token);
+int				ft_strlen_map(t_data *data, char *str);
 void			check_parse_map(t_data *data);
 void			check_tex(char *line, t_data *data);
-void			fill_parse_map(char *line, t_data *data);
+void			fill_parse_map(char **map, t_data *data);
 int				in_parse_map(char *line, t_data *data, int i, int j);
 void			parsing(char *path, t_data *data);
 double			my_abs(double value);
@@ -504,5 +514,7 @@ void			do_in_order(t_data *data);
 void			second_order(t_data *data);
 void			third_order(t_data *data, char *ret);
 void			door(t_data *data);
+void			flood_fill(t_data *data, char **map, t_pos pos, int *max);
+t_pos			int_to_t_pos(int x, int y);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 19:19:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 07:25:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 03:53:16 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,19 @@ void	print_life(t_data *data)
 {
 	int		x;
 	int		y;
+	double	b_x;
+	double	b_y;
 
 	x = -1;
+	b_x = 0.0058 * data->w;
+	b_y = 0.0058 * data->h;
 	while (++x < data->w)
 	{
 		y = -1;
 		while (++y < data->h)
-			if (x > data->life.debut_x + 7 && x < data->life.debut_x +
-					data->life.max_life - data->life.hurt - 7 &&
-	y > data->life.debut_y + 7 && y < data->life.debut_y + data->life.fin_y - 7)
+			if (x > data->life.debut_x + b_x && x < data->life.debut_x +
+		data->life.max_life - data->life.hurt - b_x && y >
+data->life.debut_y + b_y && y < data->life.debut_y + data->life.fin_y - b_y)
 				data->img.buffer[x + (y * data->img.width)] = 0xFF0000;
 			else if (x > data->life.debut_x && x < data->life.debut_x +
 	data->life.max_life && y > data->life.debut_y && y < data->life.debut_y +

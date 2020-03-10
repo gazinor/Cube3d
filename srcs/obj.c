@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/11 09:23:05 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/06 08:47:07 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/08 23:57:49 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,14 @@ void			free_obj(t_sprite *obj)
 {
 	t_sprite	*tmp;
 
-	while (obj)
+	if (obj)
 	{
-		tmp = obj->next;
-		free(obj);
-		obj = tmp;
+		while (obj)
+		{
+			tmp = obj->next;
+			free(obj);
+			obj = tmp;
+		}
+		obj = NULL;
 	}
-	obj = NULL;
 }

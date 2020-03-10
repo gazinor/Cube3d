@@ -6,24 +6,14 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 05:15:49 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/06 05:54:07 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/09 11:48:20 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-/*
-void	init_a_litle(t_data *data)
-{
-	
-}
-*/
+
 void	launch_program(t_data *data, int ac, char **av)
 {
-	pthread_t	thread;
-	pthread_t	download;
-	pthread_t	monster;
-	pthread_t	tp;
-
 	if (ac != 3 && ac != 2)
 	{
 		write(2, "\e[31mErreur\n", 12);
@@ -32,7 +22,7 @@ void	launch_program(t_data *data, int ac, char **av)
 	}
 	data->mlx.ptr = mlx_init();
 	ft_init2(data);
-//	init_a_litle(data);
+	data->begin = FALSE;
 	parsing(av[1], data);
 	ft_init(data);
 	data->launch = FALSE;
@@ -40,8 +30,8 @@ void	launch_program(t_data *data, int ac, char **av)
 	data->img.buffer = (int*)mlx_get_data_addr(data->img.ptr, &data->img.bpp,
 			&data->img.size, &data->img.endian);
 	pthread_mutex_init(&data->mutex_player, NULL);
-	pthread_create(&download, NULL, draw_downloading, data);
-	pthread_create(&thread, NULL, t_loop, data);
-	pthread_create(&tp, NULL, do_tp, data);
-	pthread_create(&monster, NULL, use_monsters, data);
+	pthread_create(&data->t_download, NULL, draw_downloading, data);
+	pthread_create(&data->t_thread, NULL, t_loop, data);
+	pthread_create(&data->t_tp, NULL, do_tp, data);
+	pthread_create(&data->t_monster, NULL, use_monsters, data);
 }

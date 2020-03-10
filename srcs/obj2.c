@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 06:39:57 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 06:44:51 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/08 23:45:04 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,14 @@ void			free_portal(t_portal *obj)
 {
 	t_portal	*tmp;
 
-	while (obj)
+	if (obj)
 	{
-		tmp = obj->next;
-		free(obj);
-		obj = tmp;
+		while (obj)
+		{
+			tmp = obj->next;
+			free(obj);
+			obj = tmp;
+		}
+		obj = NULL;
 	}
-	obj = NULL;
 }

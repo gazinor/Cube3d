@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 03:27:51 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 10:24:46 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 02:23:00 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@ void	*draw_downloading(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
-	write(1, "\n\n\n\n", 4);
-	i = 0;
-	while (i < 81)
+	write(1, "\n\n\n\n", (i = 0) + 4);
+	while ((j = -1) == -1 && i < 81 && data->signal != -1)
 	{
-		j = -1;
 		write(1, "\e[1;4;38;5;123m", 15);
 		write(1, (str = ft_itoa(i * 1.25)), 1 + ((i * 1.25 < 100) ? 1 : 2));
 		write(1, "%\e[0m \e[48;5;52m", 16);
@@ -73,7 +71,7 @@ void	*do_tp(void *arg)
 	x = 2.;
 	y = 2.;
 	life = 3;
-	while (1)
+	while (data->signal != -1)
 	{
 		launch_tp(data, &x, &y);
 		if (data->event.hit[2] == TRUE && --life != -1)

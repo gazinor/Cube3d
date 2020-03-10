@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 22:08:34 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/04 23:38:25 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 02:13:26 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int		ft_move2(t_data *data)
 {
 	if (data->event.run == 1)
 	{
-		data->perso.rot = 0.0612;
+		data->perso.rot = 0.105;
 		data->perso.speed = 0.158;
 	}
 	if (data->event.run == 0)
 	{
-		data->perso.rot = 0.0333;
+		data->perso.rot = 0.06666;
 		data->perso.speed = 0.086;
 	}
 	if (data->option.status == 1 && data->event.respawn == 1)

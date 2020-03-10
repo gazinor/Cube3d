@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 01:57:37 by glaurent          #+#    #+#             */
-/*   Updated: 2020/03/05 06:42:06 by glaurent         ###   ########.fr       */
+/*   Updated: 2020/03/10 07:43:44 by glaurent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	slash(int key, t_data *(data))
 {
-	if (key == SLASH)
+	if (key == SLASH && data->option.status == TRUE)
 	{
 		data->sword_index = 0;
 		if (data->player && (data->player->sac.ray.mapx - data->perso.pos.x) *
@@ -67,6 +67,8 @@ void	intern_put_img_to_win(t_data *data, int i)
 {
 	if (data->life.alive == FALSE && data->you_died_index < NB_YOU_DIED_IMG)
 	{
+		data->perso.speed = 0.002;
+		data->perso.rot = 0.006;
 		you_died(data);
 		if (++data->you_died_index == NB_YOU_DIED_IMG)
 			menu(data);
